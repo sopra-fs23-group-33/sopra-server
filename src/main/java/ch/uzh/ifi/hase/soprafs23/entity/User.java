@@ -3,7 +3,11 @@ package ch.uzh.ifi.hase.soprafs23.entity;
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 
 import javax.persistence.*;
+
+import org.springframework.data.annotation.CreatedDate;
+
 import java.io.Serializable;
+import java.time.LocalDate;
 
 /**
  * Internal User Representation
@@ -25,17 +29,35 @@ public class User implements Serializable {
   @GeneratedValue
   private Long id;
 
-  @Column(nullable = false)
-  private String name;
-
   @Column(nullable = false, unique = true)
   private String username;
+
+  @Column(nullable = false)
+  private String password;
+
+  @Column(nullable = false)
+  @CreatedDate
+  private LocalDate creationDate = LocalDate.now();
+
+  @Column(nullable = false)
+  private UserStatus status;
+
+  @Column(nullable = false)
+  private int totalRoundsPlayed;
+
+  @Column(nullable = false)
+  private int numberOfBetsWon;
+
+  @Column(nullable = false)
+  private int numberOfBetsLost;
 
   @Column(nullable = false, unique = true)
   private String token;
 
-  @Column(nullable = false)
-  private UserStatus status;
+  @Column
+  private int rank;
+
+
 
   public Long getId() {
     return id;
@@ -43,14 +65,6 @@ public class User implements Serializable {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
   }
 
   public String getUsername() {
@@ -61,12 +75,20 @@ public class User implements Serializable {
     this.username = username;
   }
 
-  public String getToken() {
-    return token;
+  public String getPassword() {
+    return password;
   }
 
-  public void setToken(String token) {
-    this.token = token;
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public LocalDate getCreationDate(){
+    return creationDate;
+  }
+
+  public void setCreationDate(LocalDate creationDate){
+    this.creationDate = creationDate;
   }
 
   public UserStatus getStatus() {
@@ -75,5 +97,81 @@ public class User implements Serializable {
 
   public void setStatus(UserStatus status) {
     this.status = status;
+  }
+
+  public int getTotalRoundsPlayed(){
+    return totalRoundsPlayed;
+  }
+
+  public void setTotalRoundsPlayed(int totalRoundsPlayed){
+    this.totalRoundsPlayed = totalRoundsPlayed;
+  }
+
+  public int getNumberOfBetsWon(){
+    return numberOfBetsWon;
+  }
+
+  public void setNumberOfBetsWon(int numberOfBetsWon){
+    this.numberOfBetsWon = numberOfBetsWon;
+  }
+
+  public int getNumberOfBetsLost(){
+    return numberOfBetsLost;
+  }
+
+  public void setNumberOfBetsLost(int numberOfBetsLost){
+    this.numberOfBetsLost = numberOfBetsLost;
+  }
+
+  public String getToken() {
+    return token;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
+  }
+
+  public int getRank(){
+    return rank;
+  }
+
+  public void setRank(int rank){
+    this.rank = rank;
+  }
+
+
+
+  @Override
+  public boolean equals(Object other) {
+    if(other == null) {
+      return false;
+    } else if(other == this ) {
+      return true;
+    } else if(other.getClass() != getClass()) {
+      return false;
+    } else {
+      return ((User)other).username == this.username;
+    }
+  }
+
+
+
+  @Override
+  public int hashCode(){
+    return this.username.hashCode();
+  }
+
+
+
+  void incrementTotalRoundsPlayed(){
+    this.totalRoundsPlayed = this.totalRoundsPlayed + 1;
+  }
+
+  void incrementNumberOfBetsWon(){
+    this.numberOfBetsWon = this.numberOfBetsWon + 1;
+  }
+
+  void incrementNumberOfBetsLost(){
+    this.numberOfBetsLost = this.numberOfBetsLost + 1;
   }
 }
