@@ -90,4 +90,19 @@ public class UserController {
         this.userService.checkToken(token);
         this.userService.logoutUser(userID);
     }
+
+    @GetMapping("/users/leaderboard")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    @CrossOrigin
+    public List<UserGetDTO> logoutUser( @RequestHeader("token") String token) {
+        List<User> users = userService.leaderboard();
+        List<UserGetDTO> userGetDTOs = new ArrayList<>();
+
+        // convert each user to the API representation
+        for (User user : users) {
+            userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
+        }
+        return userGetDTOs;
+    }
 }

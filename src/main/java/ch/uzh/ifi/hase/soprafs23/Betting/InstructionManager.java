@@ -49,7 +49,7 @@ public class InstructionManager {
 
         double outcome = 0.0;
         Direction betDirection = this.player.getCurrentBet().getDirection();
-        double betAmount = (double) this.player.getCurrentBet().getAmount();
+        double betAmount = this.player.getCurrentBet().getAmount();
 
         if(betDirection.equals(direction))
             outcome = 1.0;

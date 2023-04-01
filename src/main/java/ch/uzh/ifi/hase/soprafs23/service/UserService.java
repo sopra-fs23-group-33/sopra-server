@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,6 +43,8 @@ public class UserService {
     public User createUser(User newUser) {
         this.checkIfValidUser(newUser);
         User userCreated = new User(newUser.getUsername(), newUser.getPassword());
+        int rank = this.getUsers().size()+1;
+        userCreated.setRank(rank);
         userCreated = this.userRepository.save(userCreated);
         this.userRepository.flush();
         log.debug("Created Information for User: {}", newUser);
@@ -79,6 +82,18 @@ public class UserService {
 
         else {
             String ErrorMessage = "User with username " + userToFind.getUsername() + " was not found";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+        }
+
+    }
+
+    public User getUserByToken(String token) {
+        User userByToken = this.userRepository.findByToken(token);
+        if (userByToken != null)
+            return userByToken;
+
+        else {
+            String ErrorMessage = "User with " + token +" was not found";
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
         }
 
@@ -158,5 +173,11 @@ public class UserService {
     if (userByUsername != null) {
       throw new ResponseStatusException(errorIfFound, String.format(baseErrorMessage, "username"));
     }
+  }
+
+  public List<User> leaderboard(){
+      List<User> users = this.getUsers();
+      //TODO
+      return users;
   }
 }

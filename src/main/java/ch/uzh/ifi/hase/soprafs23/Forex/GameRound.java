@@ -66,7 +66,7 @@ public class GameRound  {
     }
 
     private double computeRatio(Double firstClose, Double secondClose){
-        return ratio = max(firstClose, secondClose)/ min(firstClose, secondClose);
+        return max(firstClose, secondClose)/ min(firstClose, secondClose);
 
     }
 

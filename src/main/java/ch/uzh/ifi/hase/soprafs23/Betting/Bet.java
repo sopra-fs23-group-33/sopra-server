@@ -21,8 +21,6 @@ public class Bet {
         this.direction = direction;
     }
 
-
-
     public Direction getDirection() {
         return direction;
     }

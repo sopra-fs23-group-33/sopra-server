@@ -60,14 +60,14 @@ public class Game {
 
     public Game() {}
 
-    public Game(User creator, String name, int numberOfRoundsToPlay, boolean powerupsActive, boolean eventsActive, GameType type){
+    public Game(User creator, String name, int numberOfRoundsToPlay, int totalLobbySize, boolean powerupsActive, boolean eventsActive, GameType type){
         this.creator = creator;
         this.name = name;
         this.eventsActive = eventsActive;
         this.powerupsActive = powerupsActive;
         this.numberOfRoundsToPlay = numberOfRoundsToPlay;
         this.state = GameState.LOBBY;
-        this.totalLobbySize = 1;
+        this.totalLobbySize = totalLobbySize;
         this.type = type;
         this.numberOfRoundsPlayed = 0;
         this.numberOfPlayersInLobby = 1;
