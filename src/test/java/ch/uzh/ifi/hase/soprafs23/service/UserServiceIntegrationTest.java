@@ -30,17 +30,17 @@ public class UserServiceIntegrationTest {
   private UserService userService;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     userRepository.deleteAll();
   }
 
   @Test
-  public void createUser_validInputs_success() {
+  void createUser_validInputs_success() {
     // given
     assertNull(userRepository.findByUsername("testUsername"));
 
     User testUser = new User();
-    testUser.setPassword("testName");
+    testUser.setPassword("testPwd");
     testUser.setUsername("testUsername");
 
     // when
@@ -59,22 +59,87 @@ public class UserServiceIntegrationTest {
   }
 
   @Test
-  public void createUser_duplicateUsername_throwsException() {
+  void createUser_duplicateUsername_throwsException() {
     assertNull(userRepository.findByUsername("testUsername"));
 
     User testUser = new User();
-    testUser.setPassword("testName");
+    testUser.setPassword("testPwd");
     testUser.setUsername("testUsername");
-    User createdUser = userService.createUser(testUser);
+    userService.createUser(testUser);
 
     // attempt to create second user with same username
     User testUser2 = new User();
 
     // change the name but forget about the username
-    testUser2.setPassword("testName2");
+    testUser2.setPassword("testPwd2");
     testUser2.setUsername("testUsername");
 
     // check that an error is thrown
     assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser2));
+  }
+
+  @Test
+  void loginUserValid() {
+    // given
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("testPwd");
+    testUser.setUsername("testUsername");
+
+    // when
+    User createdUser = userService.createUser(testUser);
+    User loggedUser = userService.loginUser(testUser);
+
+    // then
+    assertEquals(loggedUser.getId(), createdUser.getId());
+    assertEquals(loggedUser.getPassword(), createdUser.getPassword());
+    assertEquals(loggedUser.getUsername(), createdUser.getUsername());
+    assertEquals(loggedUser.getToken(), createdUser.getToken());
+    assertEquals(loggedUser.getRank(), createdUser.getRank());
+    assertEquals(loggedUser.getNumberOfBetsLost(), testUser.getNumberOfBetsLost());
+    assertEquals(loggedUser.getNumberOfBetsWon(), testUser.getNumberOfBetsWon());
+    assertEquals(loggedUser.getTotalRoundsPlayed(), testUser.getTotalRoundsPlayed());
+    assertEquals(UserState.ONLINE, loggedUser.getState());
+  }
+
+  @Test
+  void loginUserInvalidUsername() {
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("testPwd");
+    testUser.setUsername("testUsername");
+    userService.createUser(testUser);
+
+    // attempt to create second user with same username
+    User testUser2 = new User();
+
+    // change the name but forget about the username
+    testUser2.setPassword("testPwd");
+    testUser2.setUsername("testUsername2");
+
+    // check that an error is thrown
+    assertThrows(ResponseStatusException.class, () -> userService.loginUser(testUser2));
+  }
+
+  @Test
+  void loginUserInvalidCombination() {
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("testPwd");
+    testUser.setUsername("testUsername");
+    userService.createUser(testUser);
+
+    // attempt to create second user with same username
+    User testUser2 = new User();
+
+    // change the name but forget about the username
+    testUser2.setPassword("testPwd2");
+    testUser2.setUsername("testUsername");
+
+    // check that an error is thrown
+    assertThrows(ResponseStatusException.class, () -> userService.loginUser(testUser2));
   }
 }

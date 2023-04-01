@@ -45,7 +45,7 @@ public class UserControllerTest {
   private UserService userService;
 
   @Test
-  public void getAllValid() throws Exception {
+  void getAllValid() throws Exception {
     // given
     User user = new User();
     user.setUsername("firstname@lastname");
@@ -80,7 +80,7 @@ public class UserControllerTest {
   }
 
   @Test
-  public void registerValid() throws Exception {
+  void registerValid() throws Exception {
     // given
     User user = new User();
     user.setUsername("firstname@lastname");
@@ -117,18 +117,8 @@ public class UserControllerTest {
   }
 
   @Test
-  public void registerInvalid() throws Exception {
+  void registerInvalid() throws Exception {
     // given
-    User user = new User();
-    user.setUsername("firstname@lastname");
-    user.setToken("token1");
-    user.setCreationDate(LocalDate.parse("2023-04-01"));
-    user.setTotalRoundsPlayed(0);
-    user.setNumberOfBetsWon(0);
-    user.setNumberOfBetsLost(0);
-    user.setRank(-1);
-    user.setState(UserState.ONLINE);
-
     UserPostDTO userPostDTO = new UserPostDTO();
     userPostDTO.setPassword("Test User");
     userPostDTO.setUsername("testUsername");
@@ -145,6 +135,85 @@ public class UserControllerTest {
     // then
     mockMvc.perform(postRequest)
         .andExpect(status().isConflict());
+  }
+
+  @Test
+  void loginValid() throws Exception {
+    // given
+    User user = new User();
+    user.setUsername("firstname@lastname");
+    user.setToken("token1");
+    user.setCreationDate(LocalDate.parse("2023-04-01"));
+    user.setTotalRoundsPlayed(0);
+    user.setNumberOfBetsWon(0);
+    user.setNumberOfBetsLost(0);
+    user.setRank(-1);
+    user.setState(UserState.ONLINE);
+
+    UserPostDTO userPostDTO = new UserPostDTO();
+    userPostDTO.setPassword("Test User");
+    userPostDTO.setUsername("testUsername");
+
+    given(userService.loginUser(Mockito.any())).willReturn(user);
+
+    // when/then -> do the request + validate the result
+    MockHttpServletRequestBuilder postRequest = post("/users/login")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(userPostDTO));
+
+    // then
+    mockMvc.perform(postRequest)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.username", is(user.getUsername())))
+        .andExpect(jsonPath("$.token", is(user.getToken())))
+        .andExpect(jsonPath("$.creationDate", is(user.getCreationDate().toString())))
+        .andExpect(jsonPath("$.totalRoundsPlayed", is(user.getTotalRoundsPlayed())))
+        .andExpect(jsonPath("$.numberOfBetsWon", is(user.getNumberOfBetsWon())))
+        .andExpect(jsonPath("$.numberOfBetsLost", is(user.getNumberOfBetsLost())))
+        .andExpect(jsonPath("$.rank", is(user.getRank())))
+        .andExpect(jsonPath("$.state", is(user.getState().toString())));
+  }
+
+  @Test
+  void loginInvalidUsername() throws Exception {
+    // given
+    UserPostDTO userPostDTO = new UserPostDTO();
+    userPostDTO.setPassword("Test User");
+    userPostDTO.setUsername("testUsername");
+
+    Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND, "Username does not exist.");
+
+    given(userService.loginUser(Mockito.any())).willThrow(response);
+
+    // when/then -> do the request + validate the result
+    MockHttpServletRequestBuilder postRequest = post("/users/login")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(userPostDTO));
+
+    // then
+    mockMvc.perform(postRequest)
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  void loginInvalidCombination() throws Exception {
+    // given
+    UserPostDTO userPostDTO = new UserPostDTO();
+    userPostDTO.setPassword("Test User");
+    userPostDTO.setUsername("testUsername");
+
+    Throwable response = new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username-password combination.");
+
+    given(userService.loginUser(Mockito.any())).willThrow(response);
+
+    // when/then -> do the request + validate the result
+    MockHttpServletRequestBuilder postRequest = post("/users/login")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(userPostDTO));
+
+    // then
+    mockMvc.perform(postRequest)
+        .andExpect(status().isUnauthorized());
   }
 
   /**

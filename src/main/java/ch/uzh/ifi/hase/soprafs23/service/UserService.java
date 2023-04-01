@@ -56,6 +56,23 @@ public class UserService {
     return newUser;
   }
 
+  public User loginUser(User user) {
+    User loginUser = userRepository.findByUsername(user.getUsername());
+
+    if (loginUser == null){
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Username does not exist.");
+    } else if (!user.getPassword().equals(loginUser.getPassword())){
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username-password combination.");
+    } else {
+      loginUser.setState(UserState.ONLINE);
+      loginUser = userRepository.save(loginUser);
+      userRepository.flush();
+  
+      log.debug("Created Information for User: {}", loginUser);
+      return loginUser;
+    }
+  }
+
   /**
    * This is a helper method that will check the uniqueness criteria of the
    * username and the name
@@ -71,7 +88,7 @@ public class UserService {
 
     String baseErrorMessage = "The %s provided already exists: the user could not be created.";
     if (userByUsername != null) {
-      throw new ResponseStatusException(errorIfFound, String.format(baseErrorMessage, "username")); // must change error
+      throw new ResponseStatusException(errorIfFound, String.format(baseErrorMessage, "username"));
     }
   }
 }
