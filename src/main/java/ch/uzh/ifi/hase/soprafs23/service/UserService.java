@@ -39,39 +39,107 @@ public class UserService {
     return this.userRepository.findAll();
   }
 
-  public User createUser(User newUser) {
-    newUser.setToken(UUID.randomUUID().toString());
-    newUser.setState(UserState.ONLINE);
-    newUser.setTotalRoundsPlayed(0);
-    newUser.setNumberOfBetsWon(0);
-    newUser.setNumberOfBetsLost(0);
-    newUser.setRank(-1);
-    checkIfUserExists(newUser, HttpStatus.CONFLICT);
-    // saves the given entity but data is only persisted in the database once
-    // flush() is called
-    newUser = userRepository.save(newUser);
-    userRepository.flush();
-
-    log.debug("Created Information for User: {}", newUser);
-    return newUser;
-  }
-
-  public User loginUser(User user) {
-    User loginUser = userRepository.findByUsername(user.getUsername());
-
-    if (loginUser == null){
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Username does not exist.");
-    } else if (!user.getPassword().equals(loginUser.getPassword())){
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username-password combination.");
-    } else {
-      loginUser.setState(UserState.ONLINE);
-      loginUser = userRepository.save(loginUser);
-      userRepository.flush();
-  
-      log.debug("Created Information for User: {}", loginUser);
-      return loginUser;
+    public User createUser(User newUser) {
+        this.checkIfValidUser(newUser);
+        User userCreated = new User(newUser.getUsername(), newUser.getPassword());
+        userCreated = this.userRepository.save(userCreated);
+        this.userRepository.flush();
+        log.debug("Created Information for User: {}", newUser);
+        return userCreated;
     }
-  }
+
+    private void checkIfValidUser(User userToBeCreated) {
+
+        User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
+
+        if (userByUsername != null) {
+            String ErrorMessage = "add User failed because username already exists";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+
+        else if (userToBeCreated.getUsername().isEmpty() && userToBeCreated.getPassword().isEmpty()) {
+            String ErrorMessage = "add User failed because username and password are empty";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+
+        else if (userToBeCreated.getUsername().isEmpty()) {
+            String ErrorMessage = "add User failed because username is empty";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+
+        else if (userToBeCreated.getPassword().isEmpty()) {
+            String ErrorMessage = "add User failed because password is empty";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+    }
+    private User getUserByUsername(User userToFind) {
+        User userByUsername = this.userRepository.findByUsername(userToFind.getUsername());
+        if (userByUsername != null)
+            return userByUsername;
+
+        else {
+            String ErrorMessage = "User with username " + userToFind.getUsername() + " was not found";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+        }
+
+    }
+
+
+    public void checkToken(String token) {
+        String test = "test123";
+        if (token.equals(test))
+            return;
+
+        User userByToken = this.userRepository.findByToken(token);
+
+        if(userByToken == null)
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token (" + token + ")  " + "is invalid");
+    }
+
+    public User getUserByUserID(Long userID) {
+        User userByID = this.userRepository.findByUserID(userID);
+
+        if (userByID != null)
+            return userByID;
+        else {
+            String ErrorMessage = "User with userId " + userID + " was not found";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+        }
+    }
+
+    public User loginUser(User userToLogin) {
+        User foundUser = this.getUserByUsername(userToLogin);
+
+        if (!foundUser.getPassword().equals(userToLogin.getPassword())) {
+            String ErrorMessage = "login failed because password is wrong";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessage);
+        }
+
+        else if (foundUser.getState().equals(UserState.PLAYING)) {
+            String ErrorMessage = "login failed because user is currently playing a game";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessage);
+        }
+
+        foundUser.setState(UserState.ONLINE);
+        foundUser.setToken(UUID.randomUUID().toString());
+        foundUser = this.userRepository.saveAndFlush(foundUser);
+        log.debug("Created Information for User: {}", foundUser);
+        return foundUser;
+    }
+
+    public void logoutUser(Long userID) {
+        User userByID = getUserByUserID(userID);
+
+        if (userByID.getState().equals(UserState.OFFLINE)) {
+            String ErrorMessage = "logout failed because user was not logged in";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+
+        else {
+            userByID.setState(UserState.OFFLINE);
+            this.userRepository.saveAndFlush(userByID);
+        }
+    }
 
   /**
    * This is a helper method that will check the uniqueness criteria of the

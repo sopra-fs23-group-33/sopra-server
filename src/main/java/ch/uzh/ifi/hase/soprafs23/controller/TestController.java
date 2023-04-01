@@ -51,10 +51,10 @@ public class TestController {
 
 
 
-  @GetMapping("/api")
+  @GetMapping("/test/api")
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public GameRound test_api(@PathVariable("id") Long id) throws InterruptedException {
+  public GameRound test_api() {
       ChartAPI api = new ChartAPI();
       GameRound gr = api.getGameRound(new CurrencyPair(Currency.CHF, Currency.EUR));
       return gr;
