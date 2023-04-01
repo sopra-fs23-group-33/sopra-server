@@ -161,15 +161,15 @@ public class User implements Serializable {
 
 
 
-  void incrementTotalRoundsPlayed(){
+  public void incrementTotalRoundsPlayed(){
     this.totalRoundsPlayed = this.totalRoundsPlayed + 1;
   }
 
-  void incrementNumberOfBetsWon(){
+  public void incrementNumberOfBetsWon(){
     this.numberOfBetsWon = this.numberOfBetsWon + 1;
   }
 
-  void incrementNumberOfBetsLost(){
+  public void incrementNumberOfBetsLost(){
     this.numberOfBetsLost = this.numberOfBetsLost + 1;
   }
 }

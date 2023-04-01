@@ -1,6 +1,5 @@
 package ch.uzh.ifi.hase.soprafs23.entity;
 
-//import ch.uzh.ifi.hase.soprafs23.entity.User;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
