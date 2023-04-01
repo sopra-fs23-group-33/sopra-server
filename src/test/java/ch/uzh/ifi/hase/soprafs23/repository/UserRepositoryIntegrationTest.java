@@ -25,7 +25,7 @@ public class UserRepositoryIntegrationTest {
   public void findByUsername_success() {
     // given
     User user = new User();
-    user.setId(1L);
+    user.setUserID(1L);
     user.setUsername("firstname@lastname");
     user.setPassword("jiji");
     user.setToken("token1");
@@ -43,8 +43,8 @@ public class UserRepositoryIntegrationTest {
     User found = userRepository.findByUsername(user.getUsername());
 
     // then
-    assertNotNull(found.getId());
-    assertEquals(user.getId(), found.getId());
+    assertNotNull(found.getUserID());
+    assertEquals(user.getUserID(), found.getUserID());
     assertEquals(user.getUsername(), found.getUsername());
     assertEquals(user.getState(), found.getState());
     assertEquals(user.getToken(), found.getToken());

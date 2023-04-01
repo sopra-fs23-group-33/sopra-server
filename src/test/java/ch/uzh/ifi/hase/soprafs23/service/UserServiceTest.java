@@ -32,7 +32,7 @@ public class UserServiceTest {
 
     // given
     testUser = new User();
-    testUser.setId(12321L);
+    testUser.setUserID(12321L);
     testUser.setUsername("firstname@lastname");
     testUser.setToken("token1");
     testUser.setCreationDate(LocalDate.parse("2023-04-01"));
@@ -57,7 +57,7 @@ public class UserServiceTest {
     // then
     Mockito.verify(userRepository, Mockito.times(1)).save(Mockito.any());
 
-    assertEquals(testUser.getId(), createdUser.getId());
+    assertEquals(testUser.getUserID(), createdUser.getUserID());
     assertEquals(testUser.getPassword(), createdUser.getPassword());
     assertEquals(testUser.getUsername(), createdUser.getUsername());
     assertNotNull(createdUser.getToken());

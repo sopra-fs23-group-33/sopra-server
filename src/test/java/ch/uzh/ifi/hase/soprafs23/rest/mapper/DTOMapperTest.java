@@ -35,7 +35,7 @@ public class DTOMapperTest {
   public void testGetUser_fromUser_toUserGetDTO_success() {
     // create User
     User user = new User();
-    user.setId(12321L);
+    user.setUserID(12321L);
     user.setUsername("firstname@lastname");
     user.setToken("token1");
     user.setCreationDate(LocalDate.parse("2023-04-01"));
@@ -49,7 +49,7 @@ public class DTOMapperTest {
     UserGetDTO userGetDTO = DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
 
     // check content
-    assertEquals(user.getId(), userGetDTO.getId());
+    assertEquals(user.getUserID(), userGetDTO.getUserID());
     assertEquals(user.getUsername(), userGetDTO.getUsername());
     assertEquals(user.getState(), userGetDTO.getState());
     assertEquals(user.getToken(), userGetDTO.getToken());

@@ -6,7 +6,7 @@ import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 
 public class UserGetDTO {
 
-  private Long id;
+  private Long userID;
   private String username;
   private String token;
   private LocalDate creationDate;
@@ -16,12 +16,12 @@ public class UserGetDTO {
   private int numberOfBetsLost;
   private int rank;
 
-  public Long getId() {
-    return id;
+  public Long getUserID() {
+    return this.userID;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setUserID(Long id) {
+    this.userID = id;
   }
 
   public String getUsername() {

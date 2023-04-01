@@ -47,7 +47,7 @@ public class UserServiceIntegrationTest {
     User createdUser = userService.createUser(testUser);
 
     // then
-    assertEquals(testUser.getId(), createdUser.getId());
+    assertEquals(testUser.getUserID(), createdUser.getUserID());
     assertEquals(testUser.getPassword(), createdUser.getPassword());
     assertEquals(testUser.getUsername(), createdUser.getUsername());
     assertNotNull(createdUser.getToken());
@@ -92,7 +92,7 @@ public class UserServiceIntegrationTest {
     User loggedUser = userService.loginUser(testUser);
 
     // then
-    assertEquals(loggedUser.getId(), createdUser.getId());
+    assertEquals(loggedUser.getUserID(), createdUser.getUserID());
     assertEquals(loggedUser.getPassword(), createdUser.getPassword());
     assertEquals(loggedUser.getUsername(), createdUser.getUsername());
     assertEquals(loggedUser.getToken(), createdUser.getToken());

@@ -8,6 +8,8 @@ import org.springframework.data.annotation.CreatedDate;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Internal User Representation
@@ -27,7 +29,7 @@ public class User implements Serializable {
 
   @Id
   @GeneratedValue
-  private Long id;
+  private Long userID;
 
   @Column(nullable = false, unique = true)
   private String username;
@@ -57,12 +59,27 @@ public class User implements Serializable {
   @Column
   private int rank;
 
-  public Long getId() {
-    return id;
+    public User(){}
+
+    public User(String username, String password){
+        this.username = username;
+        this.password = password;
+        this.status = UserState.ONLINE;
+        this.creationDate = LocalDate.now();
+        this.totalRoundsPlayed = 0;
+        this.numberOfBetsWon = 0;
+        this.numberOfBetsLost = 0;
+        this.token = UUID.randomUUID().toString();
+        this.rank = -1;
+    }
+
+
+    public Long getUserID() {
+    return this.userID;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setUserID(Long id) {
+    this.userID = id;
   }
 
   public String getUsername() {
@@ -148,7 +165,7 @@ public class User implements Serializable {
     } else if(other.getClass() != getClass()) {
       return false;
     } else {
-      return ((User)other).username == this.username;
+      return Objects.equals(((User) other).username, this.username);
     }
   }
 
