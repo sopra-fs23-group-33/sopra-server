@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.entity;
 
-import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
+import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 
 import javax.persistence.*;
 
@@ -40,7 +40,7 @@ public class User implements Serializable {
   private LocalDate creationDate = LocalDate.now();
 
   @Column(nullable = false)
-  private UserStatus status;
+  private UserState status;
 
   @Column(nullable = false)
   private int totalRoundsPlayed;
@@ -56,8 +56,6 @@ public class User implements Serializable {
 
   @Column
   private int rank;
-
-
 
   public Long getId() {
     return id;
@@ -91,11 +89,11 @@ public class User implements Serializable {
     this.creationDate = creationDate;
   }
 
-  public UserStatus getStatus() {
+  public UserState getState() {
     return status;
   }
 
-  public void setStatus(UserStatus status) {
+  public void setState(UserState status) {
     this.status = status;
   }
 

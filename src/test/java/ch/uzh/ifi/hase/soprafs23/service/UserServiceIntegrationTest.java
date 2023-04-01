@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
-import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
+import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +40,7 @@ public class UserServiceIntegrationTest {
     assertNull(userRepository.findByUsername("testUsername"));
 
     User testUser = new User();
-    testUser.setName("testName");
+    testUser.setPassword("testName");
     testUser.setUsername("testUsername");
 
     // when
@@ -48,10 +48,14 @@ public class UserServiceIntegrationTest {
 
     // then
     assertEquals(testUser.getId(), createdUser.getId());
-    assertEquals(testUser.getName(), createdUser.getName());
+    assertEquals(testUser.getPassword(), createdUser.getPassword());
     assertEquals(testUser.getUsername(), createdUser.getUsername());
     assertNotNull(createdUser.getToken());
-    assertEquals(UserStatus.OFFLINE, createdUser.getStatus());
+    assertEquals(testUser.getRank(), -1);
+    assertEquals(testUser.getNumberOfBetsLost(), 0);
+    assertEquals(testUser.getNumberOfBetsWon(), 0);
+    assertEquals(testUser.getTotalRoundsPlayed(), 0);
+    assertEquals(UserState.ONLINE, createdUser.getState());
   }
 
   @Test
@@ -59,7 +63,7 @@ public class UserServiceIntegrationTest {
     assertNull(userRepository.findByUsername("testUsername"));
 
     User testUser = new User();
-    testUser.setName("testName");
+    testUser.setPassword("testName");
     testUser.setUsername("testUsername");
     User createdUser = userService.createUser(testUser);
 
@@ -67,7 +71,7 @@ public class UserServiceIntegrationTest {
     User testUser2 = new User();
 
     // change the name but forget about the username
-    testUser2.setName("testName2");
+    testUser2.setPassword("testName2");
     testUser2.setUsername("testUsername");
 
     // check that an error is thrown

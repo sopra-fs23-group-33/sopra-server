@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
-import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
+import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import org.slf4j.Logger;
@@ -41,12 +41,12 @@ public class UserService {
 
   public User createUser(User newUser) {
     newUser.setToken(UUID.randomUUID().toString());
-    newUser.setStatus(UserStatus.ONLINE);
+    newUser.setState(UserState.ONLINE);
     newUser.setTotalRoundsPlayed(0);
     newUser.setNumberOfBetsWon(0);
     newUser.setNumberOfBetsLost(0);
     newUser.setRank(-1);
-    checkIfUserExists(newUser);
+    checkIfUserExists(newUser, HttpStatus.CONFLICT);
     // saves the given entity but data is only persisted in the database once
     // flush() is called
     newUser = userRepository.save(newUser);
@@ -66,12 +66,12 @@ public class UserService {
    * @throws org.springframework.web.server.ResponseStatusException
    * @see User
    */
-  private void checkIfUserExists(User userToBeCreated) {
+  private void checkIfUserExists(User userToBeCreated, HttpStatus errorIfFound) {
     User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
 
     String baseErrorMessage = "The %s provided already exists: the user could not be created.";
     if (userByUsername != null) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, "username")); // must change error
+      throw new ResponseStatusException(errorIfFound, String.format(baseErrorMessage, "username")); // must change error
     }
   }
 }

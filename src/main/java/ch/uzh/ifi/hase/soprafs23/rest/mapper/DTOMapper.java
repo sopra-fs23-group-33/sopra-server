@@ -30,7 +30,7 @@ public interface DTOMapper {
   @Mapping(source = "username", target = "username")
   @Mapping(source = "token", target = "token")
   @Mapping(source = "creationDate", target = "creationDate")
-  @Mapping(source = "status", target = "status")
+  @Mapping(source = "state", target = "state")
   @Mapping(source = "totalRoundsPlayed", target = "totalRoundsPlayed")
   @Mapping(source = "numberOfBetsWon", target = "numberOfBetsWon")
   @Mapping(source = "numberOfBetsLost", target = "numberOfBetsLost")

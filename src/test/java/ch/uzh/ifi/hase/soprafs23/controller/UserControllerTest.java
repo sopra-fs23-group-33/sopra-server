@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
-import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
+import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,12 +45,17 @@ public class UserControllerTest {
   private UserService userService;
 
   @Test
-  public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
+  public void getAllValid() throws Exception {
     // given
     User user = new User();
-    user.setName("Firstname Lastname");
     user.setUsername("firstname@lastname");
-    user.setStatus(UserStatus.OFFLINE);
+    user.setToken("token1");
+    user.setCreationDate(LocalDate.parse("2023-04-01"));
+    user.setTotalRoundsPlayed(0);
+    user.setNumberOfBetsWon(0);
+    user.setNumberOfBetsLost(0);
+    user.setRank(-1);
+    user.setState(UserState.OFFLINE);
 
     List<User> allUsers = Collections.singletonList(user);
 
@@ -63,39 +69,82 @@ public class UserControllerTest {
     // then
     mockMvc.perform(getRequest).andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(1)))
-        .andExpect(jsonPath("$[0].name", is(user.getName())))
         .andExpect(jsonPath("$[0].username", is(user.getUsername())))
-        .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
+        .andExpect(jsonPath("$[0].token", is(user.getToken())))
+        .andExpect(jsonPath("$[0].creationDate", is(user.getCreationDate().toString())))
+        .andExpect(jsonPath("$[0].totalRoundsPlayed", is(user.getTotalRoundsPlayed())))
+        .andExpect(jsonPath("$[0].numberOfBetsWon", is(user.getNumberOfBetsWon())))
+        .andExpect(jsonPath("$[0].numberOfBetsLost", is(user.getNumberOfBetsLost())))
+        .andExpect(jsonPath("$[0].rank", is(user.getRank())))
+        .andExpect(jsonPath("$[0].state", is(user.getState().toString())));
   }
 
   @Test
-  public void createUser_validInput_userCreated() throws Exception {
+  public void registerValid() throws Exception {
     // given
     User user = new User();
-    user.setId(1L);
-    user.setName("Test User");
-    user.setUsername("testUsername");
-    user.setToken("1");
-    user.setStatus(UserStatus.ONLINE);
+    user.setUsername("firstname@lastname");
+    user.setToken("token1");
+    user.setCreationDate(LocalDate.parse("2023-04-01"));
+    user.setTotalRoundsPlayed(0);
+    user.setNumberOfBetsWon(0);
+    user.setNumberOfBetsLost(0);
+    user.setRank(-1);
+    user.setState(UserState.ONLINE);
 
     UserPostDTO userPostDTO = new UserPostDTO();
-    userPostDTO.setName("Test User");
+    userPostDTO.setPassword("Test User");
     userPostDTO.setUsername("testUsername");
 
     given(userService.createUser(Mockito.any())).willReturn(user);
 
     // when/then -> do the request + validate the result
-    MockHttpServletRequestBuilder postRequest = post("/users")
+    MockHttpServletRequestBuilder postRequest = post("/users/register")
         .contentType(MediaType.APPLICATION_JSON)
         .content(asJsonString(userPostDTO));
 
     // then
     mockMvc.perform(postRequest)
         .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.id", is(user.getId().intValue())))
-        .andExpect(jsonPath("$.name", is(user.getName())))
         .andExpect(jsonPath("$.username", is(user.getUsername())))
-        .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
+        .andExpect(jsonPath("$.token", is(user.getToken())))
+        .andExpect(jsonPath("$.creationDate", is(user.getCreationDate().toString())))
+        .andExpect(jsonPath("$.totalRoundsPlayed", is(user.getTotalRoundsPlayed())))
+        .andExpect(jsonPath("$.numberOfBetsWon", is(user.getNumberOfBetsWon())))
+        .andExpect(jsonPath("$.numberOfBetsLost", is(user.getNumberOfBetsLost())))
+        .andExpect(jsonPath("$.rank", is(user.getRank())))
+        .andExpect(jsonPath("$.state", is(user.getState().toString())));
+  }
+
+  @Test
+  public void registerInvalid() throws Exception {
+    // given
+    User user = new User();
+    user.setUsername("firstname@lastname");
+    user.setToken("token1");
+    user.setCreationDate(LocalDate.parse("2023-04-01"));
+    user.setTotalRoundsPlayed(0);
+    user.setNumberOfBetsWon(0);
+    user.setNumberOfBetsLost(0);
+    user.setRank(-1);
+    user.setState(UserState.ONLINE);
+
+    UserPostDTO userPostDTO = new UserPostDTO();
+    userPostDTO.setPassword("Test User");
+    userPostDTO.setUsername("testUsername");
+
+    Throwable response = new ResponseStatusException(HttpStatus.CONFLICT, "The username provided already exists: the user could not be created.");
+
+    given(userService.createUser(Mockito.any())).willThrow(response);
+
+    // when/then -> do the request + validate the result
+    MockHttpServletRequestBuilder postRequest = post("/users/register")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(userPostDTO));
+
+    // then
+    mockMvc.perform(postRequest)
+        .andExpect(status().isConflict());
   }
 
   /**
