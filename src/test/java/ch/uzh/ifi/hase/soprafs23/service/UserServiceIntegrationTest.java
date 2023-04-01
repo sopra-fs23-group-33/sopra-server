@@ -51,7 +51,7 @@ public class UserServiceIntegrationTest {
     assertEquals(testUser.getPassword(), createdUser.getPassword());
     assertEquals(testUser.getUsername(), createdUser.getUsername());
     assertNotNull(createdUser.getToken());
-    assertEquals(createdUser.getRank(), -1);
+    assertEquals(createdUser.getRank(), 1);
     assertEquals(createdUser.getNumberOfBetsLost(), 0);
     assertEquals(createdUser.getNumberOfBetsWon(), 0);
     assertEquals(createdUser.getTotalRoundsPlayed(), 0);
