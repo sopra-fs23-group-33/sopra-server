@@ -47,15 +47,11 @@ public class UserControllerTest {
     @Test
     void getAllValid() throws Exception {
         // given
-        User user = new User();
-        user.setUsername("firstname@lastname");
-        user.setToken("token1");
-        user.setCreationDate(LocalDate.parse("2023-04-01"));
-        user.setTotalRoundsPlayed(0);
-        user.setNumberOfBetsWon(0);
-        user.setNumberOfBetsLost(0);
-        user.setRank(-1);
-        user.setState(UserState.OFFLINE);
+        User user = new User("username", "password");
+
+        UserPostDTO userPostDTO = new UserPostDTO();
+        userPostDTO.setPassword(user.getPassword());
+        userPostDTO.setUsername(user.getUsername());
 
         List<User> allUsers = Collections.singletonList(user);
 
@@ -82,19 +78,11 @@ public class UserControllerTest {
     @Test
     void registerValid() throws Exception {
         // given
-        User user = new User();
-        user.setUsername("firstname@lastname");
-        user.setToken("token1");
-        user.setCreationDate(LocalDate.parse("2023-04-01"));
-        user.setTotalRoundsPlayed(0);
-        user.setNumberOfBetsWon(0);
-        user.setNumberOfBetsLost(0);
-        user.setRank(-1);
-        user.setState(UserState.ONLINE);
+        User user = new User("username", "password");
 
         UserPostDTO userPostDTO = new UserPostDTO();
-        userPostDTO.setPassword("Test User");
-        userPostDTO.setUsername("testUsername");
+        userPostDTO.setPassword(user.getPassword());
+        userPostDTO.setUsername(user.getUsername());
 
         given(userService.createUser(Mockito.any())).willReturn(user);
 
@@ -140,19 +128,11 @@ public class UserControllerTest {
     @Test
     void loginValid() throws Exception {
         // given
-        User user = new User();
-        user.setUsername("firstname@lastname");
-        user.setToken("token1");
-        user.setCreationDate(LocalDate.parse("2023-04-01"));
-        user.setTotalRoundsPlayed(0);
-        user.setNumberOfBetsWon(0);
-        user.setNumberOfBetsLost(0);
-        user.setRank(-1);
-        user.setState(UserState.ONLINE);
+        User user = new User("username", "password");
 
         UserPostDTO userPostDTO = new UserPostDTO();
-        userPostDTO.setPassword("Test User");
-        userPostDTO.setUsername("testUsername");
+        userPostDTO.setPassword(user.getPassword());
+        userPostDTO.setUsername(user.getUsername());
 
         given(userService.loginUser(Mockito.any())).willReturn(user);
 
@@ -212,6 +192,67 @@ public class UserControllerTest {
         MockHttpServletRequestBuilder postRequest = post("/users/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPostDTO));
+
+        // then
+        mockMvc.perform(postRequest)
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void logoutValid() throws Exception {
+        // given
+        String token = "test123";
+        Long userID = 1L;
+
+        Mockito.doNothing().when(userService).checkToken(token);
+        Mockito.doNothing().when(userService).logoutUser(userID);
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder postRequest = post("/users/" + "1" + "/logout")
+                        .header("token", "test123");
+        ;
+
+        // then
+        mockMvc.perform(postRequest)
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void logoutInvalidToken() throws Exception {
+        // given
+        String token = "test123";
+        Long userID = 1L;
+
+        Throwable response = new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token (" + token + ")  " + "is invalid");
+
+        Mockito.doThrow(response).when(userService).checkToken(token);
+        Mockito.doNothing().when(userService).logoutUser(userID);
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder postRequest = post("/users/" + "1" + "/logout")
+                        .header("token", "test123");
+        ;
+
+        // then
+        mockMvc.perform(postRequest)
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void logoutInvalidState() throws Exception {
+        // given
+        String token = "test123";
+        Long userID = 1L;
+
+        Throwable response = new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token (" + token + ")  " + "is invalid");
+
+        Mockito.doNothing().when(userService).checkToken(token);
+        Mockito.doThrow(response).when(userService).logoutUser(userID);
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder postRequest = post("/users/" + "1" + "/logout")
+                        .header("token", "test123");
+        ;
 
         // then
         mockMvc.perform(postRequest)

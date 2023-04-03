@@ -143,4 +143,77 @@ public class UserServiceIntegrationTest {
     // check that an error is thrown
     assertThrows(ResponseStatusException.class, () -> userService.loginUser(testUser2));
   }
+
+  @Test
+  void logoutUserValid() {
+    // given
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("testPwd");
+    testUser.setUsername("testUsername");
+
+    // when
+    userService.createUser(testUser);
+    User loggedUser = userService.loginUser(testUser);
+    userService.logoutUser(loggedUser.getUserID());
+    User loggedOutUser = userService.getUserByUserID(loggedUser.getUserID());
+
+    // then
+    assertEquals(loggedUser.getUserID(), loggedOutUser.getUserID());
+    assertEquals(loggedUser.getPassword(), loggedOutUser.getPassword());
+    assertEquals(loggedUser.getUsername(), loggedOutUser.getUsername());
+    assertEquals(loggedUser.getRank(), loggedOutUser.getRank());
+    assertEquals(loggedUser.getNumberOfBetsLost(), loggedOutUser.getNumberOfBetsLost());
+    assertEquals(loggedUser.getNumberOfBetsWon(), loggedOutUser.getNumberOfBetsWon());
+    assertEquals(loggedUser.getTotalRoundsPlayed(), loggedOutUser.getTotalRoundsPlayed());
+    assertEquals(UserState.OFFLINE, loggedOutUser.getState());
+  }
+
+  @Test
+  void logoutUserInvalidState() {
+    // given
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("testPwd");
+    testUser.setUsername("testUsername");
+
+    // when
+    userService.createUser(testUser);
+    User loggedUser = userService.loginUser(testUser);
+    userService.logoutUser(loggedUser.getUserID());
+
+    // check that an error is thrown
+    assertThrows(ResponseStatusException.class, () -> userService.logoutUser(loggedUser.getUserID()));
+  }
+
+  @Test
+  void checkTokenValid() {
+    // given
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("testPwd");
+    testUser.setUsername("testUsername");
+
+    // when
+    userService.createUser(testUser);
+    User loggedUser = userService.loginUser(testUser);
+    userService.logoutUser(loggedUser.getUserID());
+
+    // check that an error is thrown
+    assertDoesNotThrow(() -> userService.checkToken(loggedUser.getToken()));
+  }
+
+  @Test
+  void checkTokenInvalid() {
+    // given
+    String token = "testToken";
+    assertNull(userRepository.findByToken(token));
+
+    // check that an error is thrown
+    assertThrows(ResponseStatusException.class, () -> userService.checkToken(token));
+  }
 }
+

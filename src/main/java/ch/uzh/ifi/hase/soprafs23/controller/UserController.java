@@ -83,7 +83,7 @@ public class UserController {
     }
 
     @PostMapping("/users/{userID}/logout")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
     @CrossOrigin
     public void logoutUser(@PathVariable("userID") Long userID, @RequestHeader("token") String token) {
