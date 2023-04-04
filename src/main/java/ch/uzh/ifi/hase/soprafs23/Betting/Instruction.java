@@ -4,6 +4,7 @@ import ch.uzh.ifi.hase.soprafs23.constant.InstructionType;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @Embeddable
@@ -11,7 +12,7 @@ public class Instruction {
 
     @Column(name = "ownerID")
     private long ownerID;
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private InstructionType type;
     @Column(name = "number")
     private double number;

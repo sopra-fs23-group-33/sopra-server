@@ -27,23 +27,23 @@ import java.util.UUID;
 @Transactional
 public class UserService {
 
-  private final Logger log = LoggerFactory.getLogger(UserService.class);
+    private final Logger log = LoggerFactory.getLogger(UserService.class);
 
-  private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-  @Autowired
-  public UserService(@Qualifier("userRepository") UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
+    @Autowired
+    public UserService(@Qualifier("userRepository") UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-  public List<User> getUsers() {
-    return this.userRepository.findAll();
-  }
+    public List<User> getUsers() {
+        return this.userRepository.findAll();
+    }
 
     public User createUser(User newUser) {
         this.checkIfValidUser(newUser);
         User userCreated = new User(newUser.getUsername(), newUser.getPassword());
-        int rank = this.getUsers().size()+1;
+        int rank = this.getUsers().size() + 1;
         userCreated.setRank(rank);
         userCreated = this.userRepository.save(userCreated);
         this.userRepository.flush();
@@ -75,6 +75,7 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
         }
     }
+
     private User getUserByUsername(User userToFind) {
         User userByUsername = this.userRepository.findByUsername(userToFind.getUsername());
         if (userByUsername != null)
@@ -93,7 +94,7 @@ public class UserService {
             return userByToken;
 
         else {
-            String ErrorMessage = "User with " + token +" was not found";
+            String ErrorMessage = "User with " + token + " was not found";
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
         }
 
@@ -107,7 +108,7 @@ public class UserService {
 
         User userByToken = this.userRepository.findByToken(token);
 
-        if(userByToken == null)
+        if (userByToken == null)
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "The token (" + token + ")  " + "is invalid");
     }
 
@@ -156,28 +157,28 @@ public class UserService {
         }
     }
 
-  /**
-   * This is a helper method that will check the uniqueness criteria of the
-   * username and the name
-   * defined in the User entity. The method will do nothing if the input is unique
-   * and throw an error otherwise.
-   *
-   * @param userToBeCreated
-   * @throws org.springframework.web.server.ResponseStatusException
-   * @see User
-   */
-  private void checkIfUserExists(User userToBeCreated, HttpStatus errorIfFound) {
-    User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
+    /**
+     * This is a helper method that will check the uniqueness criteria of the
+     * username and the name
+     * defined in the User entity. The method will do nothing if the input is unique
+     * and throw an error otherwise.
+     *
+     * @param userToBeCreated
+     * @throws org.springframework.web.server.ResponseStatusException
+     * @see User
+     */
+    private void checkIfUserExists(User userToBeCreated, HttpStatus errorIfFound) {
+        User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
 
-    String baseErrorMessage = "The %s provided already exists: the user could not be created.";
-    if (userByUsername != null) {
-      throw new ResponseStatusException(errorIfFound, String.format(baseErrorMessage, "username"));
+        String baseErrorMessage = "The %s provided already exists: the user could not be created.";
+        if (userByUsername != null) {
+            throw new ResponseStatusException(errorIfFound, String.format(baseErrorMessage, "username"));
+        }
     }
-  }
 
-  public List<User> leaderboard(){
-      List<User> users = this.getUsers();
-      //TODO
-      return users;
-  }
+    public List<User> leaderboard() {
+        List<User> users = this.getUsers();
+        //TODO
+        return users;
+    }
 }

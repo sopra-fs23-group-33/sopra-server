@@ -41,6 +41,5 @@ public class GameService {
         Game createdGame = this.gameRepository.saveAndFlush(newGame);
         return createdGame;
     }
-
-
 }
+

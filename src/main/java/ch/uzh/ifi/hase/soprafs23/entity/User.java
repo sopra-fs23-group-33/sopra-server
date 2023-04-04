@@ -42,6 +42,7 @@ public class User implements Serializable {
     private LocalDate creationDate;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserState status;
 
     @Column(nullable = false)
