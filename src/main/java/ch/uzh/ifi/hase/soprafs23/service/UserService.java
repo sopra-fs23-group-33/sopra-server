@@ -15,6 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * User Service
@@ -41,7 +43,9 @@ public class UserService {
     }
 
     public User createUser(User newUser) {
+        newUser.setUsername(newUser.getUsername().trim()); // trim: why have spaces before and after? may ruin username display
         this.checkIfValidUser(newUser);
+        
         User userCreated = new User(newUser.getUsername(), newUser.getPassword());
         int rank = this.getUsers().size() + 1;
         userCreated.setRank(rank);
@@ -60,20 +64,60 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
         }
 
-        else if (userToBeCreated.getUsername().isEmpty() && userToBeCreated.getPassword().isEmpty()) {
-            String ErrorMessage = "add User failed because username and password are empty";
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        String ErrorMessage = checkIfValidUsername(userToBeCreated.getUsername()) + checkIfValidPassword(userToBeCreated.getPassword());
+        if (!ErrorMessage.equals("")){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessage.substring(0, ErrorMessage.length() - 2));
+        }
+    }
+
+    private String checkIfValidUsername(String username){
+        Pattern patternOneLetter = Pattern.compile("[a-zA-Z]");
+        Pattern patternInvalidCharacters = Pattern.compile("[^a-zA-Z0-9_!?]");
+
+        Matcher matcherOneLetter = patternOneLetter.matcher(username);
+        Matcher matcherInvalidCharacters = patternInvalidCharacters.matcher(username);
+
+        String ErrorMessage = "";
+
+        if (!matcherOneLetter.find()){
+            ErrorMessage = ErrorMessage + "Invalid username: Does not contain alphabetic characters.\n";
+        } if (matcherInvalidCharacters.find()){
+            ErrorMessage = ErrorMessage +  "Invalid username: Contains invalid characters.\n";
+        } if (username.length() > 30){
+            ErrorMessage = ErrorMessage +  "Invalid username: Too long.\n";
         }
 
-        else if (userToBeCreated.getUsername().isEmpty()) {
-            String ErrorMessage = "add User failed because username is empty";
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        return ErrorMessage;
+    }
+
+    private String checkIfValidPassword(String password){
+        Pattern patternOneLetter = Pattern.compile("[a-zA-Z]");
+        Pattern patternOneNumber = Pattern.compile("[0-9]");
+        Pattern patternOneSpecial = Pattern.compile("[_?!]");
+        Pattern patternInvalidCharacters = Pattern.compile("[^a-zA-Z0-9_?!]");
+
+        Matcher matcherOneLetter = patternOneLetter.matcher(password);
+        Matcher matcherOneNumber = patternOneNumber.matcher(password);
+        Matcher matcherOneSpecial = patternOneSpecial.matcher(password);
+        Matcher matcherInvalidCharacters = patternInvalidCharacters.matcher(password);
+
+        String ErrorMessage = "";
+
+        if (!matcherOneLetter.find()){
+            ErrorMessage = ErrorMessage + "Invalid password: Does not contain alphabetic characters.\n";
+        } if (!matcherOneNumber.find()){
+            ErrorMessage = ErrorMessage +  "Invalid password: Does not contain numeric characters.\n";
+        } if (!matcherOneSpecial.find()){
+            ErrorMessage = ErrorMessage +  "Invalid password: Does not contain special characters.\n";
+        } if (matcherInvalidCharacters.find()){
+            ErrorMessage = ErrorMessage +  "Invalid password: Contains invalid characters.\n";
+        } if (password.length() < 8){
+            ErrorMessage = ErrorMessage +  "Invalid password: Too short.\n";
+        } else if (password.length() > 30){
+            ErrorMessage = ErrorMessage +  "Invalid password: Too long.\n";
         }
 
-        else if (userToBeCreated.getPassword().isEmpty()) {
-            String ErrorMessage = "add User failed because password is empty";
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
-        }
+        return ErrorMessage;
     }
 
     private User getUserByUsername(User userToFind) {
