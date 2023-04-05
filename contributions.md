@@ -14,8 +14,9 @@
 |   1   |Letizia | #4   | mostly done        |
 |   1   |Cedric  | #38  | Finished           |
 |   1   |Cedric  | #8   | Finished           |
-|       |        |      |                    |
-|       |        |      |                    |
+|   1   | Christian | #5   |  done           |
+|   1   | Christian | #6   |  done           |
+|   1   | Christian | #7   |  done           |
 |       |        |      |                    |
 |       |        |      |                    |
 |       |        |      |                    |
