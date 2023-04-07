@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 public class UserTest {
     @Test
-    public void equalHashCodes(){
+    void equalHashCodes(){
         User user1 = new User("username", "pwd");
         User user2 = new User("username", "pwd");
 
@@ -14,7 +14,7 @@ public class UserTest {
     }
 
     @Test
-    public void unequalHashCodes(){
+    void unequalHashCodes(){
         User user1 = new User("username", "pwd");
         User user2 = new User("username2", "pwd");
 
@@ -22,7 +22,7 @@ public class UserTest {
     }
 
     @Test
-    public void equalUsers(){
+    void equalUsers(){
         User user1 = new User("username", "pwd");
         User user2 = new User("username", "pwd");
 
@@ -30,7 +30,7 @@ public class UserTest {
     }
 
     @Test
-    public void unequalUsers(){
+    void unequalUsers(){
         User user1 = new User("username", "pwd");
         User user2 = new User("username2", "pwd");
 
@@ -39,7 +39,7 @@ public class UserTest {
 
 
     @Test
-    public void incrementLost(){
+    void incrementLost(){
         User user = new User();
         user.setNumberOfBetsLost(0);
         user.incrementNumberOfBetsLost();
@@ -48,7 +48,7 @@ public class UserTest {
     }
 
     @Test
-    public void incrementWon(){
+    void incrementWon(){
         User user = new User();
         user.setNumberOfBetsWon(0);
         user.incrementNumberOfBetsWon();
@@ -57,7 +57,7 @@ public class UserTest {
     }
 
     @Test
-    public void incrementPlayed(){
+    void incrementPlayed(){
         User user = new User();
         user.setTotalRoundsPlayed(0);
         user.incrementTotalRoundsPlayed();

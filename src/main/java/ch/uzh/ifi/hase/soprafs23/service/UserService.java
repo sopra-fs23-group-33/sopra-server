@@ -72,7 +72,7 @@ public class UserService {
 
     private String checkIfValidUsername(String username){
         Pattern patternOneLetter = Pattern.compile("[a-zA-Z]");
-        Pattern patternInvalidCharacters = Pattern.compile("[^a-zA-Z0-9_!?#@&$]");
+        Pattern patternInvalidCharacters = Pattern.compile("[^a-zA-Z0-9_!?#@&$.]");
 
         Matcher matcherOneLetter = patternOneLetter.matcher(username);
         Matcher matcherInvalidCharacters = patternInvalidCharacters.matcher(username);
@@ -93,8 +93,8 @@ public class UserService {
     private String checkIfValidPassword(String password){
         Pattern patternOneLetter = Pattern.compile("[a-zA-Z]");
         Pattern patternOneNumber = Pattern.compile("[0-9]");
-        Pattern patternOneSpecial = Pattern.compile("[_?!#@&$]");
-        Pattern patternInvalidCharacters = Pattern.compile("[^a-zA-Z0-9_?!#@&$]");
+        Pattern patternOneSpecial = Pattern.compile("[_?!#@&$.]");
+        Pattern patternInvalidCharacters = Pattern.compile("[^a-zA-Z0-9_?!#@&$.]");
 
         Matcher matcherOneLetter = patternOneLetter.matcher(password);
         Matcher matcherOneNumber = patternOneNumber.matcher(password);
