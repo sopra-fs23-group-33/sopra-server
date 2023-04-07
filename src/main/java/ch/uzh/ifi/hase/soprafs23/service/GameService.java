@@ -47,7 +47,7 @@ public class GameService {
 
     private String checkIfValidName(String name){
         Pattern patternOneLetter = Pattern.compile("[a-zA-Z]");
-        Pattern patternInvalidCharacters = Pattern.compile("[^a-zA-Z0-9_!?]");
+        Pattern patternInvalidCharacters = Pattern.compile("[^a-zA-Z0-9_!?#@&$]");
 
         Matcher matcherOneLetter = patternOneLetter.matcher(name);
         Matcher matcherInvalidCharacters = patternInvalidCharacters.matcher(name);
