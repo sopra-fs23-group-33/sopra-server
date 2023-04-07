@@ -40,7 +40,7 @@ public class UserServiceIntegrationTest {
     assertNull(userRepository.findByUsername("testUsername"));
 
     User testUser = new User();
-    testUser.setPassword("testPwd");
+    testUser.setPassword("testPwd1?");
     testUser.setUsername("testUsername");
 
     // when
@@ -63,7 +63,7 @@ public class UserServiceIntegrationTest {
     assertNull(userRepository.findByUsername("testUsername"));
 
     User testUser = new User();
-    testUser.setPassword("testPwd");
+    testUser.setPassword("testPwd2?");
     testUser.setUsername("testUsername");
     userService.createUser(testUser);
 
@@ -71,7 +71,7 @@ public class UserServiceIntegrationTest {
     User testUser2 = new User();
 
     // change the name but forget about the username
-    testUser2.setPassword("testPwd2");
+    testUser2.setPassword("testPwd2?");
     testUser2.setUsername("testUsername");
 
     // check that an error is thrown
@@ -84,7 +84,7 @@ public class UserServiceIntegrationTest {
     assertNull(userRepository.findByUsername("testUsername"));
 
     User testUser = new User();
-    testUser.setPassword("testPwd");
+    testUser.setPassword("testPwd2?");
     testUser.setUsername("testUsername");
 
     // when
@@ -109,7 +109,7 @@ public class UserServiceIntegrationTest {
     assertNull(userRepository.findByUsername("testUsername"));
 
     User testUser = new User();
-    testUser.setPassword("testPwd");
+    testUser.setPassword("testPwd2?");
     testUser.setUsername("testUsername");
     userService.createUser(testUser);
 
@@ -117,7 +117,7 @@ public class UserServiceIntegrationTest {
     User testUser2 = new User();
 
     // change the name but forget about the username
-    testUser2.setPassword("testPwd");
+    testUser2.setPassword("testPwd2?");
     testUser2.setUsername("testUsername2");
 
     // check that an error is thrown
@@ -129,7 +129,7 @@ public class UserServiceIntegrationTest {
     assertNull(userRepository.findByUsername("testUsername"));
 
     User testUser = new User();
-    testUser.setPassword("testPwd");
+    testUser.setPassword("testPwd2?");
     testUser.setUsername("testUsername");
     userService.createUser(testUser);
 
@@ -137,7 +137,7 @@ public class UserServiceIntegrationTest {
     User testUser2 = new User();
 
     // change the name but forget about the username
-    testUser2.setPassword("testPwd2");
+    testUser2.setPassword("testPwd1?");
     testUser2.setUsername("testUsername");
 
     // check that an error is thrown
@@ -150,7 +150,7 @@ public class UserServiceIntegrationTest {
     assertNull(userRepository.findByUsername("testUsername"));
 
     User testUser = new User();
-    testUser.setPassword("testPwd");
+    testUser.setPassword("testPwd2?");
     testUser.setUsername("testUsername");
 
     // when
@@ -176,7 +176,7 @@ public class UserServiceIntegrationTest {
     assertNull(userRepository.findByUsername("testUsername"));
 
     User testUser = new User();
-    testUser.setPassword("testPwd");
+    testUser.setPassword("testPwd2?");
     testUser.setUsername("testUsername");
 
     // when
@@ -194,7 +194,7 @@ public class UserServiceIntegrationTest {
     assertNull(userRepository.findByUsername("testUsername"));
 
     User testUser = new User();
-    testUser.setPassword("testPwd");
+    testUser.setPassword("testPwd2?");
     testUser.setUsername("testUsername");
 
     // when
@@ -215,5 +215,110 @@ public class UserServiceIntegrationTest {
     // check that an error is thrown
     assertThrows(ResponseStatusException.class, () -> userService.checkToken(token));
   }
+
+  @Test
+  void nameAndPasswordValid() {
+    // given
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("testPwd1234?!");
+    testUser.setUsername("testUsername");
+
+    // check that an error is not thrown
+    assertDoesNotThrow(() -> userService.createUser(testUser));
+  }
+
+  @Test
+  void nameInvalidAlphabeticMissing() {
+    // given
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("testPwd1234?!");
+    testUser.setUsername("12321");
+
+    // check that an error is thrown
+    assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser));
+  }
+
+  @Test
+  void nameInvalidIlegalChar() {
+    // given
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("testPwd1234?!");
+    testUser.setUsername("AB()BA");
+
+    // check that an error is thrown
+    assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser));
+  }
+
+  @Test
+  void nameInvalidTooLong() {
+    // given
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("testPwd1234?!");
+    testUser.setUsername("BioJohgurtNature35FettImMilchanteilZutatenMilchMilchproteinMindestensHaltnarBisSieheDeckel");
+
+    // check that an error is thrown
+    assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser));
+  }
+
+  @Test
+  void pwdInvalidSpecialMissing() {
+    // given
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("testPwd1234");
+    testUser.setUsername("testUsername");
+
+    // check that an error is thrown
+    assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser));
+  }
+
+  @Test
+  void pwdInvalidTooShort() {
+    // given
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("T1?");
+    testUser.setUsername("testUsername");
+
+    // check that an error is thrown
+    assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser));
+  }
+
+  @Test
+  void pwdInvalidTooLong() {
+    // given
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("12356789123456789?MilchanteilFett35@@@@@@@@@@@@@@@");
+    testUser.setUsername("testUsername");
+
+    // check that an error is thrown
+    assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser));
+  }
+
+  @Test
+  void pwdInvalidIlegalChar() {
+    // given
+    assertNull(userRepository.findByUsername("testUsername"));
+
+    User testUser = new User();
+    testUser.setPassword("testPwd1234?()");
+    testUser.setUsername("testUsername");
+
+    // check that an error is thrown
+    assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser));
+  }
+
 }
 
