@@ -1,10 +1,10 @@
 package ch.uzh.ifi.hase.soprafs23.rest.mapper;
 
-import ch.uzh.ifi.hase.soprafs23.entity.Game;
+import ch.uzh.ifi.hase.soprafs23.Data.GameData;
+import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
+import ch.uzh.ifi.hase.soprafs23.Game.Game;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.GameGetDTO;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.UserGetDTO;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
+import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -40,14 +40,34 @@ public interface DTOMapper {
 
     @Mapping(source = "gameID", target = "gameID")
     @Mapping(source = "name", target = "name")
-    @Mapping(source = "state", target = "state")
-    @Mapping(source = "type", target = "type")
+    @Mapping(source = "status", target = "status")
+    @Mapping(source = "typeOfGame", target = "typeOfGame")
     @Mapping(source = "totalLobbySize", target = "totalLobbySize")
     @Mapping(source = "numberOfPlayersInLobby", target = "numberOfPlayersInLobby")
     @Mapping(source = "numberOfRoundsToPlay", target = "numberOfRoundsToPlay")
-    @Mapping(source = "numberOfRoundsPlayed", target = "numberOfRoundsPlayed")
+    @Mapping(source = "currentRoundPlayed", target = "currentRoundPlayed")
     @Mapping(source = "powerupsActive", target = "powerupsActive")
     @Mapping(source = "eventsActive", target = "eventsActive")
     @Mapping(source = "timer", target = "timer")
-    GameGetDTO convertGameToGameGetDTO(Game game);
+    @Mapping(source = "creator", target = "creator")
+    GameGetDTO convertGameDataToGameGetDTO(GameData gameData);
+
+
+
+    @Mapping(source = "name", target = "name")
+    @Mapping(source = "typeOfGame", target = "typeOfGame")
+    @Mapping(source = "totalLobbySize", target = "totalLobbySize")
+    @Mapping(source = "numberOfRoundsToPlay", target = "numberOfRoundsToPlay")
+    @Mapping(source = "powerupsActive", target = "powerupsActive")
+    @Mapping(source = "eventsActive", target = "eventsActive")
+    @Mapping(source = "creator", target = "creator")
+    GameData convertGamePostDTOToGameData(GamePostDTO gamePostDTO);
+
+    @Mapping(source = "username", target = "username")
+    @Mapping(source = "playerID", target = "playerID")
+    @Mapping(source = "accountBalance", target = "accountBalance")
+    @Mapping(source = "numberOfWonRounds", target = "numberOfWonRounds")
+    @Mapping(source = "numberOfLostRounds", target = "numberOfLostRounds")
+    @Mapping(source = "typeOfCurrentBet", target = "typeOfCurrentBet")
+    PlayerGetDTO convertPlayerDataToPlayerGetDTO(PlayerData playerData);
 }

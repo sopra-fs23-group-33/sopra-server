@@ -1,7 +1,7 @@
-package ch.uzh.ifi.hase.soprafs23.rest.dto;
+package ch.uzh.ifi.hase.soprafs23.Data;
 
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
-import ch.uzh.ifi.hase.soprafs23.constant.GameState;
+import ch.uzh.ifi.hase.soprafs23.Game.GameStatus;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -9,7 +9,8 @@ import ch.uzh.ifi.hase.soprafs23.entity.User;
 import javax.persistence.*;
 import java.util.List;
 
-public class GameGetDTO {
+
+public class GameData {
     Long gameID;
 
     String status;

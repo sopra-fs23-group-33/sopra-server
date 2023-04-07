@@ -120,13 +120,13 @@ public class UserService {
         return ErrorMessage;
     }
 
-    private User getUserByUsername(User userToFind) {
-        User userByUsername = this.userRepository.findByUsername(userToFind.getUsername());
+    public User getUserByUsername(String username) {
+        User userByUsername = this.userRepository.findByUsername(username);
         if (userByUsername != null)
             return userByUsername;
 
         else {
-            String ErrorMessage = "User with username " + userToFind.getUsername() + " was not found";
+            String ErrorMessage = "User with username " + username + " was not found";
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
         }
 
@@ -168,7 +168,7 @@ public class UserService {
     }
 
     public User loginUser(User userToLogin) {
-        User foundUser = this.getUserByUsername(userToLogin);
+        User foundUser = this.getUserByUsername(userToLogin.getUsername());
 
         if (!foundUser.getPassword().equals(userToLogin.getPassword())) {
             String ErrorMessage = "login failed because password is wrong";

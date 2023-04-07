@@ -3,7 +3,13 @@ package ch.uzh.ifi.hase.soprafs23.entity;
 import ch.uzh.ifi.hase.soprafs23.Betting.Bet;
 import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.Betting.InstructionManager;
+import ch.uzh.ifi.hase.soprafs23.Betting.Result;
+import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
+import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
+import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -32,9 +38,15 @@ public class Player {
     @Embedded
     private Bet currentBet;
 
+    @Enumerated(EnumType.STRING)
+    PlayerState state;
+
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+            fetch = FetchType.LAZY)
     InstructionManager instructionManager;
+
+    @Embedded
+    Result result;
 
     public Player() {}
 
@@ -43,7 +55,10 @@ public class Player {
         this.balance = 1000;
         this.numberOfBetsWon = 0;
         this.numberOfBetsLost = 0;
-        this.currentBet = new Bet(Direction.NONE, 0);
+        this.resetBet();
+        this.state = PlayerState.ACTIVE;
+        this.result = new Result(Direction.NONE, 0, 0);
+        this.user.setState(UserState.PLAYING);
     }
 
     public void init(){
@@ -52,8 +67,13 @@ public class Player {
         this.instructionManager = newInstructionManager;
     }
 
-    public void placeBet(Bet newBet){
-        this.currentBet = newBet;
+    public void placeBet(Bet newBet) {
+        if (this.state == PlayerState.ACTIVE)
+            this.currentBet = newBet;
+        else {
+            String ErrorMessage = "Failed to place bet because player already left game";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
     }
 
     public void addInstruction(Instruction instruction){
@@ -73,10 +93,27 @@ public class Player {
 
         this.user.incrementTotalRoundsPlayed();
 
-        this.balance = this.instructionManager.computeNewBalance(direction, ratio);
+        int newBalance = this.instructionManager.computeNewBalance(direction, ratio);
+        int profit = newBalance - this.balance;
+        this.result = new Result(direction, profit, this.currentBet.getAmount());
+        this.balance = newBalance;
+    }
 
-        this.user.incrementTotalRoundsPlayed();
+    public void resetBet(){
         this.currentBet = new Bet(Direction.NONE, 0);
+    }
+
+    public PlayerData status(){
+        PlayerData data = new PlayerData();
+
+        data.setPlayerID(this.playerID);
+        data.setUsername(this.user.getUsername());
+        data.setAccountBalance(this.balance);
+        data.setNumberOfWonRounds(this.numberOfBetsWon);
+        data.setNumberOfLostRounds(this.numberOfBetsLost);
+        data.setTypeOfCurrentBet(this.currentBet.getDirection().toString());
+
+        return data;
     }
 
     public Long getPlayerID() {
@@ -89,6 +126,22 @@ public class Player {
 
     public Bet getCurrentBet() {
         return currentBet;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setState(PlayerState state) {
+        this.state = state;
+    }
+
+    public PlayerState getState() {
+        return state;
+    }
+
+    public Result getResult(){
+        return this.result;
     }
 
     @Override

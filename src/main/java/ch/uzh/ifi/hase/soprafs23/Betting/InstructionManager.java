@@ -34,10 +34,9 @@ public class InstructionManager {
     }
 
     public void init(Player player) {
-        if(this.player == null) {
-            this.player = player;
-            this.instructions = new ArrayList<>();
-        }
+        this.player = player;
+        this.instructions = new ArrayList<>();
+
     }
 
     public void addInstruction(Instruction instruction){
