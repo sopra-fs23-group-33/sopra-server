@@ -27,20 +27,20 @@ public class UserServiceTest {
   private User testUser;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     MockitoAnnotations.openMocks(this);
 
     // given
     testUser = new User();
     testUser.setUserID(12321L);
-    testUser.setUsername("firstname@lastname");
+    testUser.setUsername("firstnamelastname");
     testUser.setToken("token1");
     testUser.setCreationDate(LocalDate.parse("2023-04-01"));
     testUser.setTotalRoundsPlayed(0);
     testUser.setNumberOfBetsWon(0);
     testUser.setNumberOfBetsLost(0);
     testUser.setRank(-1);
-    testUser.setPassword("qwe321");
+    testUser.setPassword("qwe321???");
 
 
     // when -> any object is being save in the userRepository -> return the dummy
@@ -49,7 +49,7 @@ public class UserServiceTest {
   }
 
   @Test
-  public void createUser_validInputs_success() {
+  void createUser_validInputs_success() {
     // when -> any object is being save in the userRepository -> return the dummy
     // testUser
     User createdUser = userService.createUser(testUser);
@@ -65,7 +65,7 @@ public class UserServiceTest {
   }
 
   @Test
-  public void createUser_duplicateName_throwsException() {
+  void createUser_duplicateName_throwsException() {
     // given -> a first user has already been created
     userService.createUser(testUser);
 
@@ -79,7 +79,7 @@ public class UserServiceTest {
   }
 
   @Test
-  public void createUser_duplicateInputs_throwsException() {
+  void createUser_duplicateInputs_throwsException() {
     // given -> a first user has already been created
     userService.createUser(testUser);
 

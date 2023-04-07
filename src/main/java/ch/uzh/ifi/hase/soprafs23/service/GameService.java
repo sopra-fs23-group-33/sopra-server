@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Service
 @Transactional
 public class GameService {
@@ -40,6 +43,26 @@ public class GameService {
 
         Game createdGame = this.gameRepository.saveAndFlush(newGame);
         return createdGame;
+    }
+
+    private String checkIfValidName(String name){
+        Pattern patternOneLetter = Pattern.compile("[a-zA-Z]");
+        Pattern patternInvalidCharacters = Pattern.compile("[^a-zA-Z0-9_!?#@&$]");
+
+        Matcher matcherOneLetter = patternOneLetter.matcher(name);
+        Matcher matcherInvalidCharacters = patternInvalidCharacters.matcher(name);
+
+        String ErrorMessage = "";
+
+        if (!matcherOneLetter.find()){
+            ErrorMessage = ErrorMessage + "Invalid name: Does not contain alphabetic characters.\n";
+        } if (matcherInvalidCharacters.find()){
+            ErrorMessage = ErrorMessage +  "Invalid name: Contains invalid characters.\n";
+        } if (name.length() > 30){
+            ErrorMessage = ErrorMessage +  "Invalid name: Too long.\n";
+        }
+
+        return ErrorMessage;
     }
 }
 
