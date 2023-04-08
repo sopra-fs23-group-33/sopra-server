@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs23.controller;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
+import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
@@ -10,6 +11,7 @@ import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.GameService;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,9 +19,12 @@ public class GameController {
     private final GameService gameService;
     private final UserService userService;
 
-    GameController(GameService gameService, UserService userService) {
+    private final GameRunner gameRunner;
+
+    GameController(GameService gameService, UserService userService, GameRunner gameRunner) {
         this.gameService = gameService;
         this.userService = userService;
+        this.gameRunner = gameRunner;
     }
 
 
@@ -95,7 +100,7 @@ public class GameController {
     }
 
     @PostMapping("/game/{gameID}/leave")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @CrossOrigin
     public void leave(@PathVariable("gameID") Long gameID, @RequestBody UserPostDTO userPostDTO, @RequestHeader("token") String token) {
         this.userService.checkToken(token);
@@ -103,6 +108,15 @@ public class GameController {
         User userToLeave = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
         this.gameService.leave(userToLeave, gameID);
+    }
+
+    @PostMapping("/game/{gameID}/start")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CrossOrigin
+    public void start(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token)  {
+        this.userService.checkToken(token);
+
+        this.gameService.start(gameID);
     }
 
 }

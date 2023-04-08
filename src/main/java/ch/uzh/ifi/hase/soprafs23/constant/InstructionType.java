@@ -12,7 +12,6 @@ public enum InstructionType {
         ADD, MUL;
     }
 
-    ;
     private final double defaultValue;
 
     private final Symbol symbol;

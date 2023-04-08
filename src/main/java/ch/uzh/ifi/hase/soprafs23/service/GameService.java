@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
+import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
 import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -30,14 +32,19 @@ public class GameService {
     private final PlayerRepository playerRepository;
     private final GameStatusRepository gameStatusRepository;
 
+    private final GameRunner gameRunner;
+
     @Autowired
     public GameService(@Qualifier("gameRepository") GameRepository gameRepository,
                        UserService userService,
-                       PlayerRepository playerRepository, GameStatusRepository gameStatusRepository, GameStatusRepository gameStatusRepository1) {
+                       PlayerRepository playerRepository,
+                       GameStatusRepository gameStatusRepository,
+                       GameRunner gameRunner) {
         this.gameRepository = gameRepository;
         this.userService = userService;
         this.playerRepository = playerRepository;
         this.gameStatusRepository = gameStatusRepository;
+        this.gameRunner = gameRunner;
     }
 
     private void flush(){
@@ -130,6 +137,11 @@ public class GameService {
         game.leave(user);
         game = this.gameRepository.saveAndFlush(game);
         this.flush();
+    }
+
+    public void start(Long gameID){
+        Game game = this.getGameByGameID(gameID);
+        gameRunner.run(game);
     }
 }
 
