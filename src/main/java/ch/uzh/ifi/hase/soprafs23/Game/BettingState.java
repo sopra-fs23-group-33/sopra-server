@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
+import ch.uzh.ifi.hase.soprafs23.exceptions.PlayerNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,7 +23,7 @@ public class BettingState extends GameStatus{
     public BettingState(){}
 
     @Override
-    public void leave(User user) {
+    public void leave(User user) throws PlayerNotFoundException {
         Player player = this.game.findPlayerByUser(user);
         player.setState(PlayerState.INACTIVE);
         //this.game.players.remove(player);
@@ -37,7 +38,7 @@ public class BettingState extends GameStatus{
 
     @Override
     public void endRound(){
-        GameRound gameRound = this.game.gameRounds.get(this.game.currentRoundPlayed);
+        GameRound gameRound = this.game.gameRounds.get(this.game.currentRoundPlayed-1);
         ArrayList<Player> playersToRemove = new ArrayList<>();
 
         for(Player player: this.game.players){

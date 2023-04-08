@@ -1,15 +1,22 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
+import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
+import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
+import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
 import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
+import ch.uzh.ifi.hase.soprafs23.exceptions.ChartException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToJoinException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.PlayerNotFoundException;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.GameStatusRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.PlayerRepository;
+import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,7 +65,7 @@ public class GameService {
 
     public Game createGame(User user, GameData gameData){
         if(!user.getState().equals(UserState.ONLINE)) {
-            String ErrorMessage = "cannot Create game because user is still in an ongoing game";
+            String ErrorMessage = "cannot Create game because user is still in an ongoing game or offline";
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
         }
         User creator = this.userService.getUserByUserID(user.getUserID());
@@ -125,23 +135,112 @@ public class GameService {
     public Player join(User userToJoin, Long gameID){
         Game game = this.getGameByGameID(gameID);
         User user = this.userService.getUserByUsername(userToJoin.getUsername());
-        Player player = game.join(user);
+
+        try {
+            Player player = game.join(user);
+        }
+        catch (FailedToJoinException e){
+            String ErrorMessage = e.getMessage();
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+
         game = this.gameRepository.saveAndFlush(game);
-        this.flush();
-        return game.findPlayerByUser(user);
+
+        try{
+            return game.findPlayerByUser(user);
+        }
+        catch (PlayerNotFoundException e){
+            String ErrorMessage = e.getMessage();
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
     }
 
-    public void leave(User userToJoin, Long gameID){
+    public void leave(User userToLeave, Long gameID){
         Game game = this.getGameByGameID(gameID);
-        User user = this.userService.getUserByUsername(userToJoin.getUsername());
-        game.leave(user);
-        game = this.gameRepository.saveAndFlush(game);
-        this.flush();
+        User user = this.userService.getUserByUsername(userToLeave.getUsername());
+        try {
+            game.leave(user);
+            game = this.gameRepository.saveAndFlush(game);
+        }
+        catch (PlayerNotFoundException e){
+            String ErrorMessage = "Failed to leave game because player is not member of this game";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+
+        if(game.getNumberOfPlayersInLobby() == 0){
+            this.gameRepository.deleteByGameID(game.getGameID());
+            this.gameRepository.flush();
+        }
     }
 
     public void start(Long gameID){
         Game game = this.getGameByGameID(gameID);
-        gameRunner.run(game);
+        if(game.canStart() && game.getState().equals(GameState.LOBBY))
+            gameRunner.run(game);
+        else{
+            String ErrorMessage = "Game with gameId " + gameID + " cannot be started";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+    }
+
+    public Player creator(Long gameID){
+        Game game = this.getGameByGameID(gameID);
+        try {
+            return game.creator();
+        }
+        catch (PlayerNotFoundException e){
+            String ErrorMessage = "Creator was not found";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+        }
+    }
+
+    public Chart chart(Long gameID){
+        Game game = this.getGameByGameID(gameID);
+        try{
+            return game.chart();
+        }
+        catch (ChartException e) {
+            String ErrorMessage = e.getMessage();
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+    }
+
+    public List<Player> players(Long gameID){
+        Game game = this.getGameByGameID(gameID);
+        List<Player> players =  game.getPlayers();
+        players.sort(Comparator.comparingInt(Player ::getBalance));
+        return players;
+    }
+
+    public List<GameData> getAllGames(String filter){
+        GameState gameState;
+        try {
+            gameState = GameState.valueOf(filter);
+        }
+        catch (Exception e){
+            String ErrorMessage = "invalid filter argument provided";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+
+        List<Game> games = this.gameRepository.findAll();
+        List<GameData> gameData = new ArrayList<>();
+
+        for(Game game: games){
+            if (game.getState().equals(gameState))
+                gameData.add(game.status());
+        }
+
+        return gameData;
+    }
+
+    public List<GameData> getAllGames() {
+        List<Game> games = this.gameRepository.findAll();
+        List<GameData> gameData = new ArrayList<>();
+
+        for(Game game: games) {
+            gameData.add(game.status());
+        }
+        return gameData;
     }
 }
 

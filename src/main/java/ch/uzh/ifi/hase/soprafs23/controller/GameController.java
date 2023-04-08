@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs23.Game.Game;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
+import ch.uzh.ifi.hase.soprafs23.exceptions.PlayerNotFoundException;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.GameService;
@@ -13,6 +14,10 @@ import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class GameController {
@@ -28,7 +33,7 @@ public class GameController {
     }
 
 
-    @PostMapping("/game/create")
+    @PostMapping("/games/create")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public GameGetDTO createGame(@RequestBody GamePostDTO gamePostDTO, @RequestHeader("token") String token) {
@@ -42,7 +47,7 @@ public class GameController {
         return DTOMapper.INSTANCE.convertGameDataToGameGetDTO(game.status());
     }
 
-    @GetMapping("/game/{gameID}")
+    @GetMapping("/games/{gameID}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @CrossOrigin
@@ -56,21 +61,20 @@ public class GameController {
         return DTOMapper.INSTANCE.convertGameDataToGameGetDTO(gameData);
     }
 
-    @GetMapping("/game/{gameID}/creator")
+    @GetMapping("/games/{gameID}/creator")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @CrossOrigin
     public PlayerGetDTO getCreator(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token) {
         this.userService.checkToken(token);
 
-        Game game = this.gameService.getGameByGameID(gameID);
-        Player creator = game.creator();
+        Player creator = this.gameService.creator(gameID);
         PlayerData playerData = creator.status();
 
         return DTOMapper.INSTANCE.convertPlayerDataToPlayerGetDTO(playerData);
     }
 
-    @GetMapping("/game/{gameID}/status")
+    @GetMapping("/games/{gameID}/status")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @CrossOrigin
@@ -84,7 +88,7 @@ public class GameController {
         return DTOMapper.INSTANCE.convertGameDataToGameGetDTO(gameData);
     }
 
-    @PostMapping("/game/{gameID}/join")
+    @PostMapping("/games/{gameID}/join")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @CrossOrigin
@@ -99,7 +103,7 @@ public class GameController {
         return DTOMapper.INSTANCE.convertPlayerDataToPlayerGetDTO(playerData);
     }
 
-    @PostMapping("/game/{gameID}/leave")
+    @PostMapping("/games/{gameID}/leave")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CrossOrigin
     public void leave(@PathVariable("gameID") Long gameID, @RequestBody UserPostDTO userPostDTO, @RequestHeader("token") String token) {
@@ -110,13 +114,56 @@ public class GameController {
         this.gameService.leave(userToLeave, gameID);
     }
 
-    @PostMapping("/game/{gameID}/start")
+    @PostMapping("/games/{gameID}/start")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CrossOrigin
     public void start(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token)  {
         this.userService.checkToken(token);
 
         this.gameService.start(gameID);
+    }
+
+    @GetMapping("/games")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<GameGetDTO> getAllGames(@RequestParam(required = false) String filter, @RequestHeader("token") String token) {
+
+        this.userService.checkToken(token);
+
+        List<GameData> games = new ArrayList<>();
+
+        if(filter != null){
+            games = this.gameService.getAllGames(filter);
+        }
+
+        else{
+            games = this.gameService.getAllGames();
+        }
+
+        List<GameGetDTO> gameGetDTOS = new ArrayList<>();
+
+        // convert each user to the API representation
+        for (GameData gameData : games) {
+            gameGetDTOS.add(DTOMapper.INSTANCE.convertGameDataToGameGetDTO(gameData));
+        }
+        return gameGetDTOS;
+    }
+
+    @GetMapping("/games/{gameID}/players")
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin
+    public List<PlayerGetDTO> players(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token)  {
+        this.userService.checkToken(token);
+
+        List<Player> players = this.gameService.players(gameID);
+
+        List<PlayerGetDTO> playerGetDTOS = new ArrayList<>();
+
+        for(Player player: players){
+            playerGetDTOS.add(DTOMapper.INSTANCE.convertPlayerDataToPlayerGetDTO(player.status()));
+        }
+
+        return playerGetDTOS;
     }
 
 }

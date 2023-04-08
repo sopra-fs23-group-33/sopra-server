@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
+import ch.uzh.ifi.hase.soprafs23.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -19,44 +20,45 @@ public class LobbyState extends GameStatus{
     public LobbyState(){}
 
     @Override
-    public Player join(User user) {
+    public Player join(User user) throws FailedToJoinException {
 
         try{
-            Player player = this.game.findPlayerByUser(user);
-            return player;
+            return this.game.findPlayerByUser(user);
         }
 
-        catch (Exception e) {
+        catch (PlayerNotFoundException e) {
             if(!user.getState().equals(UserState.ONLINE)) {
-                String ErrorMessage = "Failed to join game because user is not online";
-                throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+                throw new FailedToJoinExceptionBecauseOffline();
+                //String ErrorMessage = "Failed to join game because user is not online";
+                //throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
             }
 
-            if(this.game.getNumberOfPlayersInLobby() < this.game.totalLobbySize) {
+            else if(this.game.getNumberOfPlayersInLobby() < this.game.totalLobbySize) {
                 Player newPlayer = new Player(user);
                 newPlayer.init();
                 this.game.players.add(newPlayer);
                 return newPlayer;
             }
+            else if(this.game.getNumberOfPlayersInLobby() >= this.game.totalLobbySize){
+                throw new FailedToJoinExceptionBecauseLobbyFull();
+                //String ErrorMessage = "Failed to join game because lobby is full";
+                //throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+            }
             else {
-                String ErrorMessage = "Failed to join game because lobby is full";
-                throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+                throw new FailedToJoinException();
             }
         }
     }
     @Override
-    public void start(){
-        if(this.game.canStart()){
+    public void start() throws StartException {
+        if(this.game.canStart())
             this.game.setGameStatus(new BettingState(this.game));
-        }
-        else{
-            String ErrorMessage = "game cannot be started because conditions for start are not satisfied";
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
-        }
+        else
+            throw new StartException();
     }
 
     @Override
-    public void leave(User user) {
+    public void leave(User user) throws PlayerNotFoundException {
         Player player = this.game.findPlayerByUser(user);
         player.setState(PlayerState.INACTIVE);
         this.game.remove(player);

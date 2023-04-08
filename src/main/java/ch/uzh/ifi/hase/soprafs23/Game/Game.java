@@ -11,6 +11,10 @@ import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
+import ch.uzh.ifi.hase.soprafs23.exceptions.ChartException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToJoinException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.PlayerNotFoundException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.StartException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -85,15 +89,18 @@ public class Game {
 
     public void init(){
         this.gameStatus = new LobbyState(this);
-        Player player = this.join(this.creator);
+        try {
+            Player player = this.join(this.creator);
+        }
+        catch (FailedToJoinException ignored){}
     }
 
 
-    public Player join(User user){
+    public Player join(User user) throws FailedToJoinException {
         return this.gameStatus.join(user);
     }
 
-    public void leave(User user){
+    public void leave(User user) throws PlayerNotFoundException {
         this.gameStatus.leave(user);
     }
 
@@ -107,31 +114,34 @@ public class Game {
         }
     }
 
-    public Player findPlayerByUser(User user){
+    public Player findPlayerByUser(User user) throws PlayerNotFoundException {
         for(Player player: this.players){
             if(player.getUser().equals(user)){
                 return player;
             }
         }
-        String ErrorMessage = "User is not member of this game";
-        throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        throw new PlayerNotFoundException();
     }
 
 
-    public Player creator(){
+    public Player creator() throws PlayerNotFoundException {
         return this.findPlayerByUser(this.creator);
     }
 
-    public void start(){
+    public void start() throws StartException {
         this.gameStatus.start();
     }
 
+    public boolean checkIntegrity(){
+        return this.type.validNumberOfPlayers(this.getNumberOfPlayersInLobby());
+    }
+
     public boolean canStart(){
-        if(!this.type.validNumberOfPlayers(this.getNumberOfPlayersInLobby()))
+        if(!this.checkIntegrity())
             return false;
         else if(this.getNumberOfPlayersInLobby() > this.totalLobbySize)
             return false;
-        else if(this.numberOfRoundsToPlay != this.gameRounds.size())
+        else if(this.gameRounds.size() < 1)
             return false;
         else
             return true;
@@ -163,7 +173,7 @@ public class Game {
         return data;
     }
 
-    public Chart chart(){
+    public Chart chart() throws ChartException {
         return this.gameStatus.chart();
     }
 

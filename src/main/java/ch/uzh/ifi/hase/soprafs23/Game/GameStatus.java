@@ -5,6 +5,10 @@ import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
+import ch.uzh.ifi.hase.soprafs23.exceptions.ChartException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToJoinException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.PlayerNotFoundException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.StartException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,25 +41,24 @@ public abstract class GameStatus {
         return this.gameState;
     }
 
-    public Player join(User user){
-        String ErrorMessage = "User failed to join game";
-        throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+    public Player join(User user) throws FailedToJoinException {
+        throw new FailedToJoinException();
+        //String ErrorMessage = "User failed to join game";
+        //throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
     }
 
-    public void leave(User user) {
+    public void leave(User user) throws PlayerNotFoundException {
         Player player = this.game.findPlayerByUser(user);
         player.setState(PlayerState.INACTIVE);
         this.game.remove(player);
     }
 
-    public void start(){
-        String ErrorMessage = "Failed to start game because game is not in lobby state";
-        throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+    public void start() throws StartException {
+        throw new StartException();
     }
 
-    public Chart chart(){
-        String ErrorMessage = "Failed to fetch chart";
-        throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+    public Chart chart() throws ChartException {
+        throw new ChartException();
     }
 
     public void endRound(){

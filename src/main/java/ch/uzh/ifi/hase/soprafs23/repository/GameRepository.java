@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface GameRepository extends JpaRepository<Game, Long> {
     Game findByGameID(Long gameID);
 
+    void deleteByGameID(Long gameID);
+
 }
