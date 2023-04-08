@@ -3,6 +3,7 @@
 
 runtime: java17
 env: flex
+version: v2
 
 runtime_config:
   operating_system: "ubuntu22"
