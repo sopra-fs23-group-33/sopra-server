@@ -2,7 +2,9 @@ package ch.uzh.ifi.hase.soprafs23.Forex;
 
 
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
+import ch.uzh.ifi.hase.soprafs23.exceptions.ChartException;
 import com.crazzyghost.alphavantage.AlphaVantage;
+import com.crazzyghost.alphavantage.AlphaVantageException;
 import com.crazzyghost.alphavantage.Config;
 import com.crazzyghost.alphavantage.forex.response.ForexResponse;
 import com.crazzyghost.alphavantage.forex.response.ForexUnit;
@@ -10,7 +12,7 @@ import com.crazzyghost.alphavantage.parameters.Interval;
 import com.crazzyghost.alphavantage.parameters.OutputSize;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChartAPI {
 
@@ -27,13 +29,15 @@ public class ChartAPI {
         AlphaVantage.api().init(cfg);
     }
 
-    public GameRound getGameRound(CurrencyPair currencyPair){
+    public GameRound getGameRound(CurrencyPair currencyPair) throws ChartException {
         ForexResponse response = this.fetchChart(currencyPair);
         Chart chart = this.convertToChart(response);
         return new GameRound(chart);
     }
 
-    private ForexResponse fetchChart(CurrencyPair currencyPair){
+
+    private ForexResponse fetchChart(CurrencyPair currencyPair) throws ChartException {
+        AtomicBoolean failure = new AtomicBoolean(false);
 
         ForexResponse response = AlphaVantage.api()
                 .forex()
@@ -42,7 +46,11 @@ public class ChartAPI {
                 .toSymbol(currencyPair.getTo().toString())
                 .interval(this.interval)
                 .outputSize(this.outputSize)
+                .onFailure(e-> failure.set(true))
                 .fetchSync();
+
+        if(failure.get())
+            throw new ChartException();
 
         return response;
     }

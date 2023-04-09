@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs23.Data;
 
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.Game.GameStatus;
+import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -13,11 +14,11 @@ import java.util.List;
 public class GameData {
     Long gameID;
 
-    String status;
+    GameState status;
 
     String name;
 
-    String typeOfGame;
+    GameType typeOfGame;
 
     boolean powerupsActive;
 
@@ -45,13 +46,7 @@ public class GameData {
         this.gameID = gameID;
     }
 
-    public String getStatus() {
-        return status;
-    }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public String getName() {
         return name;
@@ -61,13 +56,6 @@ public class GameData {
         this.name = name;
     }
 
-    public String getTypeOfGame() {
-        return typeOfGame;
-    }
-
-    public void setTypeOfGame(String typeOfGame) {
-        this.typeOfGame = typeOfGame;
-    }
 
     public boolean isPowerupsActive() {
         return powerupsActive;
@@ -141,6 +129,22 @@ public class GameData {
 
     public void setCreator(String creator) {
         this.creator = creator;
+    }
+
+    public GameState getStatus() {
+        return status;
+    }
+
+    public void setStatus(GameState status) {
+        this.status = status;
+    }
+
+    public GameType getTypeOfGame() {
+        return typeOfGame;
+    }
+
+    public void setTypeOfGame(GameType typeOfGame) {
+        this.typeOfGame = typeOfGame;
     }
 
 }

@@ -1,8 +1,10 @@
 package ch.uzh.ifi.hase.soprafs23.Forex;
 
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
+import ch.uzh.ifi.hase.soprafs23.entity.User;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Embeddable
 public class CurrencyPair {
@@ -30,4 +32,30 @@ public class CurrencyPair {
     public Currency getTo() {
         return to;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+        else if (other == this) {
+            return true;
+        }
+        else if (other.getClass() != getClass()) {
+            return false;
+        }
+        else {
+            CurrencyPair cp = (CurrencyPair) other;
+
+            return (this.to.equals(cp.to) && this.from.equals(cp.from)) ||
+                    (this.to.equals(cp.from) && this.from.equals(cp.to));
+        }
+    }
+
+
+    @Override
+    public int hashCode() {
+            return this.to.hashCode() * this.from.hashCode();
+    }
+
 }

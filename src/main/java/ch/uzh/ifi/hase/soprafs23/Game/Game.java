@@ -11,10 +11,10 @@ import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-import ch.uzh.ifi.hase.soprafs23.exceptions.ChartException;
-import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToJoinException;
-import ch.uzh.ifi.hase.soprafs23.exceptions.PlayerNotFoundException;
-import ch.uzh.ifi.hase.soprafs23.exceptions.StartException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.OptimisticLocking;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -49,10 +49,12 @@ public class Game {
     @Column(name = "numberOfRoundsPlayed", nullable = false)
     int currentRoundPlayed;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
     List<GameRound> gameRounds;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
     List<Player> players;
 
     @OneToOne(cascade = CascadeType.PERSIST)
@@ -68,7 +70,7 @@ public class Game {
     int timer;
 
     @OneToOne(mappedBy = "game", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, orphanRemoval = true)
+            fetch = FetchType.EAGER, orphanRemoval = true)
     GameStatus gameStatus;
 
     public Game() {}
@@ -80,7 +82,7 @@ public class Game {
         this.powerupsActive = gameData.isPowerupsActive();
         this.numberOfRoundsToPlay = gameData.getNumberOfRoundsToPlay();
         this.totalLobbySize = gameData.getTotalLobbySize();
-        this.type = GameType.valueOf(gameData.getTypeOfGame());
+        this.type = gameData.getTypeOfGame();
         this.currentRoundPlayed = 0;
         //this.numberOfPlayersInLobby = 1;
         this.gameRounds = new ArrayList<>();
@@ -133,7 +135,10 @@ public class Game {
     }
 
     public boolean checkIntegrity(){
-        return this.type.validNumberOfPlayers(this.getNumberOfPlayersInLobby());
+        if(this.currentRoundPlayed + 1 > this.gameRounds.size())
+            return false;
+        else
+            return this.type.validNumberOfPlayers(this.getNumberOfPlayersInLobby());
     }
 
     public boolean canStart(){
@@ -146,11 +151,16 @@ public class Game {
         else
             return true;
     }
-    public void endRound(){
+
+    public void addGameRound(GameRound gameRound){
+        if(this.gameRounds.size() < this.numberOfRoundsToPlay)
+            this.gameRounds.add(gameRound);
+    }
+    public void endRound() throws endRoundException {
         this.gameStatus.endRound();
     }
 
-    public void nextRound(){
+    public void nextRound() throws nextRoundException {
         this.gameStatus.nextRound();
     }
 
@@ -158,14 +168,15 @@ public class Game {
         GameData data = new GameData();
 
         data.setGameID(this.getGameID());
-        data.setStatus(this.gameStatus.gameState.toString());
+        data.setStatus(this.gameStatus.gameState);
         data.setName(this.getName());
-        data.setTypeOfGame(this.getType().toString());
+        data.setTypeOfGame(this.getType());
         data.setPowerupsActive(this.powerupsActive);
         data.setEventsActive(this.eventsActive);
         data.setTimer(this.getTimer());
         data.setTotalLobbySize(this.getTotalLobbySize());
         data.setNumberOfPlayersInLobby(this.getNumberOfPlayersInLobby());
+        data.setNumberOfRoundsToPlay(this.numberOfRoundsToPlay);
         data.setCurrentRoundPlayed(this.getCurrentRoundPlayed());
         data.setEvent(null);
         data.setCreator(this.creator.getUsername());

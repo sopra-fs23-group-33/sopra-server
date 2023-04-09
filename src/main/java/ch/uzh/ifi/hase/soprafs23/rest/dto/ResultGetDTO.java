@@ -1,24 +1,13 @@
-package ch.uzh.ifi.hase.soprafs23.Betting;
+package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
-
-import ch.qos.logback.core.rolling.TimeBasedFileNamingAndTriggeringPolicyBase;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 
-import javax.persistence.Embeddable;
+public class ResultGetDTO {
 
-@Embeddable
-public class Result {
     private Direction outcome;
     private int profit;
     private int bettingAmount;
 
-    public Result(){}
-
-    public Result(Direction outcome, int profit, int bettingAmount){
-        this.bettingAmount = bettingAmount;
-        this.profit = profit;
-        this.outcome = outcome;
-    }
 
     public Direction getOutcome() {
         return outcome;
@@ -43,5 +32,4 @@ public class Result {
     public void setBettingAmount(int bettingAmount) {
         this.bettingAmount = bettingAmount;
     }
-
 }

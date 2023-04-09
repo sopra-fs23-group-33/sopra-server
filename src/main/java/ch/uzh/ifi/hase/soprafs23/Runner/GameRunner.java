@@ -1,7 +1,13 @@
 package ch.uzh.ifi.hase.soprafs23.Runner;
 
 
+import ch.uzh.ifi.hase.soprafs23.Game.CorruptedState;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
+import ch.uzh.ifi.hase.soprafs23.constant.GameState;
+import ch.uzh.ifi.hase.soprafs23.exceptions.NotFoundException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.StartException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.endRoundException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.nextRoundException;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +26,86 @@ public class GameRunner {
     }
 
     @Async
-    public void run(Game game) {
+    public void run(Long gameID) {
+
+        int waitTime = 35;
+
+        try {
+            Game game = this.findGame(gameID);
+            try {
+                game.start();
+                gameRepository.saveAndFlush(game);
+            }
+            catch (StartException e){
+                game.setGameStatus(new CorruptedState(game));
+                gameRepository.saveAndFlush(game);
+            }
+        }
+        catch (NotFoundException e1) {
+            return;
+        }
+
+        this.wait(waitTime);
+
+        boolean abort = false;
+
+        while(!abort){
+
+            try {
+                Game game = this.findGame(gameID);
+                try {
+                    game.endRound();
+                    gameRepository.saveAndFlush(game);
+                }
+                catch (endRoundException e){
+                    game.setGameStatus(new CorruptedState(game));
+                    gameRepository.saveAndFlush(game);
+                }
+            }
+            catch (NotFoundException e1) {
+                return;
+            }
+
+            try {
+                Game game = this.findGame(gameID);
+                if(game.getState().equals(GameState.OVERVIEW) || game.getState().equals(GameState.CORRUPTED) )
+                    abort = true;
+            }
+            catch (NotFoundException e1) {
+                return;
+            }
+
+            this.wait(waitTime);
+
+            try {
+                Game game = this.findGame(gameID);
+                try {
+                    game.nextRound();
+                    gameRepository.saveAndFlush(game);
+                }
+                catch (nextRoundException e){
+                    game.setGameStatus(new CorruptedState(game));
+                    gameRepository.saveAndFlush(game);
+                }
+            }
+            catch (NotFoundException  e1) {
+                return;
+            }
+
+            try {
+                Game game = this.findGame(gameID);
+                if(game.getState().equals(GameState.OVERVIEW) || game.getState().equals(GameState.CORRUPTED) )
+                    abort = true;
+            }
+            catch (NotFoundException e1) {
+                return;
+            }
+
+            this.wait(waitTime);
+        }
+
+        /*
+
         for (int i = 0; i < 100; i++) {
             Long t1 = System.currentTimeMillis();
 
@@ -40,8 +125,12 @@ public class GameRunner {
             System.out.println("current time " + t2);
             System.out.println("Runner with game: " + game.getGameID() + " is at iteration: " + i);
             System.out.println("Current Thread ID: " + Thread.currentThread().getId());
-
+            
         }
+        
+         */
+
+
     }
 
 
@@ -52,8 +141,16 @@ public class GameRunner {
             Thread.sleep(n);
         }
         catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
     }
 
+    private Game findGame(Long gameID) throws NotFoundException {
+        Game game = this.gameRepository.findByGameID(gameID);
+
+        if (game != null)
+            return game;
+        else
+            throw new NotFoundException();
+    }
+    
 }

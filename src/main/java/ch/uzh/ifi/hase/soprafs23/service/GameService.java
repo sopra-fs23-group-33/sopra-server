@@ -1,9 +1,15 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
+import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
+import ch.uzh.ifi.hase.soprafs23.Forex.ChartAPI;
+import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
+import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
+import ch.uzh.ifi.hase.soprafs23.Runner.ChartFetcher;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
+import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
 import ch.uzh.ifi.hase.soprafs23.constant.UserState;
@@ -41,20 +47,24 @@ public class GameService {
     private final UserService userService;
     private final PlayerRepository playerRepository;
     private final GameStatusRepository gameStatusRepository;
-
     private final GameRunner gameRunner;
+
+    private final ChartFetcher chartFetcher;
 
     @Autowired
     public GameService(@Qualifier("gameRepository") GameRepository gameRepository,
                        UserService userService,
                        PlayerRepository playerRepository,
                        GameStatusRepository gameStatusRepository,
-                       GameRunner gameRunner) {
+                       GameRunner gameRunner,
+                       ChartFetcher chartFetcher) {
+
         this.gameRepository = gameRepository;
         this.userService = userService;
         this.playerRepository = playerRepository;
         this.gameStatusRepository = gameStatusRepository;
         this.gameRunner = gameRunner;
+        this.chartFetcher = chartFetcher;
     }
 
     private void flush(){
@@ -76,6 +86,9 @@ public class GameService {
         newGame.init();
 
         Game createdGame = this.gameRepository.saveAndFlush(newGame);
+
+        this.chartFetcher.fetch(createdGame.getGameID());
+
         return createdGame;
     }
 
@@ -108,7 +121,8 @@ public class GameService {
         checkIfValidName(name);
 
         try{
-            gameType = GameType.valueOf(gameData.getTypeOfGame());
+            //gameType = GameType.valueOf(gameData.getTypeOfGame())
+            gameType = gameData.getTypeOfGame();
         }
         catch (Exception e){
             String ErrorMessage = "invalid type of game was provided";
@@ -117,6 +131,11 @@ public class GameService {
 
         if(!gameType.validNumberOfPlayers(totalLobbySize)){
             String ErrorMessage = "size of lobby does not match type of game";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+
+        if(gameData.getNumberOfRoundsToPlay() > 8){
+            String ErrorMessage = "Number of Rounds is limited to 8";
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
         }
     }
@@ -158,6 +177,7 @@ public class GameService {
     public void leave(User userToLeave, Long gameID){
         Game game = this.getGameByGameID(gameID);
         User user = this.userService.getUserByUsername(userToLeave.getUsername());
+
         try {
             game.leave(user);
             game = this.gameRepository.saveAndFlush(game);
@@ -176,7 +196,7 @@ public class GameService {
     public void start(Long gameID){
         Game game = this.getGameByGameID(gameID);
         if(game.canStart() && game.getState().equals(GameState.LOBBY))
-            gameRunner.run(game);
+            this.gameRunner.run(game.getGameID());
         else{
             String ErrorMessage = "Game with gameId " + gameID + " cannot be started";
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
@@ -194,10 +214,10 @@ public class GameService {
         }
     }
 
-    public Chart chart(Long gameID){
+    public ChartData chart(Long gameID){
         Game game = this.getGameByGameID(gameID);
         try{
-            return game.chart();
+            return game.chart().status();
         }
         catch (ChartException e) {
             String ErrorMessage = e.getMessage();

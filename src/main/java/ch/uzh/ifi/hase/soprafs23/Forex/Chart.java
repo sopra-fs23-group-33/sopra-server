@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.Forex;
 
+import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 
 import javax.persistence.*;
@@ -42,5 +43,16 @@ public class Chart {
     }
     public CurrencyPair getCurrencyPair() {
         return currencyPair;
+    }
+
+    public ChartData status(){
+        ChartData data = new ChartData();
+
+        data.setFromCurrency(this.currencyPair.getFrom());
+        data.setToCurrency(this.currencyPair.getTo());
+        data.setNumbers(this.numbers);
+        data.setDates(this.getDates());
+
+        return data;
     }
 }

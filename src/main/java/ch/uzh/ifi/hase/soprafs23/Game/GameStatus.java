@@ -5,10 +5,7 @@ import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-import ch.uzh.ifi.hase.soprafs23.exceptions.ChartException;
-import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToJoinException;
-import ch.uzh.ifi.hase.soprafs23.exceptions.PlayerNotFoundException;
-import ch.uzh.ifi.hase.soprafs23.exceptions.StartException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -61,14 +58,12 @@ public abstract class GameStatus {
         throw new ChartException();
     }
 
-    public void endRound(){
-        String ErrorMessage = "Failed to end round";
-        throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+    public void endRound() throws endRoundException {
+        throw new endRoundException();
     }
 
-    public void nextRound(){
-        String ErrorMessage = "Failed to go to next round";
-        throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+    public void nextRound() throws nextRoundException {
+        throw new nextRoundException();
     }
 
 }

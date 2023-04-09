@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
+import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
@@ -165,5 +166,17 @@ public class GameController {
 
         return playerGetDTOS;
     }
+
+    @GetMapping("/games/{gameID}/chart")
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin
+    public ChartGetDTO chart(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token)  {
+        this.userService.checkToken(token);
+
+        ChartData chartData = this.gameService.chart(gameID);
+
+        return DTOMapper.INSTANCE.convertChartDataToChartGetDTO(chartData);
+    }
+
 
 }

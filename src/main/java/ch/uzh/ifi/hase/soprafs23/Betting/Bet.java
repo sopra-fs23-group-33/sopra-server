@@ -7,6 +7,7 @@ import javax.persistence.*;
 @Embeddable
 public class Bet {
 
+
     @Enumerated(EnumType.STRING)
     private Direction direction;
 
@@ -27,6 +28,14 @@ public class Bet {
 
     public int getAmount() {
         return amount;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
 

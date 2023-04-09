@@ -1,5 +1,8 @@
 package ch.uzh.ifi.hase.soprafs23.rest.mapper;
 
+import ch.uzh.ifi.hase.soprafs23.Betting.Bet;
+import ch.uzh.ifi.hase.soprafs23.Betting.Result;
+import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
@@ -70,4 +73,20 @@ public interface DTOMapper {
     @Mapping(source = "numberOfLostRounds", target = "numberOfLostRounds")
     @Mapping(source = "typeOfCurrentBet", target = "typeOfCurrentBet")
     PlayerGetDTO convertPlayerDataToPlayerGetDTO(PlayerData playerData);
+
+    @Mapping(source = "amount", target = "amount")
+    @Mapping(source = "type", target = "direction")
+    Bet convertBetPutDTOToBet(BetPutDTO betPutDTO);
+
+
+    @Mapping(source = "outcome", target = "outcome")
+    @Mapping(source = "bettingAmount", target = "bettingAmount")
+    @Mapping(source = "profit", target = "profit")
+    ResultGetDTO convertResultToResultGetDTO(Result result);
+
+    @Mapping(source = "numbers", target = "numbers")
+    @Mapping(source = "dates", target = "dates")
+    @Mapping(source = "fromCurrency", target = "fromCurrency")
+    @Mapping(source = "toCurrency", target = "toCurrency")
+    ChartGetDTO convertChartDataToChartGetDTO(ChartData chartData);
 }

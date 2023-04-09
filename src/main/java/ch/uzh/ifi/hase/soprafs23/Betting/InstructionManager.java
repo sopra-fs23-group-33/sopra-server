@@ -4,6 +4,8 @@ import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 import ch.uzh.ifi.hase.soprafs23.constant.InstructionType;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ public class InstructionManager {
     private Long InstructionManagerID;
 
     @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Instruction> instructions;
 
     @OneToOne(fetch = FetchType.LAZY)

@@ -1,12 +1,14 @@
 package ch.uzh.ifi.hase.soprafs23.Data;
 
+import ch.uzh.ifi.hase.soprafs23.constant.Direction;
+
 public class PlayerData {
     String username;
     Long playerID;
     Integer accountBalance;
     Integer numberOfWonRounds;
     Integer numberOfLostRounds;
-    String typeOfCurrentBet;
+    Direction typeOfCurrentBet;
 
     public String getUsername() {
         return username;
@@ -48,11 +50,11 @@ public class PlayerData {
         this.numberOfLostRounds = numberOfLostRounds;
     }
 
-    public String getTypeOfCurrentBet() {
+    public Direction getTypeOfCurrentBet() {
         return typeOfCurrentBet;
     }
 
-    public void setTypeOfCurrentBet(String typeOfCurrentBet) {
+    public void setTypeOfCurrentBet(Direction typeOfCurrentBet) {
         this.typeOfCurrentBet = typeOfCurrentBet;
     }
 

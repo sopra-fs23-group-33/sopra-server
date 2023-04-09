@@ -1,16 +1,22 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
+import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
+import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Forex.ChartAPI;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 //import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
+import ch.uzh.ifi.hase.soprafs23.exceptions.ChartException;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
+import ch.uzh.ifi.hase.soprafs23.rest.dto.ChartGetDTO;
+import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * User Controller
@@ -47,10 +53,21 @@ public class TestController {
   @GetMapping("/test/api")
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public GameRound test_api() {
+  public ChartGetDTO test_api()  {
       ChartAPI api = new ChartAPI();
-      GameRound gr = api.getGameRound(new CurrencyPair(Currency.CHF, Currency.EUR));
-      return gr;
+      GameRound gr;
+      try {
+          gr = api.getGameRound(new CurrencyPair(Currency.CHF, Currency.EUR));
+      }
+      catch (Exception e){
+          String ErrorMessage = "Failed to fetch chart";
+          throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+      }
+
+      Chart c = gr.getFirstChart();
+      ChartData cd = c.status();
+      ChartGetDTO cdg = DTOMapper.INSTANCE.convertChartDataToChartGetDTO(cd);
+      return cdg;
   }
 
 

@@ -8,6 +8,10 @@ import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToPlaceBetException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToPlaceBetExceptionBecauseBalance;
+import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToPlaceBetExceptionBecauseDirection;
+import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToPlaceBetExceptionBecauseInactive;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -67,13 +71,16 @@ public class Player {
         this.instructionManager = newInstructionManager;
     }
 
-    public void placeBet(Bet newBet) {
-        if (this.state == PlayerState.ACTIVE)
-            this.currentBet = newBet;
-        else {
-            String ErrorMessage = "Failed to place bet because player already left game";
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+    public void placeBet(Bet newBet) throws FailedToPlaceBetException {
+        if (this.state != PlayerState.ACTIVE){
+            throw new FailedToPlaceBetExceptionBecauseInactive();
         }
+        else if(newBet.getAmount() > this.balance)
+            throw new FailedToPlaceBetExceptionBecauseBalance();
+        else if (newBet.getDirection().equals(Direction.NONE))
+            throw new FailedToPlaceBetExceptionBecauseDirection();
+        else
+            this.currentBet = newBet;
     }
 
     public void addInstruction(Instruction instruction){
@@ -111,7 +118,7 @@ public class Player {
         data.setAccountBalance(this.balance);
         data.setNumberOfWonRounds(this.numberOfBetsWon);
         data.setNumberOfLostRounds(this.numberOfBetsLost);
-        data.setTypeOfCurrentBet(this.currentBet.getDirection().toString());
+        data.setTypeOfCurrentBet(this.currentBet.getDirection());
 
         return data;
     }
