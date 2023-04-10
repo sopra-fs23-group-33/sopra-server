@@ -12,6 +12,8 @@ import com.crazzyghost.alphavantage.parameters.Interval;
 import com.crazzyghost.alphavantage.parameters.OutputSize;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChartAPI {
@@ -64,6 +66,9 @@ public class ChartAPI {
             dates.add(fx.getDate());
             values.add(fx.getClose());
         }
+
+        Collections.reverse(values);
+        Collections.reverse(dates);
 
         CurrencyPair currencyPair = new CurrencyPair(Currency.valueOf(response.getMetaData().getFromSymbol()), Currency.valueOf(response.getMetaData().getToSymbol()));
 

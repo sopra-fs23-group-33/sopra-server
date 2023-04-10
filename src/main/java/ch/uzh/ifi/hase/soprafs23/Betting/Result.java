@@ -5,9 +5,12 @@ import ch.qos.logback.core.rolling.TimeBasedFileNamingAndTriggeringPolicyBase;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Embeddable
 public class Result {
+    @Enumerated(EnumType.STRING)
     private Direction outcome;
     private int profit;
     private int bettingAmount;

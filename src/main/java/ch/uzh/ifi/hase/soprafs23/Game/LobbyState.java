@@ -29,8 +29,6 @@ public class LobbyState extends GameStatus{
         catch (PlayerNotFoundException e) {
             if(!user.getState().equals(UserState.ONLINE)) {
                 throw new FailedToJoinExceptionBecauseOffline();
-                //String ErrorMessage = "Failed to join game because user is not online";
-                //throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
             }
 
             else if(this.game.getNumberOfPlayersInLobby() < this.game.totalLobbySize) {
@@ -41,8 +39,6 @@ public class LobbyState extends GameStatus{
             }
             else if(this.game.getNumberOfPlayersInLobby() >= this.game.totalLobbySize){
                 throw new FailedToJoinExceptionBecauseLobbyFull();
-                //String ErrorMessage = "Failed to join game because lobby is full";
-                //throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
             }
             else {
                 throw new FailedToJoinException();

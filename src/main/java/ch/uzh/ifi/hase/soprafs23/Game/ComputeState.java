@@ -21,6 +21,5 @@ public class ComputeState extends GameStatus{
     public void leave(User user) throws PlayerNotFoundException {
         Player player = this.game.findPlayerByUser(user);
         player.setState(PlayerState.INACTIVE);
-        //this.game.players.remove(player);
     }
 }

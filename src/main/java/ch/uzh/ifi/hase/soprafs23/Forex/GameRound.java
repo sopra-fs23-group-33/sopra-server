@@ -55,8 +55,14 @@ public class GameRound  {
     }
 
     private Chart splitChart(Chart chart){
-        int length = chart.getValues().size();
+        int length = chart.getValues().size()-1;
+
         int cutOff = length /2;
+
+        if(length >= 12*24*2) {
+            cutOff = length-24*12;
+        }
+
         return  new Chart(new ArrayList<>(chart.getValues().subList(0, cutOff)), new ArrayList<>(chart.getDates().subList(0, cutOff)), chart.getCurrencyPair());
     }
 

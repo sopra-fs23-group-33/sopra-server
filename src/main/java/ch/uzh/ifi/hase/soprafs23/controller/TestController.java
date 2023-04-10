@@ -64,7 +64,7 @@ public class TestController {
           throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
       }
 
-      Chart c = gr.getFirstChart();
+      Chart c = gr.getSecondChart();
       ChartData cd = c.status();
       ChartGetDTO cdg = DTOMapper.INSTANCE.convertChartDataToChartGetDTO(cd);
       return cdg;

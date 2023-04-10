@@ -25,7 +25,7 @@ public class AsyncTransactionManager {
     private final GameRepository gameRepository;
 
     @Autowired
-    public AsyncTransactionManager(@Qualifier("gameRoundRepository") GameRoundRepository gameRoundRepository, GameRepository gameRepository) {
+    public AsyncTransactionManager(@Qualifier("gameRoundRepository") GameRoundRepository gameRoundRepository,@Qualifier("gameRepository")  GameRepository gameRepository) {
         this.gameRoundRepository = gameRoundRepository;
         this.gameRepository = gameRepository;
     }
@@ -67,6 +67,16 @@ public class AsyncTransactionManager {
         try {
             Game game = this.findGame(gameID);
             game.nextRound();
+            gameRepository.saveAndFlush(game);
+        }
+        catch (NotFoundException ignored){
+        }
+    }
+
+    public void setTimerGame(Long gameID, int timer) {
+        try {
+            Game game = this.findGame(gameID);
+            game.setTimer(timer);
             gameRepository.saveAndFlush(game);
         }
         catch (NotFoundException ignored){

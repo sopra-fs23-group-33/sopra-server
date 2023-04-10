@@ -1,10 +1,7 @@
 package ch.uzh.ifi.hase.soprafs23.Runner;
 
 
-import ch.uzh.ifi.hase.soprafs23.Game.CorruptedState;
-import ch.uzh.ifi.hase.soprafs23.Game.Game;
-import ch.uzh.ifi.hase.soprafs23.constant.GameState;
-import ch.uzh.ifi.hase.soprafs23.exceptions.NotFoundException;
+
 import ch.uzh.ifi.hase.soprafs23.exceptions.StartException;
 import ch.uzh.ifi.hase.soprafs23.exceptions.endRoundException;
 import ch.uzh.ifi.hase.soprafs23.exceptions.nextRoundException;
@@ -13,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 
 @Component
@@ -28,8 +23,8 @@ public class GameRunner {
         this.asyncTransactionManager = asyncTransactionManager;
     }
 
+    //@Transactional(propagation = Propagation.REQUIRES_NEW)
     @Async
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void run(Long gameID) {
 
         int waitTime = 15;
@@ -42,6 +37,7 @@ public class GameRunner {
         }
 
 
+        asyncTransactionManager.setTimerGame(gameID,waitTime);
         this.wait(waitTime);
 
         boolean abort = false;
@@ -55,6 +51,7 @@ public class GameRunner {
                 asyncTransactionManager.corruptGame(gameID);
             }
 
+            asyncTransactionManager.setTimerGame(gameID,waitTime);
             this.wait(waitTime);
 
             try {
@@ -66,6 +63,7 @@ public class GameRunner {
 
             abort = asyncTransactionManager.getAbort(gameID);
 
+            asyncTransactionManager.setTimerGame(gameID,waitTime);
             this.wait(waitTime);
         }
 

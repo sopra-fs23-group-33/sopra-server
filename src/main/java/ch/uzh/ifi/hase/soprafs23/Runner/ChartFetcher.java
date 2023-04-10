@@ -29,7 +29,7 @@ public class ChartFetcher {
 
     private final AsyncTransactionManager asyncTransactionManager;
     @Autowired
-    public ChartFetcher(@Qualifier("gameRoundRepository") GameRoundRepository gameRoundRepository, GameRepository gameRepository, AsyncTransactionManager asyncTransactionManager) {
+    public ChartFetcher(@Qualifier("gameRoundRepository") GameRoundRepository gameRoundRepository,@Qualifier("gameRepository") GameRepository gameRepository, AsyncTransactionManager asyncTransactionManager) {
         this.gameRoundRepository = gameRoundRepository;
         this.gameRepository = gameRepository;
         this.asyncTransactionManager = asyncTransactionManager;
@@ -65,7 +65,7 @@ public class ChartFetcher {
 
 
         try {
-            GameRound firstRound = this.fetch(firstPair, 3, false);
+            GameRound firstRound = this.fetch(firstPair, 2, true);
             this.asyncTransactionManager.addGameRound(firstRound, gameID);
         }
         catch (NotFoundException | ChartException e2) {

@@ -34,6 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -134,8 +135,13 @@ public class GameService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
         }
 
-        if(gameData.getNumberOfRoundsToPlay() > 20){
+        if(gameData.getNumberOfRoundsToPlay() > 8){
             String ErrorMessage = "Number of Rounds is limited to 8";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+
+        if(gameData.getTotalLobbySize() > 8){
+            String ErrorMessage = "Lobby size is limited to 8";
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
         }
     }
@@ -229,7 +235,7 @@ public class GameService {
     public List<Player> players(Long gameID){
         Game game = this.getGameByGameID(gameID);
         List<Player> players =  game.getPlayers();
-        players.sort(Comparator.comparingInt(Player ::getBalance));
+        players.sort(Comparator.comparingInt(Player ::getBalance).reversed());
         return players;
     }
 

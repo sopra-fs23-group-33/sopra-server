@@ -40,8 +40,6 @@ public abstract class GameStatus {
 
     public Player join(User user) throws FailedToJoinException {
         throw new FailedToJoinException();
-        //String ErrorMessage = "User failed to join game";
-        //throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
     }
 
     public void leave(User user) throws PlayerNotFoundException {
