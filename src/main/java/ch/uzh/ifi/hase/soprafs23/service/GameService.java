@@ -7,6 +7,7 @@ import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Forex.ChartAPI;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
+import ch.uzh.ifi.hase.soprafs23.Game.CorruptedState;
 import ch.uzh.ifi.hase.soprafs23.Runner.ChartFetcher;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
@@ -16,9 +17,7 @@ import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-import ch.uzh.ifi.hase.soprafs23.exceptions.ChartException;
-import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToJoinException;
-import ch.uzh.ifi.hase.soprafs23.exceptions.PlayerNotFoundException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.*;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.GameStatusRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.PlayerRepository;
@@ -30,6 +29,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -134,7 +134,7 @@ public class GameService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
         }
 
-        if(gameData.getNumberOfRoundsToPlay() > 8){
+        if(gameData.getNumberOfRoundsToPlay() > 20){
             String ErrorMessage = "Number of Rounds is limited to 8";
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
         }
@@ -195,6 +195,7 @@ public class GameService {
 
     public void start(Long gameID){
         Game game = this.getGameByGameID(gameID);
+
         if(game.canStart() && game.getState().equals(GameState.LOBBY))
             this.gameRunner.run(game.getGameID());
         else{
@@ -262,5 +263,6 @@ public class GameService {
         }
         return gameData;
     }
+
 }
 

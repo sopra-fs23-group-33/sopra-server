@@ -2,6 +2,8 @@ package ch.uzh.ifi.hase.soprafs23.Forex;
 
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;

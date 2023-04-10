@@ -12,12 +12,9 @@ import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToPlaceBetException;
 import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToPlaceBetExceptionBecauseBalance;
 import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToPlaceBetExceptionBecauseDirection;
 import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToPlaceBetExceptionBecauseInactive;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "Player")
@@ -45,8 +42,7 @@ public class Player {
     @Enumerated(EnumType.STRING)
     PlayerState state;
 
-    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "player", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     InstructionManager instructionManager;
 
     @Embedded
@@ -91,14 +87,15 @@ public class Player {
         if(direction == this.currentBet.getDirection()){
             this.numberOfBetsWon += 1;
             this.user.incrementNumberOfBetsWon();
+            this.user.incrementTotalRoundsPlayed();
         }
 
-        else {
+        else if(direction != this.currentBet.getDirection() && this.currentBet.getDirection() != Direction.NONE){
             this.numberOfBetsLost += 1;
             this.user.incrementNumberOfBetsLost();
+            this.user.incrementTotalRoundsPlayed();
         }
 
-        this.user.incrementTotalRoundsPlayed();
 
         int newBalance = this.instructionManager.computeNewBalance(direction, ratio);
         int profit = newBalance - this.balance;

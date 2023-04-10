@@ -12,13 +12,14 @@ import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.hibernate.annotations.OptimisticLocking;
+import org.hibernate.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,15 +50,15 @@ public class Game {
     @Column(name = "numberOfRoundsPlayed", nullable = false)
     int currentRoundPlayed;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @LazyCollection(LazyCollectionOption.FALSE)
+
+    //@LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY )
     List<GameRound> gameRounds;
 
-    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     List<Player> players;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
     User creator;
 
     @Column(name = "powerups_active", nullable = false)
@@ -69,8 +70,7 @@ public class Game {
     @Column(name = "timer")
     int timer;
 
-    @OneToOne(mappedBy = "game", cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToOne(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     GameStatus gameStatus;
 
     public Game() {}
@@ -135,10 +135,13 @@ public class Game {
     }
 
     public boolean checkIntegrity(){
+
         if(this.currentRoundPlayed + 1 > this.gameRounds.size())
             return false;
         else
             return this.type.validNumberOfPlayers(this.getNumberOfPlayersInLobby());
+
+
     }
 
     public boolean canStart(){

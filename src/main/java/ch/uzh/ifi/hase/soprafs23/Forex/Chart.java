@@ -9,9 +9,9 @@ import java.util.List;
 
 @Embeddable
 public class Chart {
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     private List<Double> numbers;
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     private List<String> dates;
     @Embedded
     private CurrencyPair currencyPair;

@@ -24,8 +24,9 @@ public class InstructionManager {
     @GeneratedValue
     private Long InstructionManagerID;
 
+
+    //@LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
-    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Instruction> instructions;
 
     @OneToOne(fetch = FetchType.LAZY)

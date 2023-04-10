@@ -13,37 +13,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Component
 public class GameRunner {
 
     private final  GameRepository gameRepository;
-
+    private final AsyncTransactionManager asyncTransactionManager;
     @Autowired
-    public GameRunner(@Qualifier("gameRepository") GameRepository gameRepository) {
+    public GameRunner(@Qualifier("gameRepository") GameRepository gameRepository, AsyncTransactionManager asyncTransactionManager) {
         this.gameRepository = gameRepository;
+        this.asyncTransactionManager = asyncTransactionManager;
     }
 
     @Async
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void run(Long gameID) {
 
-        int waitTime = 35;
+        int waitTime = 15;
 
         try {
-            Game game = this.findGame(gameID);
-            try {
-                game.start();
-                gameRepository.saveAndFlush(game);
-            }
-            catch (StartException e){
-                game.setGameStatus(new CorruptedState(game));
-                gameRepository.saveAndFlush(game);
-            }
+            asyncTransactionManager.startGame(gameID);
         }
-        catch (NotFoundException e1) {
-            return;
+        catch (StartException e1){
+            asyncTransactionManager.corruptGame(gameID);
         }
+
 
         this.wait(waitTime);
 
@@ -52,88 +49,27 @@ public class GameRunner {
         while(!abort){
 
             try {
-                Game game = this.findGame(gameID);
-                try {
-                    game.endRound();
-                    gameRepository.saveAndFlush(game);
-                }
-                catch (endRoundException e){
-                    game.setGameStatus(new CorruptedState(game));
-                    gameRepository.saveAndFlush(game);
-                }
+                asyncTransactionManager.endRoundGame(gameID);
             }
-            catch (NotFoundException e1) {
-                return;
-            }
-
-            try {
-                Game game = this.findGame(gameID);
-                if(game.getState().equals(GameState.OVERVIEW) || game.getState().equals(GameState.CORRUPTED) )
-                    abort = true;
-            }
-            catch (NotFoundException e1) {
-                return;
+            catch (endRoundException e2){
+                asyncTransactionManager.corruptGame(gameID);
             }
 
             this.wait(waitTime);
 
             try {
-                Game game = this.findGame(gameID);
-                try {
-                    game.nextRound();
-                    gameRepository.saveAndFlush(game);
-                }
-                catch (nextRoundException e){
-                    game.setGameStatus(new CorruptedState(game));
-                    gameRepository.saveAndFlush(game);
-                }
+                asyncTransactionManager.nextRoundGame(gameID);
             }
-            catch (NotFoundException  e1) {
-                return;
+            catch (nextRoundException e3){
+                asyncTransactionManager.corruptGame(gameID);
             }
 
-            try {
-                Game game = this.findGame(gameID);
-                if(game.getState().equals(GameState.OVERVIEW) || game.getState().equals(GameState.CORRUPTED) )
-                    abort = true;
-            }
-            catch (NotFoundException e1) {
-                return;
-            }
+            abort = asyncTransactionManager.getAbort(gameID);
 
             this.wait(waitTime);
         }
-
-        /*
-
-        for (int i = 0; i < 100; i++) {
-            Long t1 = System.currentTimeMillis();
-
-            game.setName("LOBBY "+ Thread.currentThread().getId());
-            this.gameRepository.saveAndFlush(game);
-            this.wait(2);
-            game.setName("BETTING "+ Thread.currentThread().getId());
-            this.gameRepository.saveAndFlush(game);
-            this.wait(2);
-            game.setName("RESULT " + Thread.currentThread().getId());
-            this.gameRepository.saveAndFlush(game);
-            this.wait(2);
-
-            int t2 = (int) (System.currentTimeMillis() - t1);
-            game.setTimer(t2);
-            this.gameRepository.saveAndFlush(game);
-            System.out.println("current time " + t2);
-            System.out.println("Runner with game: " + game.getGameID() + " is at iteration: " + i);
-            System.out.println("Current Thread ID: " + Thread.currentThread().getId());
-            
-        }
-        
-         */
-
 
     }
-
-
 
     public void wait(int n){
         n = n*1000;
@@ -144,13 +80,4 @@ public class GameRunner {
         }
     }
 
-    private Game findGame(Long gameID) throws NotFoundException {
-        Game game = this.gameRepository.findByGameID(gameID);
-
-        if (game != null)
-            return game;
-        else
-            throw new NotFoundException();
-    }
-    
 }
