@@ -17,8 +17,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+
+//(propagation = Propagation.REQUIRES_NEW)
 @Component
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional
 public class AsyncTransactionManager {
 
     private final GameRoundRepository gameRoundRepository;
@@ -118,4 +120,16 @@ public class AsyncTransactionManager {
             throw new NotFoundException();
     }
 
+    public boolean allBetsPlaced(Long gameID){
+        try {
+            Game game = this.findGame(gameID);
+            if(game.allBetsPlaced())
+                return true;
+            else
+               return false;
+        }
+        catch (NotFoundException ignored){
+            return false;
+        }
+    }
 }

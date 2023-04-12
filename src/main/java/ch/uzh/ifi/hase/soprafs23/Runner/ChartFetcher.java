@@ -45,7 +45,7 @@ public class ChartFetcher {
         try {
             rounds = asyncTransactionManager.getRounds(gameID);
         }
-        catch (NotFoundException e1) {
+        catch (NotFoundException e) {
             return;
         }
 
@@ -65,16 +65,25 @@ public class ChartFetcher {
 
 
         try {
-            GameRound firstRound = this.fetch(firstPair, 2, true);
+            GameRound firstRound = this.fetch(firstPair, 1, false);
             this.asyncTransactionManager.addGameRound(firstRound, gameID);
         }
-        catch (NotFoundException | ChartException e2) {
+        catch (NotFoundException e1){
             return;
+        }
+        catch (ChartException e2){
+            try{
+                GameRound firstRound = this.fetch(firstPair, 2, true);
+                this.asyncTransactionManager.addGameRound(firstRound, gameID);
+            }
+            catch (NotFoundException | ChartException e3) {
+                return;
+            }
         }
 
         for (CurrencyPair currencyPair : currencyPairsList) {
             try {
-                GameRound newRound = this.fetch(currencyPair, 5, true);
+                GameRound newRound = this.fetch(currencyPair, 3, true);
                 this.asyncTransactionManager.addGameRound(newRound, gameID);
             }
             catch (NotFoundException | ChartException e4) {
@@ -115,7 +124,7 @@ public class ChartFetcher {
             count++;
             try {
                 if(delay)
-                    Thread.sleep(2000);
+                    Thread.sleep(2500);
                 return api.getGameRound(currencyPair);
             }
             catch (Exception ignored) {

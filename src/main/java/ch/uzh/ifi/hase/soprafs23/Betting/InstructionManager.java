@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.lang.Math.max;
+import static java.lang.Math.round;
 
 
 @Entity(name = "PlayerManager")
@@ -66,9 +67,12 @@ public class InstructionManager {
             temp.put(type, instruction.compute(temp.get(type)));
         }
 
+
+
         double newBalance = temp.get(InstructionType.a0) +
                             temp.get(InstructionType.a1)*this.player.getBalance() +
                             outcome*(((ratio-1.0)*100+1)*betAmount*temp.get(InstructionType.a2) + temp.get(InstructionType.a3));
+        newBalance = round(newBalance);
 
         return max((int) newBalance, 0);
     }

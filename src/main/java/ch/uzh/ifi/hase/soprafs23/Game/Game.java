@@ -5,10 +5,7 @@ import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.Game.GameStatus;
 import ch.uzh.ifi.hase.soprafs23.Game.LobbyState;
-import ch.uzh.ifi.hase.soprafs23.constant.GameState;
-import ch.uzh.ifi.hase.soprafs23.constant.GameType;
-import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
-import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.constant.*;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
@@ -183,6 +180,15 @@ public class Game {
         data.setCreator(this.creator.getUsername());
 
         return data;
+    }
+
+    public boolean allBetsPlaced(){
+        for(Player player: this.players){
+            if(player.getState().equals(PlayerState.ACTIVE) && player.getCurrentBet().getDirection().equals(Direction.NONE)){
+                return false;
+            }
+        }
+        return true;
     }
 
     public Chart chart() throws ChartException {

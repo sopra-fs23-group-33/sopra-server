@@ -2,6 +2,8 @@ package ch.uzh.ifi.hase.soprafs23.Runner;
 
 
 
+import ch.uzh.ifi.hase.soprafs23.Game.Game;
+import ch.uzh.ifi.hase.soprafs23.exceptions.NotFoundException;
 import ch.uzh.ifi.hase.soprafs23.exceptions.StartException;
 import ch.uzh.ifi.hase.soprafs23.exceptions.endRoundException;
 import ch.uzh.ifi.hase.soprafs23.exceptions.nextRoundException;
@@ -38,7 +40,7 @@ public class GameRunner {
 
 
         asyncTransactionManager.setTimerGame(gameID,waitTime);
-        this.wait(waitTime);
+        this.wait_interrupt(waitTime, gameID);
 
         boolean abort = false;
 
@@ -64,17 +66,37 @@ public class GameRunner {
             abort = asyncTransactionManager.getAbort(gameID);
 
             asyncTransactionManager.setTimerGame(gameID,waitTime);
-            this.wait(waitTime);
+            this.wait_interrupt(waitTime, gameID);
         }
 
     }
 
-    public void wait(int n){
+    private void wait(int n){
         n = n*1000;
-        try {
+        try{
             Thread.sleep(n);
         }
         catch (InterruptedException e) {
+            return;
+        }
+    }
+
+    private void wait_interrupt(int n, Long gameID){
+        n = n*1000;
+        long t = System.currentTimeMillis();
+
+        while(System.currentTimeMillis() - t < n){
+            try{
+                boolean allBetsPlaced = asyncTransactionManager.allBetsPlaced(gameID);
+                if(allBetsPlaced) {
+                    System.out.println("All bets Placed");
+                    return;
+                }
+                Thread.sleep(1000);
+            }
+            catch ( InterruptedException e) {
+                return;
+            }
         }
     }
 
