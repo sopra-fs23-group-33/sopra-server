@@ -1,9 +1,5 @@
 package ch.uzh.ifi.hase.soprafs23.Runner;
 
-
-
-import ch.uzh.ifi.hase.soprafs23.Game.Game;
-import ch.uzh.ifi.hase.soprafs23.exceptions.NotFoundException;
 import ch.uzh.ifi.hase.soprafs23.exceptions.StartException;
 import ch.uzh.ifi.hase.soprafs23.exceptions.endRoundException;
 import ch.uzh.ifi.hase.soprafs23.exceptions.nextRoundException;
@@ -25,7 +21,7 @@ public class GameRunner {
         this.asyncTransactionManager = asyncTransactionManager;
     }
 
-    //@Transactional(propagation = Propagation.REQUIRES_NEW)
+
     @Async
     public void run(Long gameID, int bettingTime, int resultTime) {
 

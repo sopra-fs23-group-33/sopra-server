@@ -1,7 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.Betting;
 
 
-import ch.qos.logback.core.rolling.TimeBasedFileNamingAndTriggeringPolicyBase;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 
 import javax.persistence.Embeddable;

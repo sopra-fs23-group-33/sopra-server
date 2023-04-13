@@ -8,22 +8,21 @@ import static org.junit.jupiter.api.Assertions.*;
 import ch.uzh.ifi.hase.soprafs23.Betting.Bet;
 import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.Betting.Result;
-import ch.uzh.ifi.hase.soprafs23.Data.GameData;
+
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
-import ch.uzh.ifi.hase.soprafs23.constant.GameType;
+
 import ch.uzh.ifi.hase.soprafs23.constant.InstructionType;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
-import ch.uzh.ifi.hase.soprafs23.entity.Player;
-import ch.uzh.ifi.hase.soprafs23.entity.User;
+
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
 import ch.uzh.ifi.hase.soprafs23.repository.PlayerRepository;
-import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit4.SpringRunner;
+
 
 
 @DataJpaTest

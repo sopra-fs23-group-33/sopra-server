@@ -9,7 +9,7 @@ import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
-import org.hibernate.annotations.Cascade;
+
 
 import javax.persistence.*;
 import java.util.Objects;

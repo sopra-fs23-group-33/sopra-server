@@ -4,7 +4,7 @@ package ch.uzh.ifi.hase.soprafs23.Forex;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.exceptions.ChartException;
 import com.crazzyghost.alphavantage.AlphaVantage;
-import com.crazzyghost.alphavantage.AlphaVantageException;
+
 import com.crazzyghost.alphavantage.Config;
 import com.crazzyghost.alphavantage.forex.response.ForexResponse;
 import com.crazzyghost.alphavantage.forex.response.ForexUnit;
@@ -13,7 +13,7 @@ import com.crazzyghost.alphavantage.parameters.OutputSize;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
 

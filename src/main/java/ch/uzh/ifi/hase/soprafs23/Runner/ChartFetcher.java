@@ -3,10 +3,9 @@ package ch.uzh.ifi.hase.soprafs23.Runner;
 import ch.uzh.ifi.hase.soprafs23.Forex.ChartAPI;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
-import ch.uzh.ifi.hase.soprafs23.Game.CorruptedState;
-import ch.uzh.ifi.hase.soprafs23.Game.Game;
+
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
-import ch.uzh.ifi.hase.soprafs23.constant.GameState;
+
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRoundRepository;
@@ -14,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.ArrayList;
 import java.util.HashSet;

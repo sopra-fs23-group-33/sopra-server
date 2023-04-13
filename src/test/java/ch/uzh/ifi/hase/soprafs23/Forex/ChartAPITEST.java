@@ -1,7 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.Forex;
 
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
-import ch.uzh.ifi.hase.soprafs23.exceptions.ChartException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

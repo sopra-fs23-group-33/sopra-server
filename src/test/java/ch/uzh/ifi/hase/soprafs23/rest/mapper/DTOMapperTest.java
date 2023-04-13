@@ -7,18 +7,15 @@ import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
-import ch.uzh.ifi.hase.soprafs23.Game.Game;
+
 import ch.uzh.ifi.hase.soprafs23.constant.*;
-import ch.uzh.ifi.hase.soprafs23.entity.Player;
+
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
-import ch.uzh.ifi.hase.soprafs23.repository.PlayerRepository;
-import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
+
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.web.WebAppConfiguration;
 

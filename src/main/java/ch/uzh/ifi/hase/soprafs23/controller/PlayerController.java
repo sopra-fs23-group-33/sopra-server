@@ -3,13 +3,13 @@ package ch.uzh.ifi.hase.soprafs23.controller;
 import ch.uzh.ifi.hase.soprafs23.Betting.Bet;
 import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
-import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
+
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
-import ch.uzh.ifi.hase.soprafs23.entity.User;
+
 import ch.uzh.ifi.hase.soprafs23.rest.dto.BetPutDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.ResultGetDTO;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.UserGetDTO;
+
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.GameService;
 import ch.uzh.ifi.hase.soprafs23.service.PlayerService;

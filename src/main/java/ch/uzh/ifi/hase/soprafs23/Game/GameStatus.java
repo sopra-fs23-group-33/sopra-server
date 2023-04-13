@@ -6,11 +6,9 @@ import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.*;
-import java.lang.reflect.Type;
+
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)

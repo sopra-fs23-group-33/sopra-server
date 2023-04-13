@@ -7,15 +7,15 @@ import ch.uzh.ifi.hase.soprafs23.Game.Game;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-import ch.uzh.ifi.hase.soprafs23.exceptions.PlayerNotFoundException;
+
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.GameService;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Async;
+
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.ArrayList;
 import java.util.List;

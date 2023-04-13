@@ -5,9 +5,9 @@ import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Forex.ChartAPI;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
-//import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
+
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
-import ch.uzh.ifi.hase.soprafs23.exceptions.ChartException;
+
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.ChartGetDTO;
@@ -31,8 +31,6 @@ public class TestController {
 
   private final UserService userService;
   private final UserRepository userRepository;
-
-  //private final GameRunner gameRunner;
 
   private final GameRepository gameRepository;
 

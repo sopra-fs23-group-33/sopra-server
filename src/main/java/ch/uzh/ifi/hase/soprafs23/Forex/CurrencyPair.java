@@ -1,10 +1,9 @@
 package ch.uzh.ifi.hase.soprafs23.Forex;
 
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
-import ch.uzh.ifi.hase.soprafs23.entity.User;
+
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Embeddable
 public class CurrencyPair {

@@ -1,17 +1,13 @@
 package ch.uzh.ifi.hase.soprafs23.Betting;
 
-import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 import ch.uzh.ifi.hase.soprafs23.constant.InstructionType;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.lang.Math.max;
 import static java.lang.Math.round;

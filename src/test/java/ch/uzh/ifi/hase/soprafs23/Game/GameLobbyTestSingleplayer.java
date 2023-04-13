@@ -3,7 +3,6 @@ package ch.uzh.ifi.hase.soprafs23.Game;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
-import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToJoinException;
 import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToJoinExceptionBecauseLobbyFull;

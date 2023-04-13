@@ -1,6 +1,5 @@
 package ch.uzh.ifi.hase.soprafs23.Game;
 
-import ch.uzh.ifi.hase.soprafs23.Betting.Bet;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
