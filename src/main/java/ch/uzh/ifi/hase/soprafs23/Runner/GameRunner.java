@@ -63,8 +63,10 @@ public class GameRunner {
 
             abort = asyncTransactionManager.getAbort(gameID);
 
-            asyncTransactionManager.setTimerGame(gameID,waitTimeBetting);
-            this.wait_interrupt(waitTimeBetting, gameID);
+            if(!abort) {
+                asyncTransactionManager.setTimerGame(gameID, waitTimeBetting);
+                this.wait_interrupt(waitTimeBetting, gameID);
+            }
         }
 
     }
