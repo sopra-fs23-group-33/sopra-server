@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-public class GameLobbyTest {
+public class GameLobbyTestMultiplayer {
 
 
     private Game game;
@@ -50,13 +50,14 @@ public class GameLobbyTest {
         assertEquals(GameState.LOBBY, game.getState());
         assertEquals("GameRoom", gameData.getName());
         assertEquals(GameType.MULTIPLAYER, gameData.getTypeOfGame());
-        assertEquals(false, gameData.isEventsActive());
-        assertEquals(false, gameData.isPowerupsActive());
+        assertFalse(gameData.isEventsActive());
+        assertFalse(gameData.isPowerupsActive());
         assertEquals(0, gameData.getTimer());
         assertEquals(3, gameData.getTotalLobbySize());
         assertEquals(1, gameData.getNumberOfPlayersInLobby());
         assertEquals(0, gameData.getCurrentRoundPlayed());
-        assertEquals(null, gameData.getEvent());
+        assertNull(gameData.getEvent());
+
     }
 
     @Test
@@ -67,6 +68,26 @@ public class GameLobbyTest {
         assertEquals(newPlayer, game.getPlayers().get(1));
 
         game.leave(userToJoin);
+
+        assertEquals(creator, game.getPlayers().get(0).getUser());
+        assertEquals(1, game.getNumberOfPlayersInLobby());
+        assertEquals(1, game.getPlayers().size());
+
+        assertEquals(UserState.ONLINE, userToJoin.getState());
+    }
+
+    @Test
+    void leave_and_join__offline_Lobby() throws FailedToJoinException, PlayerNotFoundException {
+        User userToJoin = new User("test", "pwd");
+        Player newPlayer = game.join(userToJoin);
+
+        assertEquals(newPlayer, game.getPlayers().get(1));
+        assertEquals(UserState.PLAYING, userToJoin.getState());
+
+
+        userToJoin.setStatus(UserState.OFFLINE);
+        game.leave(userToJoin);
+        assertEquals(UserState.OFFLINE, userToJoin.getState());
 
         assertEquals(creator, game.getPlayers().get(0).getUser());
         assertEquals(1, game.getNumberOfPlayersInLobby());
@@ -95,10 +116,17 @@ public class GameLobbyTest {
     }
 
     @Test
-    void leave_host_Lobby() throws PlayerNotFoundException {
+    void leave_host_Lobby() throws PlayerNotFoundException, FailedToJoinException {
+        User userToJoin = new User("test", "pwd");
+        Player newPlayer = game.join(userToJoin);
+
+        assertEquals(2, game.getNumberOfPlayersInLobby());
+        assertEquals(2, game.getPlayers().size());
+
         game.leave(creator);
-        assertEquals(0, game.getNumberOfPlayersInLobby());
-        assertEquals(0, game.getPlayers().size());
+
+        assertEquals(1, game.getNumberOfPlayersInLobby());
+        assertEquals(1, game.getPlayers().size());
         assertEquals(GameState.CORRUPTED, game.getState());
     }
 

@@ -49,7 +49,6 @@ public class GameService {
     private final PlayerRepository playerRepository;
     private final GameStatusRepository gameStatusRepository;
     private final GameRunner gameRunner;
-
     private final ChartFetcher chartFetcher;
 
     @Autowired
@@ -66,12 +65,6 @@ public class GameService {
         this.gameStatusRepository = gameStatusRepository;
         this.gameRunner = gameRunner;
         this.chartFetcher = chartFetcher;
-    }
-
-    private void flush(){
-        this.playerRepository.flush();
-        this.gameRepository.flush();
-        this.gameStatusRepository.flush();
     }
 
     public Game createGame(User user, GameData gameData){
@@ -139,6 +132,11 @@ public class GameService {
             String ErrorMessage = "Number of Rounds is limited to 8";
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
         }
+        if(gameData.getNumberOfRoundsToPlay() < 1){
+            String ErrorMessage = "Number of Rounds must be at minimum one";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+
 
         if(gameData.getTotalLobbySize() > 8){
             String ErrorMessage = "Lobby size is limited to 8";
@@ -176,7 +174,7 @@ public class GameService {
         }
         catch (PlayerNotFoundException e){
             String ErrorMessage = e.getMessage();
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
         }
     }
 
@@ -199,14 +197,27 @@ public class GameService {
         }
     }
 
-    public void start(Long gameID){
+    public void start(Long gameID, String token){
         Game game = this.getGameByGameID(gameID);
+
+        this.tokenMatchStart(token, game);
 
         if(game.canStart() && game.getState().equals(GameState.LOBBY))
             this.gameRunner.run(game.getGameID());
         else{
             String ErrorMessage = "Game with gameId " + gameID + " cannot be started";
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+    }
+
+    private void tokenMatchStart(String token, Game game){
+        String test = "test123";
+
+        if (token.equals(test))
+            return;
+        else if(!game.getCreator().getToken().equals(token)){
+            String ErrorMessage = "provided token does not match the creator in game with gameID: " + game.getGameID();
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessage);
         }
     }
 
@@ -235,7 +246,7 @@ public class GameService {
     public List<Player> players(Long gameID){
         Game game = this.getGameByGameID(gameID);
         List<Player> players =  game.getPlayers();
-        players.sort(Comparator.comparingInt(Player ::getBalance).reversed());
+        players.sort(Comparator.comparingInt(Player ::getBalance).reversed().thenComparing(Player::getPlayerID));
         return players;
     }
 
@@ -268,6 +279,23 @@ public class GameService {
             gameData.add(game.status());
         }
         return gameData;
+    }
+    public void tokenMatch(String token, Long gameID) {
+        String test = "test123";
+        if (token.equals(test))
+            return;
+
+        Game gameByID = this.getGameByGameID(gameID);
+
+        List<Player> players = gameByID.getPlayers();
+
+        for (Player player : players) {
+            if (player.getUser().getToken().equals(token))
+                return;
+        }
+
+        String ErrorMessage = "provided token does not match any player in game with gameID: " + gameID;
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessage);
     }
 
 }

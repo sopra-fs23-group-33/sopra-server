@@ -1,8 +1,5 @@
-package ch.uzh.ifi.hase.soprafs23.ForexTest;
+package ch.uzh.ifi.hase.soprafs23.Forex;
 
-import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
-import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
-import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 import org.junit.jupiter.api.BeforeEach;
@@ -91,8 +88,6 @@ public class GameRoundTest {
 
     @Test
     void test_small_split(){
-
-
         Chart chart = new Chart(new ArrayList<>(numbers.subList(0,100)), new ArrayList<>(dates.subList(0,100)), currencyPair);
 
         GameRound gameRound = new GameRound(chart);

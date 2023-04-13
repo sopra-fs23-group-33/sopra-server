@@ -37,7 +37,7 @@ public class BettingState extends GameStatus{
 
     @Override
     public void endRound(){
-        GameRound gameRound = this.game.gameRounds.get(this.game.currentRoundPlayed-1);
+        GameRound gameRound = this.game.getGameRounds().get(this.game.currentRoundPlayed-1);
         ArrayList<Player> playersToRemove = new ArrayList<>();
 
         for(Player player: this.game.players){

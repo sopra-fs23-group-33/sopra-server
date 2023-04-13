@@ -16,9 +16,7 @@ public class CurrencyPair {
     @Column(name = "to", nullable = false)
     private Currency to;
 
-    public CurrencyPair(){
-
-    }
+    public CurrencyPair(){}
 
     public CurrencyPair(Currency from, Currency to){
         this.from = from;

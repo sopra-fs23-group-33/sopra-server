@@ -109,6 +109,7 @@ public class GameController {
     @CrossOrigin
     public void leave(@PathVariable("gameID") Long gameID, @RequestBody UserPostDTO userPostDTO, @RequestHeader("token") String token) {
         this.userService.checkToken(token);
+        this.gameService.tokenMatch(token, gameID);
 
         User userToLeave = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
@@ -121,7 +122,7 @@ public class GameController {
     public void start(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token)  {
         this.userService.checkToken(token);
 
-        this.gameService.start(gameID);
+        this.gameService.start(gameID, token);
     }
 
     @GetMapping("/games")
@@ -155,6 +156,7 @@ public class GameController {
     @CrossOrigin
     public List<PlayerGetDTO> players(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token)  {
         this.userService.checkToken(token);
+        this.gameService.tokenMatch(token, gameID);
 
         List<Player> players = this.gameService.players(gameID);
 
@@ -172,6 +174,7 @@ public class GameController {
     @CrossOrigin
     public ChartGetDTO chart(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token)  {
         this.userService.checkToken(token);
+        this.gameService.tokenMatch(token, gameID);
 
         ChartData chartData = this.gameService.chart(gameID);
 

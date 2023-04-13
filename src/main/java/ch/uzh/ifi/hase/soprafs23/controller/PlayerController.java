@@ -37,6 +37,7 @@ public class PlayerController {
     public PlayerGetDTO getPlayerByPlayerID(@PathVariable("playerID") Long playerID, @RequestHeader("token") String token) {
         //returns a user for a provided userID
         this.userService.checkToken(token);
+        this.playerService.tokenMatch(token, playerID);
 
         Player player = playerService.getPlayerByPlayerID(playerID);
         PlayerData playerData = player.status();
@@ -51,6 +52,7 @@ public class PlayerController {
     public void placeBet(@RequestBody BetPutDTO betPutDTO,  @PathVariable("playerID") Long playerID, @RequestHeader("token") String token) {
         //returns a user for a provided userID
         this.userService.checkToken(token);
+        this.playerService.tokenMatch(token, playerID);
 
         Bet betToPlace = DTOMapper.INSTANCE.convertBetPutDTOToBet(betPutDTO);
         this.playerService.placeBet(betToPlace, playerID);
@@ -63,9 +65,11 @@ public class PlayerController {
     public ResultGetDTO result(@PathVariable("playerID") Long playerID, @RequestHeader("token") String token) {
         //returns a user for a provided userID
         this.userService.checkToken(token);
+        this.playerService.tokenMatch(token, playerID);
 
         Result result = this.playerService.getResult(playerID);
 
         return DTOMapper.INSTANCE.convertResultToResultGetDTO(result);
     }
+
 }

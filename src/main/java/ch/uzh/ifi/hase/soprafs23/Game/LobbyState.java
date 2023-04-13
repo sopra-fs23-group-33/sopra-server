@@ -31,13 +31,13 @@ public class LobbyState extends GameStatus{
                 throw new FailedToJoinExceptionBecauseOffline();
             }
 
-            else if(this.game.getNumberOfPlayersInLobby() < this.game.totalLobbySize) {
+            else if(this.game.getNumberOfPlayersInLobby() < this.game.getTotalLobbySize()) {
                 Player newPlayer = new Player(user);
                 newPlayer.init();
                 this.game.players.add(newPlayer);
                 return newPlayer;
             }
-            else if(this.game.getNumberOfPlayersInLobby() >= this.game.totalLobbySize){
+            else if(this.game.getNumberOfPlayersInLobby() >= this.game.getTotalLobbySize()){
                 throw new FailedToJoinExceptionBecauseLobbyFull();
             }
             else {
@@ -59,7 +59,7 @@ public class LobbyState extends GameStatus{
         player.setState(PlayerState.INACTIVE);
         this.game.remove(player);
 
-        if(user.equals(this.game.creator)) {
+        if(user.equals(this.game.getCreator())) {
             this.game.setGameStatus(new CorruptedState(this.game));
         }
 

@@ -21,11 +21,11 @@ import java.util.List;
 @RestController
 public class UserController {
 
-  private final UserService userService;
+    private final UserService userService;
 
-  UserController(UserService userService) {
-    this.userService = userService;
-  }
+    UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
@@ -73,7 +73,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @CrossOrigin
-    public UserGetDTO getUserById(@PathVariable("userID") Long userID,  @RequestHeader("token") String token) {
+    public UserGetDTO getUserById(@PathVariable("userID") Long userID, @RequestHeader("token") String token) {
         //returns a user for a provided userID
         this.userService.checkToken(token);
         User userById = userService.getUserByUserID(userID);
@@ -94,7 +94,9 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     @CrossOrigin
-    public List<UserGetDTO> logoutUser( @RequestHeader("token") String token) {
+    public List<UserGetDTO> leaderboard(@RequestHeader("token") String token) {
+        this.userService.checkToken(token);
+
         List<User> users = userService.leaderboard();
         List<UserGetDTO> userGetDTOs = new ArrayList<>();
 

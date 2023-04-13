@@ -20,23 +20,25 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 @Entity(name = "Game")
 @Table(name = "game")
 public class Game {
 
     @Id
     @GeneratedValue
-    Long gameID;
+    private Long gameID;
 
     @Column(name = "name", nullable = false)
-    String name;
+    private String name;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    GameType type;
+    private GameType type;
 
     @Column(name = "totalLobbySize", nullable = false)
-    int totalLobbySize;
+    private int totalLobbySize;
 
 
     @Column(name = "numberOfRoundsToPlay", nullable = false)
@@ -45,28 +47,26 @@ public class Game {
     @Column(name = "numberOfRoundsPlayed", nullable = false)
     int currentRoundPlayed;
 
-
-    //@LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY )
-    List<GameRound> gameRounds;
+    private List<GameRound> gameRounds;
 
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     List<Player> players;
 
-    @OneToOne
-    User creator;
+    @OneToOne(fetch = FetchType.LAZY)
+    private User creator;
 
     @Column(name = "powerups_active", nullable = false)
-    boolean powerupsActive = false;
+    private boolean powerupsActive = false;
 
     @Column(name = "events_active", nullable = false)
-    boolean eventsActive = false;
+    private boolean eventsActive = false;
 
     @Column(name = "timer")
-    int timer;
+    private int timer;
 
     @OneToOne(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    GameStatus gameStatus;
+    private GameStatus gameStatus;
 
     public Game() {}
 

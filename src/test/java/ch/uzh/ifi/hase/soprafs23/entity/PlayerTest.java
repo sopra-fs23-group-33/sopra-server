@@ -2,24 +2,35 @@ package ch.uzh.ifi.hase.soprafs23.entity;
 
 
 
+import static java.lang.Math.round;
 import static org.junit.jupiter.api.Assertions.*;
 
 import ch.uzh.ifi.hase.soprafs23.Betting.Bet;
+import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
+import ch.uzh.ifi.hase.soprafs23.constant.InstructionType;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
+import ch.uzh.ifi.hase.soprafs23.repository.PlayerRepository;
+import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 
+@DataJpaTest
 public class PlayerTest {
 
+    @Autowired
+    private PlayerRepository playerRepository;
     private User user;
 
     private Player player;
@@ -29,6 +40,7 @@ public class PlayerTest {
         user = new User("creator", "password");
         player = new Player(user);
         player.init();
+        playerRepository.saveAndFlush(player);
     }
 
 
@@ -137,6 +149,12 @@ public class PlayerTest {
         assertEquals(1, playerData.getNumberOfWonRounds());
         assertEquals(0, playerData.getNumberOfLostRounds());
         assertEquals(Direction.UP, playerData.getTypeOfCurrentBet());
+
+        User user = player.getUser();
+
+        assertEquals(1, user.getNumberOfBetsWon());
+        assertEquals(0, user.getNumberOfBetsLost());
+        assertEquals(1, user.getWinRate());
     }
 
 
@@ -161,6 +179,12 @@ public class PlayerTest {
         assertEquals(0, playerData.getNumberOfWonRounds());
         assertEquals(1, playerData.getNumberOfLostRounds());
         assertEquals(Direction.UP, playerData.getTypeOfCurrentBet());
+
+        User user = player.getUser();
+
+        assertEquals(0, user.getNumberOfBetsWon());
+        assertEquals(1, user.getNumberOfBetsLost());
+        assertEquals(0, user.getWinRate());
     }
 
     @Test
@@ -184,11 +208,16 @@ public class PlayerTest {
         assertEquals(0, playerData.getNumberOfWonRounds());
         assertEquals(1, playerData.getNumberOfLostRounds());
         assertEquals(Direction.UP, playerData.getTypeOfCurrentBet());
+
+        User user = player.getUser();
+
+        assertEquals(0, user.getNumberOfBetsWon());
+        assertEquals(1, user.getNumberOfBetsLost());
+        assertEquals(0, user.getWinRate());
     }
 
     @Test
     void endRound_zeroBet() throws FailedToPlaceBetException {
-
         player.endRound(Direction.DOWN, 1.01);
         Result result = player.getResult();
 
@@ -205,5 +234,132 @@ public class PlayerTest {
         assertEquals(0, playerData.getNumberOfWonRounds());
         assertEquals(0, playerData.getNumberOfLostRounds());
         assertEquals(Direction.NONE, playerData.getTypeOfCurrentBet());
+
+        User user = player.getUser();
+
+        assertEquals(0, user.getNumberOfBetsWon());
+        assertEquals(0, user.getNumberOfBetsLost());
+        assertEquals(0, user.getWinRate());
+    }
+
+    @Test
+    void simple_instructions_bet_won() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A0 = new Instruction(playerID, InstructionType.a0, 100);
+        Instruction A1 = new Instruction(playerID, InstructionType.a1, 2);
+        Instruction A2 = new Instruction(playerID, InstructionType.a2, 3);
+        Instruction A3 = new Instruction(playerID, InstructionType.a3, 200);
+
+        player.addInstruction(A0);
+        player.addInstruction(A1);
+        player.addInstruction(A2);
+        player.addInstruction(A3);
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round((100+2*1000+1*(((1.01-1)*100+1)*100*3 + 200))), player.getBalance());
+
+        player.resetBet();
+        player.placeBet(validBet);
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(2900 + 2*100), player.getBalance());
+    }
+
+    @Test
+    void simple_instructions_bet_lost() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A0 = new Instruction(playerID, InstructionType.a0, 100);
+        Instruction A1 = new Instruction(playerID, InstructionType.a1, 2);
+        Instruction A2 = new Instruction(playerID, InstructionType.a2, 3);
+        Instruction A3 = new Instruction(playerID, InstructionType.a3, 200);
+
+        player.addInstruction(A0);
+        player.addInstruction(A1);
+        player.addInstruction(A2);
+        player.addInstruction(A3);
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+
+        player.endRound(Direction.DOWN, 1.01);
+
+        assertEquals(round((100+2*1000-1*(((1.01-1)*100+1)*100*3 + 200)))   , player.getBalance());
+    }
+
+
+    @Test
+    void simple_instructions_zero_bet() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A0 = new Instruction(playerID, InstructionType.a0, 100);
+        Instruction A1 = new Instruction(playerID, InstructionType.a1, 2);
+        Instruction A2 = new Instruction(playerID, InstructionType.a2, 3);
+        Instruction A3 = new Instruction(playerID, InstructionType.a3, 200);
+
+        player.addInstruction(A0);
+        player.addInstruction(A1);
+        player.addInstruction(A2);
+        player.addInstruction(A3);
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(100+2*1000)   , player.getBalance());
+    }
+
+    @Test
+    void more_complex_instructions() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A0 = new Instruction(playerID, InstructionType.a0, 100);
+        Instruction A1 = new Instruction(playerID, InstructionType.a1, 2);
+        Instruction A2 = new Instruction(playerID, InstructionType.a2, 4);
+        Instruction A3 = new Instruction(playerID, InstructionType.a3, 200);
+
+        Instruction A0R = new Instruction(playerID, InstructionType.a0, -100);
+        Instruction A1R = new Instruction(playerID, InstructionType.a1, 0.5);
+        Instruction A2R = new Instruction(playerID, InstructionType.a2, 0.25);
+        Instruction A3R = new Instruction(playerID, InstructionType.a3, -200);
+
+
+        player.addInstruction(A0);
+        player.addInstruction(A1);
+
+
+        player.addInstruction(A0R);
+        player.addInstruction(A1R);
+        player.addInstruction(A2R);
+        player.addInstruction(A3R);
+
+        player.addInstruction(A2);
+        player.addInstruction(A3);
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(1000+2*100)   , player.getBalance());
+    }
+
+    @Test
+    void foreign_instruction() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A0 = new Instruction(playerID+1, InstructionType.a0, 100);
+        player.addInstruction(A0);
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(1000+2*100), player.getBalance());
     }
 }

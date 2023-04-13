@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
 import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import org.slf4j.Logger;
@@ -13,10 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static java.lang.Integer.min;
 
 /**
  * User Service
@@ -132,6 +136,7 @@ public class UserService {
 
     }
 
+    /*
     public User getUserByToken(String token) {
         User userByToken = this.userRepository.findByToken(token);
         if (userByToken != null)
@@ -143,6 +148,8 @@ public class UserService {
         }
 
     }
+
+     */
 
 
     public void checkToken(String token) {
@@ -201,16 +208,8 @@ public class UserService {
         }
     }
 
-    /**
-     * This is a helper method that will check the uniqueness criteria of the
-     * username and the name
-     * defined in the User entity. The method will do nothing if the input is unique
-     * and throw an error otherwise.
-     *
-     * @param userToBeCreated
-     * @throws org.springframework.web.server.ResponseStatusException
-     * @see User
-     */
+
+    /*
     private void checkIfUserExists(User userToBeCreated, HttpStatus errorIfFound) {
         User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
 
@@ -220,9 +219,29 @@ public class UserService {
         }
     }
 
+     */
+
     public List<User> leaderboard() {
+        this.updateRanks();
         List<User> users = this.getUsers();
-        //TODO
-        return users;
+
+        users.sort(Comparator.comparingDouble(User::getWinRate).reversed().thenComparing(User::getUserID));
+
+        return users.subList(0, min(users.size(), 9));
+    }
+    private void updateRanks(){
+        List<User> users = this.getUsers();
+
+        users.sort(Comparator.comparingDouble(User::getWinRate).reversed().thenComparing(User::getUserID));
+
+        int rank = 1;
+
+        for(User user: users){
+            user.setRank(rank);
+            rank++;
+            this.userRepository.save(user);
+        }
+
+        this.userRepository.flush();
     }
 }

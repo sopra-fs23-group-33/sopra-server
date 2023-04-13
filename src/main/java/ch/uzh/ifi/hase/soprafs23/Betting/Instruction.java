@@ -17,7 +17,7 @@ public class Instruction {
     @Column(name = "number")
     private double number;
 
-    public Instruction(Long ownerID, InstructionType type, int number){
+    public Instruction(Long ownerID, InstructionType type, double number){
         this.number = number;
         this.ownerID = ownerID;
         this.type = type;

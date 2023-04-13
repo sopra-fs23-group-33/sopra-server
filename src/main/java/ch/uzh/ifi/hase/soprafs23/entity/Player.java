@@ -37,13 +37,13 @@ public class Player {
     private Bet currentBet;
 
     @Enumerated(EnumType.STRING)
-    PlayerState state;
+    private PlayerState state;
 
     @OneToOne(mappedBy = "player", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    InstructionManager instructionManager;
+    private InstructionManager instructionManager;
 
     @Embedded
-    Result result;
+    private Result result;
 
     public Player() {}
 
@@ -84,16 +84,12 @@ public class Player {
     public void endRound(Direction direction, Double ratio){
         if(direction == this.currentBet.getDirection()){
             this.numberOfBetsWon += 1;
-            this.user.incrementNumberOfBetsWon();
-            this.user.incrementTotalRoundsPlayed();
+            this.user.roundWon();
         }
-
         else if(direction != this.currentBet.getDirection() && this.currentBet.getDirection() != Direction.NONE){
             this.numberOfBetsLost += 1;
-            this.user.incrementNumberOfBetsLost();
-            this.user.incrementTotalRoundsPlayed();
+            this.user.roundLost();
         }
-
 
         int newBalance = this.instructionManager.computeNewBalance(direction, ratio);
         int profit = newBalance - this.balance;

@@ -18,11 +18,11 @@ import java.util.UUID;
  * Every variable will be mapped into a database field with the @Column
  * annotation
  * - nullable = false -> this cannot be left empty
- * - unique = true -> this value must be unqiue across the database -> composes
+ * - unique = true -> this value must be unique across the database -> composes
  * the primary key
  */
 @Entity
-@Table(name = "USER")
+@Table(name = "user")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -60,6 +60,10 @@ public class User implements Serializable {
     @Column
     private int rank;
 
+
+    @Column
+    private double winRate;
+
     public User() {
     }
 
@@ -73,6 +77,7 @@ public class User implements Serializable {
         this.numberOfBetsLost = 0;
         this.token = UUID.randomUUID().toString();
         this.rank = -1;
+        this.updateWinRate();
     }
 
 
@@ -180,6 +185,26 @@ public class User implements Serializable {
     }
 
 
+    public void roundLost(){
+        this.incrementNumberOfBetsLost();
+        this.incrementTotalRoundsPlayed();
+        this.updateWinRate();
+    }
+
+    public void roundWon(){
+        this.incrementNumberOfBetsWon();
+        this.incrementTotalRoundsPlayed();
+        this.updateWinRate();
+    }
+
+    private void updateWinRate(){
+        if(this.totalRoundsPlayed <= 0)
+            this.winRate = 0;
+        else{
+            this.winRate = ((double) this.numberOfBetsWon)/((double) this.totalRoundsPlayed);
+        }
+
+    }
     public void incrementTotalRoundsPlayed() {
         this.totalRoundsPlayed = this.totalRoundsPlayed + 1;
     }
@@ -191,4 +216,20 @@ public class User implements Serializable {
     public void incrementNumberOfBetsLost() {
         this.numberOfBetsLost = this.numberOfBetsLost + 1;
     }
+    public UserState getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserState status) {
+        this.status = status;
+    }
+
+    public double getWinRate() {
+        return winRate;
+    }
+
+    public void setWinRate(double winRate) {
+        this.winRate = winRate;
+    }
+
 }

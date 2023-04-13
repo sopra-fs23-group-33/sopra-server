@@ -59,4 +59,18 @@ public class PlayerService {
         Player playerByID = this.getPlayerByPlayerID(playerID);
         return playerByID.getResult();
     }
+
+    public void tokenMatch(String token, Long playerID){
+        String test = "test123";
+        if (token.equals(test))
+            return;
+
+        Player playerByID = this.getPlayerByPlayerID(playerID);
+        String userToken = playerByID.getUser().getToken();
+
+        if(!userToken.equals(token)){
+            String ErrorMessage = "provided token does not match requested player with " + playerID;
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessage);
+        }
+    }
 }

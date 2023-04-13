@@ -40,7 +40,7 @@ public class InstructionManager {
 
     public void init(Player player) {
         this.player = player;
-        this.instructions = new ArrayList<>();
+        this.resetInstructions();
 
     }
 
@@ -67,12 +67,13 @@ public class InstructionManager {
             temp.put(type, instruction.compute(temp.get(type)));
         }
 
-
+        this.resetInstructions();
 
         double newBalance = temp.get(InstructionType.a0) +
                             temp.get(InstructionType.a1)*this.player.getBalance() +
                             outcome*(((ratio-1.0)*100+1)*betAmount*temp.get(InstructionType.a2) + temp.get(InstructionType.a3));
         newBalance = round(newBalance);
+
 
         return max((int) newBalance, 0);
     }
@@ -84,6 +85,10 @@ public class InstructionManager {
             temp.put(type, type.getDefaultValue());
         }
         return temp;
+    }
+
+    private void resetInstructions(){
+        this.instructions = new ArrayList<>();
     }
 
 }
