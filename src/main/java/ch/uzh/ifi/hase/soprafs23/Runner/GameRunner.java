@@ -27,9 +27,11 @@ public class GameRunner {
 
     //@Transactional(propagation = Propagation.REQUIRES_NEW)
     @Async
-    public void run(Long gameID) {
+    public void run(Long gameID, int bettingTime, int resultTime) {
 
-        int waitTime = 15;
+        int waitTimeBetting = bettingTime;
+        int waitTimeResult = resultTime;
+
 
         try {
             asyncTransactionManager.startGame(gameID);
@@ -39,8 +41,8 @@ public class GameRunner {
         }
 
 
-        asyncTransactionManager.setTimerGame(gameID,waitTime);
-        this.wait_interrupt(waitTime, gameID);
+        asyncTransactionManager.setTimerGame(gameID,waitTimeBetting);
+        this.wait_interrupt(waitTimeBetting, gameID);
 
         boolean abort = false;
 
@@ -53,8 +55,8 @@ public class GameRunner {
                 asyncTransactionManager.corruptGame(gameID);
             }
 
-            asyncTransactionManager.setTimerGame(gameID,waitTime);
-            this.wait(waitTime);
+            asyncTransactionManager.setTimerGame(gameID,waitTimeResult);
+            this.wait(waitTimeResult);
 
             try {
                 asyncTransactionManager.nextRoundGame(gameID);
@@ -65,8 +67,8 @@ public class GameRunner {
 
             abort = asyncTransactionManager.getAbort(gameID);
 
-            asyncTransactionManager.setTimerGame(gameID,waitTime);
-            this.wait_interrupt(waitTime, gameID);
+            asyncTransactionManager.setTimerGame(gameID,waitTimeBetting);
+            this.wait_interrupt(waitTimeBetting, gameID);
         }
 
     }
@@ -92,7 +94,7 @@ public class GameRunner {
                     System.out.println("All bets Placed");
                     return;
                 }
-                Thread.sleep(1000);
+                Thread.sleep(500);
             }
             catch ( InterruptedException e) {
                 return;

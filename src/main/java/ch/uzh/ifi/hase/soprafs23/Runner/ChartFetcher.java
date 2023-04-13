@@ -26,13 +26,15 @@ import java.util.HashSet;
 public class ChartFetcher {
     private final GameRoundRepository gameRoundRepository;
     private final GameRepository gameRepository;
-
     private final AsyncTransactionManager asyncTransactionManager;
+
+    private final ChartAPI chartAPI;
     @Autowired
-    public ChartFetcher(@Qualifier("gameRoundRepository") GameRoundRepository gameRoundRepository,@Qualifier("gameRepository") GameRepository gameRepository, AsyncTransactionManager asyncTransactionManager) {
+    public ChartFetcher(@Qualifier("gameRoundRepository") GameRoundRepository gameRoundRepository,@Qualifier("gameRepository") GameRepository gameRepository, AsyncTransactionManager asyncTransactionManager, ChartAPI chartAPI) {
         this.gameRoundRepository = gameRoundRepository;
         this.gameRepository = gameRepository;
         this.asyncTransactionManager = asyncTransactionManager;
+        this.chartAPI = chartAPI;
     }
 
 
@@ -117,7 +119,7 @@ public class ChartFetcher {
 
 
     private GameRound fetch(CurrencyPair currencyPair, int trials, boolean delay) throws ChartException {
-        ChartAPI api = new ChartAPI();
+        //ChartAPI api = new ChartAPI();
         int count = 0;
 
         while (count <= trials) {
@@ -125,7 +127,7 @@ public class ChartFetcher {
             try {
                 if(delay)
                     Thread.sleep(2500);
-                return api.getGameRound(currencyPair);
+                return this.chartAPI.getGameRound(currencyPair);
             }
             catch (Exception ignored) {
             }

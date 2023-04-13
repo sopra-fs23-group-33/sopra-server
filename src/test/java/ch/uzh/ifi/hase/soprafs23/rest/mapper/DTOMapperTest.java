@@ -8,10 +8,7 @@ import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
-import ch.uzh.ifi.hase.soprafs23.constant.Currency;
-import ch.uzh.ifi.hase.soprafs23.constant.Direction;
-import ch.uzh.ifi.hase.soprafs23.constant.GameType;
-import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.constant.*;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
@@ -182,6 +179,12 @@ public class DTOMapperTest {
         gameData.setName("MyGame");
         gameData.setTotalLobbySize(2);
         gameData.setGameID(1L);
+        gameData.setEvent("NoEvent");
+        gameData.setCreator("Creator");
+        gameData.setTimer(10);
+        gameData.setCurrentRoundPlayed(2);
+        gameData.setNumberOfPlayersInLobby(1);
+        gameData.setStatus(GameState.LOBBY);
 
         GameGetDTO gameGetDTO = DTOMapper.INSTANCE.convertGameDataToGameGetDTO(gameData);
 
@@ -192,7 +195,12 @@ public class DTOMapperTest {
         assertEquals(gameData.getTotalLobbySize(), gameGetDTO.getTotalLobbySize());
         assertEquals(gameData.isEventsActive(), gameGetDTO.isEventsActive());
         assertEquals(gameData.isPowerupsActive(), gameGetDTO.isPowerupsActive());
-
-
+        assertEquals(gameData.getEvent(), gameGetDTO.getEvent());
+        assertEquals(gameData.getCreator(), gameGetDTO.getCreator());
+        assertEquals(gameData.getTimer(), gameGetDTO.getTimer());
+        assertEquals(gameData.getCurrentRoundPlayed(), gameGetDTO.getCurrentRoundPlayed());
+        assertEquals(gameData.getNumberOfPlayersInLobby(), gameGetDTO.getNumberOfPlayersInLobby());
+        assertEquals(gameData.getStatus().toString(), gameGetDTO.getStatus());
+        assertEquals(gameData.getGameID(), gameGetDTO.getGameID());
     }
 }

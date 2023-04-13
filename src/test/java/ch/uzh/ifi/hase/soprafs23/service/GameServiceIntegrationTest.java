@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs23.service;
 import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
+import ch.uzh.ifi.hase.soprafs23.Forex.ChartAPI;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.Game.BettingState;
@@ -25,7 +26,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
@@ -191,7 +194,7 @@ public class GameServiceIntegrationTest {
     }
 
     @Test
-    void validStart(){
+    void validStart() throws InterruptedException {
         User newUser = new User("newUser", "Pw3as?sword");
         this.userService.createUser(newUser);
         newUser = this.userService.getUserByUsername(newUser.getUsername());
@@ -216,6 +219,7 @@ public class GameServiceIntegrationTest {
         assertEquals(1, game.getGameRounds().size());
 
         assertDoesNotThrow(()-> gameService.start(game.getGameID(), "test123"));
+        //Thread.sleep(90000);
     }
 
     @Test
@@ -428,6 +432,36 @@ public class GameServiceIntegrationTest {
         User finalNewUser = newUser;
 
         assertThrows(ResponseStatusException.class, ()-> this.gameService.createGame(finalNewUser, gameData));
+    }
+
+    @Test
+    void startOutsideOfLobbyState(){
+        User newUser = new User("newUser", "Pw3as?sword");
+        this.userService.createUser(newUser);
+        newUser = this.userService.getUserByUsername(newUser.getUsername());
+
+        Player player = this.gameService.join(newUser, game.getGameID());
+        game = gameService.getGameByGameID((game.getGameID()));
+
+        ArrayList<Double> numbers = new ArrayList<>();
+        ArrayList<String> dates = new ArrayList<>();
+        CurrencyPair currencyPair = new CurrencyPair(Currency.CHF,Currency.EUR);
+
+        for(int i = 0; i < 10; i++){
+            numbers.add((double) i);
+            dates.add("Date" + i);
+        }
+        GameRound gameRound = new GameRound(new Chart(numbers, dates, currencyPair));
+
+        game.addGameRound(gameRound);
+        gameRepository.saveAndFlush(game);
+
+        game = gameService.getGameByGameID((game.getGameID()));
+        assertEquals(1, game.getGameRounds().size());
+
+        game.setGameStatus(new BettingState(game));
+        gameRepository.saveAndFlush(game);
+        assertThrows(ResponseStatusException.class, () -> this.gameService.start(game.getGameID(), "test123"));
     }
 
 }

@@ -10,12 +10,14 @@ import com.crazzyghost.alphavantage.forex.response.ForexResponse;
 import com.crazzyghost.alphavantage.forex.response.ForexUnit;
 import com.crazzyghost.alphavantage.parameters.Interval;
 import com.crazzyghost.alphavantage.parameters.OutputSize;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+@Component
 public class ChartAPI {
 
     private final String apiKey = "L5DXRR793TYLP95U";

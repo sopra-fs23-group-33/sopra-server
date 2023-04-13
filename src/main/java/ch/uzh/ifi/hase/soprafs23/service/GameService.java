@@ -115,7 +115,6 @@ public class GameService {
         checkIfValidName(name);
 
         try{
-            //gameType = GameType.valueOf(gameData.getTypeOfGame())
             gameType = gameData.getTypeOfGame();
         }
         catch (Exception e){
@@ -127,7 +126,6 @@ public class GameService {
             String ErrorMessage = "size of lobby does not match type of game";
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
         }
-
         if(gameData.getNumberOfRoundsToPlay() > 8){
             String ErrorMessage = "Number of Rounds is limited to 8";
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
@@ -136,8 +134,6 @@ public class GameService {
             String ErrorMessage = "Number of Rounds must be at minimum one";
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
         }
-
-
         if(gameData.getTotalLobbySize() > 8){
             String ErrorMessage = "Lobby size is limited to 8";
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
@@ -203,7 +199,7 @@ public class GameService {
         this.tokenMatchStart(token, game);
 
         if(game.canStart() && game.getState().equals(GameState.LOBBY))
-            this.gameRunner.run(game.getGameID());
+            this.gameRunner.run(game.getGameID(), 15, 15);
         else{
             String ErrorMessage = "Game with gameId " + gameID + " cannot be started";
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
