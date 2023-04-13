@@ -26,8 +26,10 @@ public class ResultState extends GameStatus{
         for(Player player: game.players)
             player.resetBet();
 
-        if(this.game.currentRoundPlayed >= this.game.numberOfRoundsToPlay || !this.game.checkIntegrity())
+        if(this.game.currentRoundPlayed >= this.game.numberOfRoundsToPlay || !this.game.checkIntegrity()) {
+            this.game.setTimer(0);
             this.game.setGameStatus(new OverviewState(this.game));
+        }
         else
             this.game.setGameStatus(new BettingState(this.game));
     }

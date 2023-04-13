@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Component
+
 public class ChartAPI {
 
     private final String apiKey = "L5DXRR793TYLP95U";

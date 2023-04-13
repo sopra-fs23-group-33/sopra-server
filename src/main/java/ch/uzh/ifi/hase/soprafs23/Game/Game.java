@@ -50,7 +50,7 @@ public class Game {
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     List<Player> players;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     private User creator;
 
     @Column(name = "powerups_active", nullable = false)
@@ -76,7 +76,6 @@ public class Game {
         this.totalLobbySize = gameData.getTotalLobbySize();
         this.type = gameData.getTypeOfGame();
         this.currentRoundPlayed = 0;
-        //this.numberOfPlayersInLobby = 1;
         this.gameRounds = new ArrayList<>();
         this.players = new ArrayList<>();
     }

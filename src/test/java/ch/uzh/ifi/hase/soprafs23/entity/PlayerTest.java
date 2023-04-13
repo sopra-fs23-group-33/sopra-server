@@ -327,17 +327,13 @@ public class PlayerTest {
         Instruction A2R = new Instruction(playerID, InstructionType.a2, 0.25);
         Instruction A3R = new Instruction(playerID, InstructionType.a3, -200);
 
-
-        player.addInstruction(A0);
         player.addInstruction(A1);
-
-
-        player.addInstruction(A0R);
-        player.addInstruction(A1R);
         player.addInstruction(A2R);
+        player.addInstruction(A0);
+        player.addInstruction(A0R);
         player.addInstruction(A3R);
-
         player.addInstruction(A2);
+        player.addInstruction(A1R);
         player.addInstruction(A3);
 
         Bet validBet = new Bet(Direction.UP, 100);

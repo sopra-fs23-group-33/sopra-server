@@ -404,24 +404,41 @@ public class UserServiceIntegrationTest {
 
         assertTrue(leaderboard.isEmpty());
 
-        User testUser1 = new User("testUsername1", "TestPwd2?");
-        userService.createUser(testUser1);
+        User testUser1 = new User("User1", "TestPwd2?");
+        testUser1 = userService.createUser(testUser1);
 
-        User testUser2 = new User("testUsername2", "TestPwd2?");
-        userService.createUser(testUser2);
+        User testUser2 = new User("User2", "TestPwd2?");
+        testUser2 = userService.createUser(testUser2);
 
-        User testUser3 = new User("testUsername3", "TestPwd2?");
-        userService.createUser(testUser3);
+        User testUser3 = new User("User3", "TestPwd2?");
+        testUser3 = userService.createUser(testUser3);
 
-        User winner = userService.getUserByUsername(testUser3.getUsername());
-        winner.roundWon();
-        userRepository.saveAndFlush(winner);
+        User testUser4 = new User("User4", "TestPwd2?");
+        testUser4 = userService.createUser(testUser4);
+
+        User bestUser = userService.getUserByUsername(testUser3.getUsername());
+        bestUser.roundWon();
+        bestUser.roundWon();
+        bestUser.roundWon();
+        bestUser.roundLost();
+        userRepository.saveAndFlush(bestUser);
+
+        User secondBestUser = userService.getUserByUsername(testUser2.getUsername());
+        secondBestUser.roundWon();
+        secondBestUser.roundLost();
+        userRepository.saveAndFlush(secondBestUser);
 
         leaderboard = this.userService.leaderboard();
 
         assertEquals(testUser3.getUsername(), leaderboard.get(0).getUsername());
-        assertEquals(testUser1.getUsername(), leaderboard.get(1).getUsername());
-        assertEquals(testUser2.getUsername(), leaderboard.get(2).getUsername());
+        assertEquals(testUser2.getUsername(), leaderboard.get(1).getUsername());
+        assertEquals(testUser1.getUsername(), leaderboard.get(2).getUsername());
+        assertEquals(testUser4.getUsername(), leaderboard.get(3).getUsername());
+
+        assertEquals(0.75, leaderboard.get(0).getWinRate());
+        assertEquals(0.5, leaderboard.get(1).getWinRate());
+        assertEquals(0.0, leaderboard.get(2).getWinRate());
+        assertEquals(0.0, leaderboard.get(3).getWinRate());
     }
 
 }
