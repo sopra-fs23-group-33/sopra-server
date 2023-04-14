@@ -37,7 +37,12 @@ public class ChartFetcher {
 
     @Async
     public void fetch(Long gameID) {
+        try {
+            Thread.sleep(200);
+        }
+        catch (Exception e){
 
+        }
         int rounds;
         HashSet<CurrencyPair> currencyPairs;
 
