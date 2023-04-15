@@ -23,10 +23,6 @@ jobs:
           distribution: "temurin"
           java-version: "17"
 
-      - name: Set database password1
-        run: echo "dbPassword=${{ secrets.GITHUB_TOKEN}}" > dbpassword.properties
-
-
       - name: Test and analyze
         run: ./gradlew test jacocoTestReport sonarqube
         env:
@@ -41,9 +37,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-
-      - name: Set database password
-        run: echo "dbPassword=${{ secrets.GITHUB_TOKEN }}" > dbpassword.properties
 
       - name: Deploy to App Engine
         id: deploy
