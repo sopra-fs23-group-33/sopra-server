@@ -51,9 +51,6 @@ public class PlayerServiceIntegrationTest {
     private GameService gameService;
 
     private Game game;
-    private GameData gameData;
-    private User creator;
-
 
     @BeforeEach
     void setup()  {
@@ -118,7 +115,6 @@ public class PlayerServiceIntegrationTest {
         Bet zeroBet = new Bet(Direction.DOWN, 0);
         Bet noneBet = new  Bet(Direction.NONE, 10);
         Bet highVolumeBet =  new Bet(Direction.UP, 100000);
-        Bet validBet = new Bet(Direction.UP, 100);
 
         assertThrows(ResponseStatusException.class, () -> this.playerService.placeBet(negativeBet, playerID));
         assertThrows(ResponseStatusException.class, () -> this.playerService.placeBet(zeroBet, playerID));

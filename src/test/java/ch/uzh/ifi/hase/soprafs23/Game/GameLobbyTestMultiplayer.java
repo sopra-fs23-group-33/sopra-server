@@ -102,8 +102,8 @@ public class GameLobbyTestMultiplayer {
         User userToJoin4 = new User("test4", "pwd");
 
 
-        Player newPlayer = game.join(userToJoin);
-        newPlayer = game.join(userToJoin2);
+        game.join(userToJoin);
+        game.join(userToJoin2);
         assertEquals(3, game.getPlayers().size());
 
         assertThrows(FailedToJoinExceptionBecauseLobbyFull.class, () -> game.join(userToJoin3));
@@ -118,7 +118,7 @@ public class GameLobbyTestMultiplayer {
     @Test
     void leave_host_Lobby() throws PlayerNotFoundException, FailedToJoinException {
         User userToJoin = new User("test", "pwd");
-        Player newPlayer = game.join(userToJoin);
+        game.join(userToJoin);
 
         assertEquals(2, game.getNumberOfPlayersInLobby());
         assertEquals(2, game.getPlayers().size());

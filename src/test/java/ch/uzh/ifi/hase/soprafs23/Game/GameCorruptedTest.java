@@ -8,7 +8,6 @@ import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
-import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,7 +59,7 @@ public class GameCorruptedTest {
     @Test
     void corrupt_game() throws nextRoundException, StartException, endRoundException, FailedToJoinException {
         User second = new User("second", "password");
-        Player secondPlayer = game.join(second);
+        game.join(second);
 
         add_gameRounds(2);
         game.start();
@@ -83,7 +82,7 @@ public class GameCorruptedTest {
     void leave_and_join_Corrupted() throws PlayerNotFoundException, StartException, endRoundException, nextRoundException, FailedToJoinException {
 
         User second = new User("second", "password");
-        Player secondPlayer = game.join(second);
+        game.join(second);
 
         add_gameRounds(2);
         game.start();

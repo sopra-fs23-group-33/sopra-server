@@ -3,21 +3,17 @@ package ch.uzh.ifi.hase.soprafs23.service;
 import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
-import ch.uzh.ifi.hase.soprafs23.Forex.ChartAPI;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.Game.BettingState;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
-import ch.uzh.ifi.hase.soprafs23.Game.GameStatus;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
 import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToJoinException;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
-import ch.uzh.ifi.hase.soprafs23.repository.GameRoundRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -55,10 +51,6 @@ public class GameServiceIntegrationTest {
     @Qualifier("gameRepository")
     @Autowired
     private GameRepository gameRepository;
-
-
-    @Autowired
-    private PlayerService playerService;
 
     @Autowired
     private GameService gameService;
@@ -122,7 +114,7 @@ public class GameServiceIntegrationTest {
         User newUser = new User("newUser", "Pw3as?sword");
         this.userService.createUser(newUser);
         newUser = this.userService.getUserByUsername(newUser.getUsername());
-        Player player = this.gameService.join(newUser, game.getGameID());
+        this.gameService.join(newUser, game.getGameID());
 
         newUser = new User("newUser2", "Pw3as?sword");
         this.userService.createUser(newUser);
@@ -198,7 +190,7 @@ public class GameServiceIntegrationTest {
         this.userService.createUser(newUser);
         newUser = this.userService.getUserByUsername(newUser.getUsername());
 
-        Player player = this.gameService.join(newUser, game.getGameID());
+        this.gameService.join(newUser, game.getGameID());
         game = gameService.getGameByGameID((game.getGameID()));
 
         ArrayList<Double> numbers = new ArrayList<>();
@@ -254,7 +246,7 @@ public class GameServiceIntegrationTest {
         this.userService.createUser(newUser);
         newUser = this.userService.getUserByUsername(newUser.getUsername());
 
-        Player player = this.gameService.join(newUser, game.getGameID());
+        this.gameService.join(newUser, game.getGameID());
         game = gameService.getGameByGameID((game.getGameID()));
 
         this.gameService.leave(creator, game.getGameID());
@@ -267,7 +259,7 @@ public class GameServiceIntegrationTest {
         this.userService.createUser(newUser);
         newUser = this.userService.getUserByUsername(newUser.getUsername());
 
-        Player player = this.gameService.join(newUser, game.getGameID());
+        this.gameService.join(newUser, game.getGameID());
         game = gameService.getGameByGameID((game.getGameID()));
 
         ArrayList<Double> numbers = new ArrayList<>();
@@ -305,7 +297,7 @@ public class GameServiceIntegrationTest {
         this.userService.createUser(newUser);
         newUser = this.userService.getUserByUsername(newUser.getUsername());
 
-        Player player = this.gameService.join(newUser, game.getGameID());
+        this.gameService.join(newUser, game.getGameID());
         game = gameService.getGameByGameID((game.getGameID()));
         List<Player> players =  gameService.players(game.getGameID());
 
@@ -439,7 +431,7 @@ public class GameServiceIntegrationTest {
         this.userService.createUser(newUser);
         newUser = this.userService.getUserByUsername(newUser.getUsername());
 
-        Player player = this.gameService.join(newUser, game.getGameID());
+        this.gameService.join(newUser, game.getGameID());
         game = gameService.getGameByGameID((game.getGameID()));
 
         ArrayList<Double> numbers = new ArrayList<>();

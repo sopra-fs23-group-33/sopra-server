@@ -7,7 +7,6 @@ import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
-import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToJoinException;
 import ch.uzh.ifi.hase.soprafs23.exceptions.StartException;
@@ -41,7 +40,7 @@ public class GameOverviewTest {
         game.init();
 
         User second = new User("second", "password");
-        Player secondPlayer = game.join(second);
+        game.join(second);
 
     }
 

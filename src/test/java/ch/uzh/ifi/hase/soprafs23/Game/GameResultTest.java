@@ -40,7 +40,7 @@ public class GameResultTest {
         game.init();
 
         User second = new User("second", "password");
-        Player secondPlayer = game.join(second);
+        game.join(second);
 
     }
 

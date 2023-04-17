@@ -5,7 +5,6 @@ import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.constant.*;
-import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,6 @@ public class GameBettingTest {
     private User creator;
 
     private User second;
-    private Player secondPlayer;
 
     @BeforeEach
     void setup_for_Overview_State() throws FailedToJoinException, StartException, endRoundException, nextRoundException {
@@ -36,7 +34,7 @@ public class GameBettingTest {
         game.init();
 
         second = new User("second", "password");
-        secondPlayer = game.join(second);
+        game.join(second);
 
     }
 
