@@ -59,9 +59,7 @@ public class GameControllerTest {
 
     UserPostDTO userPostDTO;
     User user;
-    //BetPutDTO betToSend;
-    //Result result;
-    //ResultGetDTO resultDTO;
+
     GamePostDTO gamePostDTO;
     GameData gameData;
     Game game;
@@ -92,18 +90,7 @@ public class GameControllerTest {
             userPostDTO.getUsername(),
             userPostDTO.getPassword()
         );
-    
-        //betToSend = new BetPutDTO();
-        //betToSend.setAmount(100);
-        //betToSend.setType(Direction.UP);
 
-        //result = new Result(Direction.UP, 10, 100);
-
-        //resultDTO = new ResultGetDTO();
-        //resultDTO.setOutcome(Direction.UP);
-        //resultDTO.setBettingAmount(100);
-        //resultDTO.setProfit(1); 
-        
         gamePostDTO = new GamePostDTO();
         gamePostDTO.setCreator("username");
         gamePostDTO.setEventsActive(false);
