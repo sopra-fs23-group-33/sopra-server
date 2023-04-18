@@ -50,4 +50,6 @@ jobs:
           SPRING_PROFILES_ACTIVE: prod
 
       - name: Test
+        env:
+          SPRING_PROFILES_ACTIVE: prod
         run: curl "${{ steps.deploy.outputs.url }}"
