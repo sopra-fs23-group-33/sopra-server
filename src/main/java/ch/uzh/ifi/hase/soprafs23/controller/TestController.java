@@ -9,6 +9,7 @@ import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
+import ch.uzh.ifi.hase.soprafs23.repository.GameRoundRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.ChartGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
@@ -31,7 +32,6 @@ public class TestController {
 
   private final UserService userService;
   private final UserRepository userRepository;
-
   private final GameRepository gameRepository;
 
   private int count = 0;
@@ -67,6 +67,16 @@ public class TestController {
       ChartGetDTO cdg = DTOMapper.INSTANCE.convertChartDataToChartGetDTO(cd);
       return cdg;
   }
+
+    @DeleteMapping("/delete")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public void delete_all()  {
+      gameRepository.deleteAll();
+      gameRepository.flush();
+      userRepository.deleteAll();
+      userRepository.flush();
+    }
 
 
 
