@@ -9,7 +9,7 @@ runtime_config:
   runtime_version: "17"
 
 network:
-session_affinity: false
+  session_affinity: false
 
 env_variables:
-SPRING_PROFILES_ACTIVE: 'prod'
+  SPRING_PROFILES_ACTIVE: 'prod'
