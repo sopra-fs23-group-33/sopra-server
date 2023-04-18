@@ -180,6 +180,4 @@ public class GameController {
 
         return DTOMapper.INSTANCE.convertChartDataToChartGetDTO(chartData);
     }
-
-
 }

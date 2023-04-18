@@ -156,7 +156,7 @@ public class GameService {
         User user = this.userService.getUserByUsername(userToJoin.getUsername());
 
         try {
-            Player player = game.join(user);
+            game.join(user);
         }
         catch (FailedToJoinException e){
             String ErrorMessage = e.getMessage();

@@ -83,7 +83,7 @@ public class Game {
     public void init(){
         this.gameStatus = new LobbyState(this);
         try {
-            Player player = this.join(this.creator);
+            this.join(this.creator);
         }
         catch (FailedToJoinException ignored){}
     }

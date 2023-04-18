@@ -39,8 +39,6 @@ public class GameData {
         this.gameID = gameID;
     }
 
-
-
     public String getName() {
         return name;
     }
