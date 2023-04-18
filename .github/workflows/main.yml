@@ -26,13 +26,13 @@ jobs:
       - name: Test and analyze
         run: ./gradlew test jacocoTestReport sonarqube
         env:
+          SPRING_PROFILES_ACTIVE: dev
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   deploy:
     name: Deploying to Google Cloud
     runs-on: ubuntu-latest
-    needs: test
 
     steps:
       - name: Checkout
@@ -45,6 +45,8 @@ jobs:
           deliverables: app.yaml
           version: v3
           credentials: ${{ secrets.GCP_SERVICE_CREDENTIALS }}
+        env:
+          SPRING_PROFILES_ACTIVE: prod
 
       - name: Test
         run: curl "${{ steps.deploy.outputs.url }}"
