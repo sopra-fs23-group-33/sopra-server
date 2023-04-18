@@ -34,6 +34,9 @@ jobs:
     name: Deploying to Google Cloud
     runs-on: ubuntu-latest
 
+    env:
+      SPRING_PROFILES_ACTIVE: prod
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -45,8 +48,6 @@ jobs:
           deliverables: app.yaml
           version: v3
           credentials: ${{ secrets.GCP_SERVICE_CREDENTIALS }}
-        env:
-          SPRING_PROFILES_ACTIVE: prod
 
       - name: Test
         run: curl "${{ steps.deploy.outputs.url }}"
