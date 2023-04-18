@@ -8,3 +8,8 @@ runtime_config:
   operating_system: "ubuntu22"
   runtime_version: "17"
 
+network:
+session_affinity: false
+
+env_variables:
+SPRING_PROFILES_ACTIVE: 'prod'

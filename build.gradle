@@ -15,6 +15,12 @@ java {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
+processResources {
+    filesMatching('**/application-prod.properties') {
+        expand(project.properties)
+    }
+}
+
 
 configurations {
     developmentOnly
@@ -91,5 +97,17 @@ if (secretPropsFile.exists()) {
         ext[name] = value
     }
 }
+
+File dbPasswordPropsFile = file('./dbpassword.properties')
+if (dbPasswordPropsFile.exists()) {
+    Properties p = new Properties()
+    p.load(new FileInputStream(dbPasswordPropsFile))
+    p.each { name, value ->
+        ext[name] = value
+    }
+} else {
+    ext['dbPassword'] = 'defaultpassword'
+}
+
 
 defaultTasks 'bootJar', 'build'
