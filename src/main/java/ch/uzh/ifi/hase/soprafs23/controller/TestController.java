@@ -19,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+
 /**
  * User Controller
  * This class is responsible for handling all REST request that are related to
@@ -30,12 +32,13 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public class TestController {
 
+    private  ArrayList<Integer> integers;
+
   private final UserService userService;
   private final UserRepository userRepository;
   private final GameRepository gameRepository;
 
   private int count = 0;
-
 
   private GameRound gameRound;
 
@@ -44,6 +47,7 @@ public class TestController {
     this.userService = userService;
     this.userRepository = gameRoundRepository;
       this.gameRepository = gameRepository;
+      this.integers = new ArrayList<>();
   }
 
 
@@ -67,6 +71,15 @@ public class TestController {
       ChartGetDTO cdg = DTOMapper.INSTANCE.convertChartDataToChartGetDTO(cd);
       return cdg;
   }
+
+    @GetMapping("/test/ram")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public ArrayList<Integer> test_ram()  {
+        int size = integers.size();
+        integers.add(size);
+        return integers;
+    }
 
     @DeleteMapping("/delete")
     @ResponseStatus(HttpStatus.OK)
