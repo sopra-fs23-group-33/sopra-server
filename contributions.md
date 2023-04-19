@@ -18,7 +18,7 @@
 |   1   | Christian | #7   |  done           |
 |   2   | Josep     |  #24    |    Implemented and tested|
 |   2   | Josep     |  #43    |    Implemented and tested (maybe must be adjusted in the future)                |
-|       |        |      |                    |
+|   2   | Josep     |  #49    |    Done                |
 |       |        |      |                    |
 |       |        |      |                    |
 |       |        |      |                    |
