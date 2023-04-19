@@ -90,7 +90,7 @@ public class GameControllerTest {
             userPostDTO.getUsername(),
             userPostDTO.getPassword()
         );
-
+        
         gamePostDTO = new GamePostDTO();
         gamePostDTO.setCreator("username");
         gamePostDTO.setEventsActive(false);
@@ -575,6 +575,34 @@ public class GameControllerTest {
         given(gameService.getAllGames()).willReturn(allGames);
 
         MockHttpServletRequestBuilder getRequest = get("/games")
+            .header("token", user.getToken());
+
+        // then
+        mockMvc.perform(getRequest).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].gameID", is(1)))
+                .andExpect(jsonPath("$[0].status", is("LOBBY")))
+                .andExpect(jsonPath("$[0].name", is(gamePostDTO.getName())))
+                .andExpect(jsonPath("$[0].typeOfGame", is(gamePostDTO.getTypeOfGame())))
+                .andExpect(jsonPath("$[0].powerupsActive", is(false)))
+                .andExpect(jsonPath("$[0].eventsActive", is(false)))
+                .andExpect(jsonPath("$[0].timer", is(0)))
+                .andExpect(jsonPath("$[0].totalLobbySize", is(gamePostDTO.getTotalLobbySize())))
+                .andExpect(jsonPath("$[0].numberOfPlayersInLobby", is(1)))
+                .andExpect(jsonPath("$[0].numberOfRoundsToPlay", is(gamePostDTO.getNumberOfRoundsToPlay())))
+                .andExpect(jsonPath("$[0].currentRoundPlayed", is(0)))
+                .andExpect(jsonPath("$[0].event", org.hamcrest.CoreMatchers.nullValue()))
+                .andExpect(jsonPath("$[0].creator", is(gamePostDTO.getCreator())));
+    }
+
+    @Test
+    void getAllGamesFilterValid() throws Exception {
+        List<GameData> allGames = Collections.singletonList(game.status());
+
+        Mockito.doNothing().when(userService).checkToken(user.getToken());
+        given(gameService.getAllGames("LOBBY")).willReturn(allGames);
+
+        MockHttpServletRequestBuilder getRequest = get("/games?filter=LOBBY")
             .header("token", user.getToken());
 
         // then
