@@ -19,7 +19,7 @@
 |   2   | Josep     |  #24    |    Implemented and tested|
 |   2   | Josep     |  #43    |    Implemented and tested (maybe must be adjusted in the future)                |
 |   2   | Josep     |  #49    |    Done                |
-|       |        |      |                    |
+| 0-2   |Stefan  |?     |Game is feature complete for M3                    |
 |       |        |      |                    |
 |       |        |      |                    |
 |       |        |      |                    |
