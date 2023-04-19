@@ -83,9 +83,13 @@ public class UserService {
 
         if (!matcherOneLetter.find()){
             ErrorMessage = ErrorMessage + "Invalid username: Does not contain alphabetic characters.\n";
-        } if (matcherInvalidCharacters.find()){
+        } 
+        
+        if (matcherInvalidCharacters.find()){
             ErrorMessage = ErrorMessage +  "Invalid username: Contains invalid characters.\n";
-        } if (username.length() > 30){
+        } 
+        
+        if (username.length() > 30){
             ErrorMessage = ErrorMessage +  "Invalid username: Too long.\n";
         }
 
@@ -107,13 +111,21 @@ public class UserService {
 
         if (!matcherOneLetter.find()){
             ErrorMessage = ErrorMessage + "Invalid password: Does not contain alphabetic characters.\n";
-        } if (!matcherOneNumber.find()){
+        } 
+        
+        if (!matcherOneNumber.find()){
             ErrorMessage = ErrorMessage +  "Invalid password: Does not contain numeric characters.\n";
-        } if (!matcherOneSpecial.find()){
+        } 
+        
+        if (!matcherOneSpecial.find()){
             ErrorMessage = ErrorMessage +  "Invalid password: Does not contain special characters.\n";
-        } if (matcherInvalidCharacters.find()){
+        } 
+        
+        if (matcherInvalidCharacters.find()){
             ErrorMessage = ErrorMessage +  "Invalid password: Contains invalid characters.\n";
-        } if (password.length() < 8){
+        } 
+        
+        if (password.length() < 8){
             ErrorMessage = ErrorMessage +  "Invalid password: Too short.\n";
         } else if (password.length() > 30){
             ErrorMessage = ErrorMessage +  "Invalid password: Too long.\n";
@@ -133,22 +145,6 @@ public class UserService {
         }
 
     }
-
-    /*
-    public User getUserByToken(String token) {
-        User userByToken = this.userRepository.findByToken(token);
-        if (userByToken != null)
-            return userByToken;
-
-        else {
-            String ErrorMessage = "User with " + token + " was not found";
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
-        }
-
-    }
-
-     */
-
 
     public void checkToken(String token) {
         String test = "test123";
@@ -205,19 +201,6 @@ public class UserService {
             this.userRepository.saveAndFlush(userByID);
         }
     }
-
-
-    /*
-    private void checkIfUserExists(User userToBeCreated, HttpStatus errorIfFound) {
-        User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
-
-        String baseErrorMessage = "The %s provided already exists: the user could not be created.";
-        if (userByUsername != null) {
-            throw new ResponseStatusException(errorIfFound, String.format(baseErrorMessage, "username"));
-        }
-    }
-
-     */
 
     public List<User> leaderboard() {
         this.updateRanks();
