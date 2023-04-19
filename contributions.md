@@ -23,6 +23,13 @@
 | 1     |Stefan  |?      |Alpba build of game                    |
 | 2     |Stefan  |?      |improved robustness and implemented Tests                    |
 | 3     |Stefan  |?     |Ported Cloud to App Engine Flex and DB to Cloud SQL                    |
+| 2     |Letizia | #14  |     done           |
+| 2     |Letizia | #47  |     done           |
 |       |        |      |                    |
 |       |        |      |                    |
 |       |        |      |                    |
+|       |        |      |                    |
+|       |        |      |                    |
+|       |        |      |                    |
+|       |        |      |                    |
+
