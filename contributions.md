@@ -20,9 +20,9 @@
 |   2   | Josep     |  #43    |    Implemented and tested (maybe must be adjusted in the future)                |
 |   2   | Josep     |  #49    |    Done                |
 | 0     |Stefan  |?     |implemented chart fetching and core DB schema                    |
-| 1     |Stefan  |?      |Alpba build of game                    |
-| 2     |Stefan  |?      |improved robustness and implemented Tests                    |
-| 3     |Stefan  |?     |Ported Cloud to App Engine Flex and DB to Cloud SQL                    |
+| 1     |Stefan  |?      |Alpha build of server                    |
+| 2     |Stefan  |?      |improved robustness and implemented Tests (server)                   |
+| 3     |Stefan  |?     |Ported Cloud to App Engine Flex and DB to Cloud SQL (server)                   |
 | 2     |Letizia | #14  |     done           |
 | 2     |Letizia | #47  |     done           |
 |       |        |      |                    |
