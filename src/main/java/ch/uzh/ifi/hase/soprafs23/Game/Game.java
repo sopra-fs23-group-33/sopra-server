@@ -65,6 +65,14 @@ public class Game {
     @OneToOne(mappedBy = "game", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private GameStatus gameStatus;
 
+    @Column(name = "resultTime", nullable = false)
+    private int resultTime;
+
+    @Column(name = "bettingTime", nullable = false)
+    private int bettingTime;
+
+
+
     public Game() {}
 
     public Game(User creator, GameData gameData){
@@ -78,6 +86,8 @@ public class Game {
         this.currentRoundPlayed = 0;
         this.gameRounds = new ArrayList<>();
         this.players = new ArrayList<>();
+        this.bettingTime = 15;
+        this.resultTime = 15;
     }
 
     public void init(){
@@ -191,6 +201,28 @@ public class Game {
         return this.gameStatus.chart();
     }
 
+    public void setTimerForBetting(){
+        this.setTimer(this.bettingTime);
+    }
+
+    public void setTimerForResult(){
+        this.setTimer(this.resultTime);
+    }
+
+    public void decrementTimer(){
+        if(this.timer > 0){
+            this.timer -= 1;
+        }
+    }
+
+    public void incrementRoundsPlayed(){
+        this.currentRoundPlayed++;
+    }
+
+    public void update() throws endRoundException, nextRoundException, StartException {
+        this.gameStatus.update();
+    }
+
     public int getCurrentRoundPlayed() {
         return currentRoundPlayed;
     }
@@ -301,4 +333,30 @@ public class Game {
     public void setTimer(int timer) {
         this.timer = timer;
     }
+
+    public void setCurrentRoundPlayed(int currentRoundPlayed) {
+        this.currentRoundPlayed = currentRoundPlayed;
+    }
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
+    }
+
+    public int getBettingTime() {
+        return bettingTime;
+    }
+
+    public void setBettingTime(int bettingTime) {
+        this.bettingTime = bettingTime;
+    }
+
+    public int getResultTime() {
+        return resultTime;
+    }
+
+    public void setResultTime(int resultTime) {
+        this.resultTime = resultTime;
+    }
+
+
 }

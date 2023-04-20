@@ -3,6 +3,9 @@ package ch.uzh.ifi.hase.soprafs23.Game;
 import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
+import ch.uzh.ifi.hase.soprafs23.exceptions.StartException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.endRoundException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.nextRoundException;
 
 
 import javax.persistence.Entity;
@@ -11,6 +14,7 @@ import javax.persistence.Entity;
 public class ResultState extends GameStatus{
     public ResultState(Game game) {
         super(game, GameState.RESULT);
+        this.game.setTimerForResult();
     }
     public ResultState(){}
 
@@ -33,4 +37,13 @@ public class ResultState extends GameStatus{
         else
             this.game.setGameStatus(new BettingState(this.game));
     }
+
+    @Override
+    public void update() throws nextRoundException {
+        this.game.decrementTimer();
+
+        if(this.game.getTimer() <= 0 )
+            this.game.nextRound();
+    }
+
 }

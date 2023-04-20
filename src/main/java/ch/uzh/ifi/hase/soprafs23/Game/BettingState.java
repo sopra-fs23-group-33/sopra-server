@@ -7,6 +7,7 @@ import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.PlayerNotFoundException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.endRoundException;
 
 
 import javax.persistence.Entity;
@@ -16,7 +17,8 @@ import java.util.ArrayList;
 public class BettingState extends GameStatus{
     public BettingState(Game game) {
         super(game, GameState.BETTING);
-        this.game.currentRoundPlayed++;
+        this.game.incrementRoundsPlayed();
+        this.game.setTimerForBetting();
     }
 
     public BettingState(){}
@@ -29,17 +31,17 @@ public class BettingState extends GameStatus{
 
     @Override
     public Chart chart() {
-        int round = this.game.currentRoundPlayed;
+        int round = this.game.getCurrentRoundPlayed();
         return this.game.getGameRounds().get(round-1).getFirstChart();
     }
 
 
     @Override
     public void endRound(){
-        GameRound gameRound = this.game.getGameRounds().get(this.game.currentRoundPlayed-1);
+        GameRound gameRound = this.game.getGameRounds().get(this.game.getCurrentRoundPlayed()-1);
         ArrayList<Player> playersToRemove = new ArrayList<>();
 
-        for(Player player: this.game.players){
+        for(Player player: this.game.getPlayers()){
             player.endRound(gameRound.getOutcome(), gameRound.getRatio());
 
             if(player.getState().equals(PlayerState.INACTIVE))
@@ -53,5 +55,12 @@ public class BettingState extends GameStatus{
         this.game.setGameStatus(new ResultState(this.game));
     }
 
+    @Override
+    public void update() throws endRoundException {
+        this.game.decrementTimer();
+
+        if((this.game.getTimer() <= 0 || this.game.allBetsPlaced()))
+            this.game.endRound();
+    }
 
 }

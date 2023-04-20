@@ -10,6 +10,7 @@ import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.Game.CorruptedState;
 import ch.uzh.ifi.hase.soprafs23.Runner.ChartFetcher;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
+import ch.uzh.ifi.hase.soprafs23.Runner.GameRunnerV2;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
@@ -48,7 +49,7 @@ public class GameService {
     private final UserService userService;
     private final PlayerRepository playerRepository;
     private final GameStatusRepository gameStatusRepository;
-    private final GameRunner gameRunner;
+    private final GameRunnerV2 gameRunnerV2;
     private final ChartFetcher chartFetcher;
 
     @Autowired
@@ -56,14 +57,14 @@ public class GameService {
                        UserService userService,
                        PlayerRepository playerRepository,
                        GameStatusRepository gameStatusRepository,
-                       GameRunner gameRunner,
+                       GameRunnerV2 gameRunner,
                        ChartFetcher chartFetcher) {
 
         this.gameRepository = gameRepository;
         this.userService = userService;
         this.playerRepository = playerRepository;
         this.gameStatusRepository = gameStatusRepository;
-        this.gameRunner = gameRunner;
+        this.gameRunnerV2 = gameRunner;
         this.chartFetcher = chartFetcher;
     }
 
@@ -199,7 +200,8 @@ public class GameService {
         this.tokenMatchStart(token, game);
 
         if(game.canStart() && game.getState().equals(GameState.LOBBY))
-            this.gameRunner.run(game.getGameID(), 15, 15);
+            this.gameRunnerV2.startGame(gameID);
+            //this.gameRunner.run(game.getGameID(), 15, 15);
         else{
             String ErrorMessage = "Game with gameId " + gameID + " cannot be started";
             throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
@@ -269,6 +271,7 @@ public class GameService {
 
     public List<GameData> getAllGames() {
         List<Game> games = this.gameRepository.findAll();
+
         List<GameData> gameData = new ArrayList<>();
 
         for(Game game: games) {

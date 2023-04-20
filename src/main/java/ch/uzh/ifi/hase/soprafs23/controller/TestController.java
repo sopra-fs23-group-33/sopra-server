@@ -37,17 +37,19 @@ public class TestController {
   private final UserService userService;
   private final UserRepository userRepository;
   private final GameRepository gameRepository;
+  private final GameRoundRepository gameRoundRepository;
 
   private int count = 0;
 
   private GameRound gameRound;
 
   @Autowired
-  TestController(UserService userService, UserRepository gameRoundRepository, GameRepository gameRepository) {
+  TestController(UserService userService, UserRepository userRepository, GameRepository gameRepository,  GameRoundRepository gameRoundRepository) {
     this.userService = userService;
-    this.userRepository = gameRoundRepository;
+    this.userRepository = userRepository;
       this.gameRepository = gameRepository;
       this.integers = new ArrayList<>();
+      this.gameRoundRepository = gameRoundRepository;
   }
 
 
@@ -60,9 +62,10 @@ public class TestController {
       GameRound gr;
       try {
           gr = api.getGameRound(new CurrencyPair(Currency.CHF, Currency.EUR));
+          this.gameRoundRepository.saveAndFlush(gr);
       }
       catch (Exception e){
-          String ErrorMessage = "Failed to fetch chart";
+          String ErrorMessage = "Failed to store chart";
           throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
       }
 
@@ -71,6 +74,8 @@ public class TestController {
       ChartGetDTO cdg = DTOMapper.INSTANCE.convertChartDataToChartGetDTO(cd);
       return cdg;
   }
+
+
 
     @GetMapping("/test/ram")
     @ResponseStatus(HttpStatus.OK)

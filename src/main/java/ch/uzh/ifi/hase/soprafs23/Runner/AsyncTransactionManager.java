@@ -37,10 +37,17 @@ public class AsyncTransactionManager {
     }
 
     public void addGameRound(GameRound gameRound, Long gameID) throws NotFoundException {
+
+        Long t1 = System.currentTimeMillis();
+
         this.gameRoundRepository.saveAndFlush(gameRound);
         Game game = this.findGame(gameID);
         game.addGameRound(gameRound);
         this.gameRepository.saveAndFlush(game);
+
+        Long t2 = System.currentTimeMillis()-t1;
+        System.out.println("time needed for fetching: "+t2);
+
     }
 
     public void startGame(Long gameID) throws  StartException {
@@ -110,7 +117,7 @@ public class AsyncTransactionManager {
         }
     }
 
-    private Game findGame(Long gameID) throws NotFoundException {
+    public Game findGame(Long gameID) throws NotFoundException {
         Game game = this.gameRepository.findByGameID(gameID);
 
         if (game != null)
@@ -129,6 +136,16 @@ public class AsyncTransactionManager {
         }
         catch (NotFoundException ignored){
             return false;
+        }
+    }
+
+    public void updateGame(Long gameID){
+        try {
+            Game game = this.findGame(gameID);
+            game.update();
+            gameRepository.saveAndFlush(game);
+        }
+        catch (Exception ignored){
         }
     }
 }

@@ -62,4 +62,6 @@ public abstract class GameStatus {
         throw new nextRoundException();
     }
 
+    public void update() throws StartException, endRoundException, nextRoundException {}
+
 }

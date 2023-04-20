@@ -64,5 +64,10 @@ public class LobbyState extends GameStatus{
 
     }
 
+    @Override
+    public void update() throws StartException {
+        this.start();
+    }
+
 
 }
