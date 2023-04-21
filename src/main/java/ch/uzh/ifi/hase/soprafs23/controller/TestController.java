@@ -6,6 +6,7 @@ import ch.uzh.ifi.hase.soprafs23.Forex.ChartAPI;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 
+import ch.uzh.ifi.hase.soprafs23.Runner.BackgroundChartFetcher;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
@@ -42,6 +43,9 @@ public class TestController {
   private int count = 0;
 
   private GameRound gameRound;
+
+  @Autowired
+  BackgroundChartFetcher backgroundChartFetcher;
 
   @Autowired
   TestController(UserService userService, UserRepository userRepository, GameRepository gameRepository,  GameRoundRepository gameRoundRepository) {
@@ -94,6 +98,9 @@ public class TestController {
       gameRepository.flush();
       userRepository.deleteAll();
       userRepository.flush();
+      gameRoundRepository.deleteAll();
+      gameRoundRepository.flush();
+      backgroundChartFetcher.enqueue(32);
     }
 
 

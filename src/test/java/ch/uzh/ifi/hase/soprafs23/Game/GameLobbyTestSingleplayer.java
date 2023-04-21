@@ -1,14 +1,18 @@
 package ch.uzh.ifi.hase.soprafs23.Game;
 
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
+import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
+import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
+import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
+import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToJoinException;
-import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToJoinExceptionBecauseLobbyFull;
-import ch.uzh.ifi.hase.soprafs23.exceptions.PlayerNotFoundException;
+import ch.uzh.ifi.hase.soprafs23.exceptions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -68,6 +72,25 @@ public class GameLobbyTestSingleplayer {
         assertEquals(GameState.CORRUPTED, game.getState());
 
         assertThrows(FailedToJoinException.class, () -> game.join(userToJoin));
+    }
+
+    @Test
+    void update_Lobby() throws endRoundException, nextRoundException, StartException {
+        ArrayList<Double> numbers = new ArrayList<>();
+        ArrayList<String> dates = new ArrayList<>();
+        CurrencyPair currencyPair = new CurrencyPair(Currency.CHF,Currency.EUR);
+
+        for(int i = 0; i < 10; i++){
+            numbers.add(1.0);
+            dates.add("Date" + i);
+        }
+
+        GameRound gameRound = new GameRound(new Chart(numbers, dates, currencyPair));
+        game.addGameRound(gameRound);
+
+        game.update();
+        assertEquals(GameState.BETTING, game.getState());
+        assertEquals(game.getBettingTime(), game.getTimer());
     }
 
 }

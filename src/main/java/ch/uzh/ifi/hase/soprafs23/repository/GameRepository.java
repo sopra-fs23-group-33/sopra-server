@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository("gameRepository")
 public interface GameRepository extends JpaRepository<Game, Long> {
     Game findByGameID(Long gameID);
+
     long countByGameID(Long gameID);
     void deleteByGameID(Long gameID);
 

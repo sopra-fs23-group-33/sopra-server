@@ -34,7 +34,7 @@ public class GameRunnerV2 {
 
         try {
             Game game = asyncTransactionManager.findGame(gameID);
-            sleepTime = game.getNumberOfRoundsToPlay()*(game.getBettingTime()+game.getResultTime())+15;
+            sleepTime = game.getNumberOfRoundsToPlay()*(game.getBettingTime()+game.getResultTime())+20;
         }
         catch (Exception e) {
             return;

@@ -47,7 +47,7 @@ public class Game {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY )
     private List<GameRound> gameRounds;
 
-    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     List<Player> players;
 
     @OneToOne
@@ -157,9 +157,12 @@ public class Game {
     }
 
     public void addGameRound(GameRound gameRound){
-        if(this.gameRounds.size() < this.numberOfRoundsToPlay)
+        if(this.gameRounds.size() < this.numberOfRoundsToPlay) {
+            gameRound.activate();
             this.gameRounds.add(gameRound);
+        }
     }
+
     public void endRound() throws endRoundException {
         this.gameStatus.endRound();
     }

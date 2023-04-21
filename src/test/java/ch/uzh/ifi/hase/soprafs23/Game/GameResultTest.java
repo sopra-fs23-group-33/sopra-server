@@ -149,4 +149,22 @@ public class GameResultTest {
         assertEquals(0, player.getCurrentBet().getAmount());
         assertEquals(Direction.NONE, player.getCurrentBet().getDirection());
     }
+    @Test
+    void update_timer_ends_Result() throws endRoundException, nextRoundException, StartException {
+        add_gameRounds(2);
+        game.start();
+        game.endRound();
+        assertEquals(GameState.RESULT, game.getState());
+
+
+        int resultTime = game.getResultTime();
+        for (int i = 0; i < resultTime; i++) {
+            assertEquals(resultTime - i, game.getTimer());
+            assertEquals(GameState.RESULT, game.getState());
+            game.update();
+        }
+        assertEquals(GameState.BETTING, game.getState());
+        assertEquals(game.getBettingTime(), game.getTimer());
+    }
+
 }

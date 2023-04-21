@@ -108,4 +108,12 @@ public class GameCorruptedTest {
         assertEquals(0, this.game.getNumberOfPlayersInLobby());
         assertEquals(0, this.game.getPlayers().size());
     }
+
+    @Test
+    void update_Corrupted() throws endRoundException, nextRoundException, StartException {
+        game.setGameStatus(new CorruptedState(game));
+        assertEquals(GameState.CORRUPTED, game.getState());
+        game.update();
+        assertEquals(GameState.CORRUPTED, game.getState());
+    }
 }

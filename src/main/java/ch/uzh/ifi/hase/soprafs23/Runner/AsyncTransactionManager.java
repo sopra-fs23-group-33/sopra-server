@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Component
 @Transactional
@@ -48,6 +50,10 @@ public class AsyncTransactionManager {
         Long t2 = System.currentTimeMillis()-t1;
         System.out.println("time needed for fetching: "+t2);
 
+    }
+
+    public void addSingleGameRound(GameRound gameRound) throws NotFoundException {
+        this.gameRoundRepository.saveAndFlush(gameRound);
     }
 
     public void startGame(Long gameID) throws  StartException {
@@ -148,4 +154,9 @@ public class AsyncTransactionManager {
         catch (Exception ignored){
         }
     }
+
+    public int numberOfRounds(){
+        return (int) gameRoundRepository.countByUsageFalse();
+    }
+
 }

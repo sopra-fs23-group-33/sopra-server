@@ -113,5 +113,13 @@ public class GameOverviewTest {
         assertThrows(nextRoundException.class, () -> game.nextRound());
     }
 
+    @Test
+    void update_Overview() throws endRoundException, nextRoundException, StartException {
+        game.setGameStatus(new OverviewState(game));
+        assertEquals(GameState.OVERVIEW, game.getState());
+        game.update();
+        assertEquals(GameState.OVERVIEW, game.getState());
+    }
+
 
 }

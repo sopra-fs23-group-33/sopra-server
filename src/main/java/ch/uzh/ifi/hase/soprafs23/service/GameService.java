@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs23.Forex.ChartAPI;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.Game.CorruptedState;
+import ch.uzh.ifi.hase.soprafs23.Runner.BackgroundChartFetcher;
 import ch.uzh.ifi.hase.soprafs23.Runner.ChartFetcher;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunnerV2;
@@ -20,6 +21,7 @@ import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
+import ch.uzh.ifi.hase.soprafs23.repository.GameRoundRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.GameStatusRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
@@ -52,13 +54,19 @@ public class GameService {
     private final GameRunnerV2 gameRunnerV2;
     private final ChartFetcher chartFetcher;
 
+    private final BackgroundChartFetcher backgroundChartFetcher;
+
+    private final GameRoundRepository gameRoundRepository;
+
     @Autowired
     public GameService(@Qualifier("gameRepository") GameRepository gameRepository,
                        UserService userService,
                        PlayerRepository playerRepository,
                        GameStatusRepository gameStatusRepository,
                        GameRunnerV2 gameRunner,
-                       ChartFetcher chartFetcher) {
+                       ChartFetcher chartFetcher,
+                        BackgroundChartFetcher backgroundChartFetcher,
+                       GameRoundRepository gameRoundRepository) {
 
         this.gameRepository = gameRepository;
         this.userService = userService;
@@ -66,6 +74,9 @@ public class GameService {
         this.gameStatusRepository = gameStatusRepository;
         this.gameRunnerV2 = gameRunner;
         this.chartFetcher = chartFetcher;
+        this.backgroundChartFetcher = backgroundChartFetcher;
+        this.backgroundChartFetcher.enqueue(32);
+        this.gameRoundRepository = gameRoundRepository;
     }
 
     public Game createGame(User user, GameData gameData){
@@ -82,7 +93,25 @@ public class GameService {
 
         Game createdGame = this.gameRepository.saveAndFlush(newGame);
 
-        this.chartFetcher.fetch(createdGame.getGameID());
+        //this.chartFetcher.fetch(createdGame.getGameID());
+
+        List<GameRound> gameRounds = this.gameRoundRepository.findTop8ByUsageOrderByRoundIDAsc(false);
+
+        /*
+        if(gameRounds.isEmpty()){
+            String ErrorMessage = "cannot Create game because no charts are available";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        }
+
+         */
+
+        for(GameRound gameRound: gameRounds){
+            createdGame.addGameRound(gameRound);
+        }
+
+        this.backgroundChartFetcher.enqueue(8);
+
+        createdGame = this.gameRepository.saveAndFlush(newGame);
 
         return createdGame;
     }

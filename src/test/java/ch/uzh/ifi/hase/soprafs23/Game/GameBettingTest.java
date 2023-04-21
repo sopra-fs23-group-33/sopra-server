@@ -137,5 +137,21 @@ public class GameBettingTest {
         assertEquals(1, game.players.size());
     }
 
+    @Test
+    void update_timer_ends_Betting() throws endRoundException, nextRoundException, StartException {
+        add_gameRounds(2);
+        game.update();
+        assertEquals(GameState.BETTING, game.getState());
+
+        int bettingTime = game.getBettingTime();
+        for (int i = 0; i < bettingTime; i++) {
+            assertEquals(bettingTime - i, game.getTimer());
+            assertEquals(GameState.BETTING, game.getState());
+            game.update();
+        }
+        assertEquals(GameState.RESULT, game.getState());
+        assertEquals(game.getResultTime(), game.getTimer());
+    }
+
 
 }

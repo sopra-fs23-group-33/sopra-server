@@ -14,6 +14,7 @@ import ch.uzh.ifi.hase.soprafs23.constant.UserState;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
+import ch.uzh.ifi.hase.soprafs23.repository.GameRoundRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -53,6 +54,9 @@ public class GameServiceIntegrationTest {
     private GameRepository gameRepository;
 
     @Autowired
+    private GameRoundRepository gameRoundRepository;
+
+    @Autowired
     private GameService gameService;
 
     private Game game;
@@ -68,6 +72,8 @@ public class GameServiceIntegrationTest {
         playerRepository.flush();
         userRepository.deleteAll();
         userRepository.flush();
+        gameRepository.deleteAll();
+        gameRepository.flush();
 
         creator = new User("Creator", "Pw3as?sword");
         this.userService.createUser(creator);
@@ -94,6 +100,8 @@ public class GameServiceIntegrationTest {
         playerRepository.flush();
         userRepository.deleteAll();
         userRepository.flush();
+        gameRepository.deleteAll();
+        gameRepository.flush();
     }
 
     @Test
@@ -271,6 +279,7 @@ public class GameServiceIntegrationTest {
             dates.add("Date" + i);
         }
         GameRound gameRound = new GameRound(new Chart(numbers, dates, currencyPair));
+        gameRoundRepository.saveAndFlush(gameRound);
 
         game.addGameRound(gameRound);
         gameRepository.saveAndFlush(game);

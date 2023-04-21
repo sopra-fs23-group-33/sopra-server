@@ -36,6 +36,8 @@ public class GameRound  {
     @Id
     @GeneratedValue
     private Long roundID;
+    @Column(name = "usage")
+    private boolean usage;
 
     public GameRound(){
 
@@ -50,6 +52,7 @@ public class GameRound  {
 
         this.ratio = this.computeRatio(firstClose, secondClose);
         this.outcome = this.computeOutcome(firstClose, secondClose);
+        this.usage = false;
     }
 
     private Chart splitChart(Chart chart){
@@ -94,6 +97,14 @@ public class GameRound  {
 
     public Long getRoundID() {
         return roundID;
+    }
+
+    public void activate(){
+        this.usage= true;
+    }
+
+    public void deactivate(){
+        this.usage= false;
     }
 
 
