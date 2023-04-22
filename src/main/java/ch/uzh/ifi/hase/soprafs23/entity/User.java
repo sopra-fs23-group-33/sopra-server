@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.entity;
 
-import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 
 import javax.persistence.*;
 
@@ -43,7 +43,7 @@ public class User implements Serializable {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserState status;
+    private UserStatus status;
 
     @Column(nullable = false)
     private int totalRoundsPlayed;
@@ -70,7 +70,7 @@ public class User implements Serializable {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.status = UserState.ONLINE;
+        this.status = UserStatus.ONLINE;
         this.creationDate = LocalDate.now();
         this.totalRoundsPlayed = 0;
         this.numberOfBetsWon = 0;
@@ -111,14 +111,6 @@ public class User implements Serializable {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public UserState getState() {
-        return status;
-    }
-
-    public void setState(UserState status) {
-        this.status = status;
     }
 
     public int getTotalRoundsPlayed() {
@@ -216,11 +208,11 @@ public class User implements Serializable {
     public void incrementNumberOfBetsLost() {
         this.numberOfBetsLost = this.numberOfBetsLost + 1;
     }
-    public UserState getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 
-    public void setStatus(UserState status) {
+    public void setStatus(UserStatus status) {
         this.status = status;
     }
 

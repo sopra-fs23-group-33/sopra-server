@@ -41,7 +41,7 @@ public class ChartFetcher {
             Thread.sleep(200);
         }
         catch (Exception e){
-
+            ;
         }
         int rounds;
         HashSet<CurrencyPair> currencyPairs;
@@ -63,7 +63,6 @@ public class ChartFetcher {
         if (currencyPairs.size() != rounds)
             return;
 
-        ArrayList<GameRound> gameRounds = new ArrayList<>();
         ArrayList<CurrencyPair> currencyPairsList = new ArrayList<>(currencyPairs);
         CurrencyPair firstPair = currencyPairsList.remove(0);
 
@@ -109,11 +108,8 @@ public class ChartFetcher {
             Currency to = Currency.getRandomCurrency();
             Currency from = Currency.getRandomCurrency();
 
-            if (to.equals(from))
-                continue;
-            else {
+            if (!to.equals(from))
                 currencyPairs.add(new CurrencyPair(to, from));
-            }
         }
         return currencyPairs;
     }
@@ -132,6 +128,7 @@ public class ChartFetcher {
                 return api.getGameRound(currencyPair);
             }
             catch (Exception ignored) {
+                ;
             }
         }
 

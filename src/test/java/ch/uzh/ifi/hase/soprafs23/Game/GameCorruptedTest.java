@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class GameCorruptedTest {
+class GameCorruptedTest {
     private Game game;
     private GameData gameData;
     private User creator;

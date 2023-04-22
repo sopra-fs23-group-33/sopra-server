@@ -77,7 +77,7 @@ public class GameRunner {
             Thread.sleep(n);
         }
         catch (InterruptedException e) {
-            return;
+            ;
         }
     }
 

@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.repository;
 
-import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.time.LocalDate;
 
 @DataJpaTest
-public class UserRepositoryIntegrationTest {
+class UserRepositoryIntegrationTest {
 
   @Autowired
   private TestEntityManager entityManager;
@@ -22,7 +22,7 @@ public class UserRepositoryIntegrationTest {
   private UserRepository userRepository;
 
   @Test
-  public void findByUsername_success() {
+  void findByUsername_success() {
     // given
     User user = new User();
     user.setUserID(1L);
@@ -34,7 +34,7 @@ public class UserRepositoryIntegrationTest {
     user.setNumberOfBetsWon(0);
     user.setNumberOfBetsLost(0);
     user.setRank(-1);
-    user.setState(UserState.ONLINE);
+    user.setStatus(UserStatus.ONLINE);
 
     entityManager.merge(user);
     entityManager.flush();
@@ -46,7 +46,7 @@ public class UserRepositoryIntegrationTest {
     assertNotNull(found.getUserID());
     //assertEquals(1, found.getUserID());
     assertEquals(user.getUsername(), found.getUsername());
-    assertEquals(user.getState(), found.getState());
+    assertEquals(user.getStatus(), found.getStatus());
     assertEquals(user.getToken(), found.getToken());
     assertEquals(user.getPassword(), found.getPassword());
     assertEquals(user.getCreationDate(), found.getCreationDate());

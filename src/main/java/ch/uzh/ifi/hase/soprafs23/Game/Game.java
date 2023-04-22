@@ -95,7 +95,9 @@ public class Game {
         try {
             this.join(this.creator);
         }
-        catch (FailedToJoinException ignored){}
+        catch (FailedToJoinException ignored){
+            ;
+        }
     }
 
 
@@ -111,8 +113,8 @@ public class Game {
         if(this.players.contains(player) && player.getState().equals(PlayerState.INACTIVE)) {
             User user = player.getUser();
 
-            if(user.getState().equals(UserState.PLAYING))
-                user.setState(UserState.ONLINE);
+            if(user.getStatus().equals(UserStatus.PLAYING))
+                user.setStatus(UserStatus.ONLINE);
             this.players.remove(player);
         }
     }
@@ -150,10 +152,7 @@ public class Game {
             return false;
         else if(this.getNumberOfPlayersInLobby() > this.totalLobbySize)
             return false;
-        else if(this.gameRounds.size() < 1)
-            return false;
-        else
-            return true;
+        else return !this.gameRounds.isEmpty();
     }
 
     public void addGameRound(GameRound gameRound){

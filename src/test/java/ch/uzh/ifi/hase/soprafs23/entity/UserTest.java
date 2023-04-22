@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-public class UserTest {
+class UserTest {
     @Test
     void equalHashCodes(){
         User user1 = new User("username", "pwd");
@@ -44,7 +44,7 @@ public class UserTest {
         user.setNumberOfBetsLost(0);
         user.incrementNumberOfBetsLost();
 
-        assertEquals(user.getNumberOfBetsLost(), 1);
+        assertEquals(1, user.getNumberOfBetsLost());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class UserTest {
         user.setNumberOfBetsWon(0);
         user.incrementNumberOfBetsWon();
 
-        assertEquals(user.getNumberOfBetsWon(), 1);
+        assertEquals(1, user.getNumberOfBetsWon());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class UserTest {
         user.setTotalRoundsPlayed(0);
         user.incrementTotalRoundsPlayed();
 
-        assertEquals(user.getTotalRoundsPlayed(), 1);
+        assertEquals(1, user.getTotalRoundsPlayed());
     }
 }
 

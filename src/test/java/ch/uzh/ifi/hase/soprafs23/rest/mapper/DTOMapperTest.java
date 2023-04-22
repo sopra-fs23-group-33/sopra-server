@@ -35,10 +35,10 @@ import java.util.ArrayList;
 @WebAppConfiguration
 @SpringBootTest
 @Transactional
-public class DTOMapperTest {
+class DTOMapperTest {
 
     @Test
-    public void testCreateUser_fromUserPostDTO_toUser_success() {
+    void testCreateUser_fromUserPostDTO_toUser_success() {
         // create UserPostDTO
         UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setPassword("name");
@@ -53,7 +53,7 @@ public class DTOMapperTest {
     }
 
     @Test
-    public void testGetUser_fromUser_toUserGetDTO_success() {
+    void testGetUser_fromUser_toUserGetDTO_success() {
         // create User
         User user = new User();
         user.setUserID(12321L);
@@ -64,7 +64,7 @@ public class DTOMapperTest {
         user.setNumberOfBetsWon(0);
         user.setNumberOfBetsLost(0);
         user.setRank(-1);
-        user.setState(UserState.OFFLINE);
+        user.setStatus(UserStatus.OFFLINE);
 
         // MAP -> Create UserGetDTO
         UserGetDTO userGetDTO = DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
@@ -72,7 +72,7 @@ public class DTOMapperTest {
         // check content
         assertEquals(user.getUserID(), userGetDTO.getUserID());
         assertEquals(user.getUsername(), userGetDTO.getUsername());
-        assertEquals(user.getState(), userGetDTO.getState());
+        assertEquals(user.getStatus(), userGetDTO.getStatus());
         assertEquals(user.getToken(), userGetDTO.getToken());
         assertEquals(user.getCreationDate(), userGetDTO.getCreationDate());
         assertEquals(user.getTotalRoundsPlayed(), userGetDTO.getTotalRoundsPlayed());

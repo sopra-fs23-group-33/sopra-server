@@ -7,7 +7,7 @@ import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
-import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
 
 
@@ -55,7 +55,7 @@ public class Player {
         this.resetBet();
         this.state = PlayerState.ACTIVE;
         this.result = new Result(Direction.NONE, 0, 0);
-        this.user.setState(UserState.PLAYING);
+        this.user.setStatus(UserStatus.PLAYING);
     }
 
     public void init(){

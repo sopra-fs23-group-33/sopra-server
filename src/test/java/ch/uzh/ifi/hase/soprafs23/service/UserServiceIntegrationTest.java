@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
-import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @WebAppConfiguration
 @SpringBootTest
 @Transactional
-public class UserServiceIntegrationTest {
+class UserServiceIntegrationTest {
 
     @Qualifier("userRepository")
     @Autowired
@@ -63,11 +63,11 @@ public class UserServiceIntegrationTest {
         assertEquals(testUser.getPassword(), createdUser.getPassword());
         assertEquals(testUser.getUsername(), createdUser.getUsername());
         assertNotNull(createdUser.getToken());
-        assertEquals(createdUser.getRank(), 1);
-        assertEquals(createdUser.getNumberOfBetsLost(), 0);
-        assertEquals(createdUser.getNumberOfBetsWon(), 0);
-        assertEquals(createdUser.getTotalRoundsPlayed(), 0);
-        assertEquals(UserState.ONLINE, createdUser.getState());
+        assertEquals(1, createdUser.getRank());
+        assertEquals(0, createdUser.getNumberOfBetsLost());
+        assertEquals(0, createdUser.getNumberOfBetsWon());
+        assertEquals(0, createdUser.getTotalRoundsPlayed());
+        assertEquals(UserStatus.ONLINE, createdUser.getStatus());
     }
 
     @Test
@@ -113,7 +113,7 @@ public class UserServiceIntegrationTest {
         assertEquals(loggedUser.getNumberOfBetsLost(), testUser.getNumberOfBetsLost());
         assertEquals(loggedUser.getNumberOfBetsWon(), testUser.getNumberOfBetsWon());
         assertEquals(loggedUser.getTotalRoundsPlayed(), testUser.getTotalRoundsPlayed());
-        assertEquals(UserState.ONLINE, loggedUser.getState());
+        assertEquals(UserStatus.ONLINE, loggedUser.getStatus());
     }
 
     @Test
@@ -145,9 +145,9 @@ public class UserServiceIntegrationTest {
         testUser.setUsername("testUsername");
         userService.createUser(testUser);
 
-        //change userstate to playing
+        //change UserStatus to playing
         User testUser2 = userRepository.findByUsername(testUser.getUsername());
-        testUser2.setStatus(UserState.PLAYING);
+        testUser2.setStatus(UserStatus.PLAYING);
         userRepository.saveAndFlush(testUser2);
 
         // attempt to create second user with same username
@@ -203,7 +203,7 @@ public class UserServiceIntegrationTest {
         assertEquals(loggedUser.getNumberOfBetsLost(), loggedOutUser.getNumberOfBetsLost());
         assertEquals(loggedUser.getNumberOfBetsWon(), loggedOutUser.getNumberOfBetsWon());
         assertEquals(loggedUser.getTotalRoundsPlayed(), loggedOutUser.getTotalRoundsPlayed());
-        assertEquals(UserState.OFFLINE, loggedOutUser.getState());
+        assertEquals(UserStatus.OFFLINE, loggedOutUser.getStatus());
     }
 
     @Test
@@ -221,7 +221,8 @@ public class UserServiceIntegrationTest {
         userService.logoutUser(loggedUser.getUserID());
 
         // check that an error is thrown
-        assertThrows(ResponseStatusException.class, () -> userService.logoutUser(loggedUser.getUserID()));
+        Long id = loggedUser.getUserID();
+        assertThrows(ResponseStatusException.class, () -> userService.logoutUser(id));
     }
 
     @Test

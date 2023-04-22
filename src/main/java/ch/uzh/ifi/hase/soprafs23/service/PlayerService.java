@@ -37,8 +37,8 @@ public class PlayerService {
         if (playerByID != null)
             return playerByID;
         else {
-            String ErrorMessage = "Player with playerId " + playerID + " was not found";
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+            String errorMessage = "Player with playerId " + playerID + " was not found";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
         }
     }
 
@@ -50,8 +50,8 @@ public class PlayerService {
             this.playerRepository.saveAndFlush(playerByID);
         }
         catch (FailedToPlaceBetException e) {
-            String ErrorMessage = e.getMessage();
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+            String errorMessage = e.getMessage();
+            throw new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
         }
     }
 
@@ -69,8 +69,8 @@ public class PlayerService {
         String userToken = playerByID.getUser().getToken();
 
         if(!userToken.equals(token)){
-            String ErrorMessage = "provided token does not match requested player with " + playerID;
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessage);
+            String errorMessage = "provided token does not match requested player with " + playerID;
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
         }
     }
 }

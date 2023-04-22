@@ -2,7 +2,7 @@ package ch.uzh.ifi.hase.soprafs23.Game;
 
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
-import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
@@ -26,7 +26,7 @@ public class LobbyState extends GameStatus{
         }
 
         catch (PlayerNotFoundException e) {
-            if(!user.getState().equals(UserState.ONLINE)) {
+            if(!user.getStatus().equals(UserStatus.ONLINE)) {
                 throw new FailedToJoinExceptionBecauseOffline();
             }
 

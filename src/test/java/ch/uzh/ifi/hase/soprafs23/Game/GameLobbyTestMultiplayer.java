@@ -9,7 +9,7 @@ import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
-import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-public class GameLobbyTestMultiplayer {
+class GameLobbyTestMultiplayer {
 
 
     private Game game;
@@ -73,7 +73,7 @@ public class GameLobbyTestMultiplayer {
         assertEquals(1, game.getNumberOfPlayersInLobby());
         assertEquals(1, game.getPlayers().size());
 
-        assertEquals(UserState.ONLINE, userToJoin.getState());
+        assertEquals(UserStatus.ONLINE, userToJoin.getStatus());
     }
 
     @Test
@@ -82,12 +82,12 @@ public class GameLobbyTestMultiplayer {
         Player newPlayer = game.join(userToJoin);
 
         assertEquals(newPlayer, game.getPlayers().get(1));
-        assertEquals(UserState.PLAYING, userToJoin.getState());
+        assertEquals(UserStatus.PLAYING, userToJoin.getStatus());
 
 
-        userToJoin.setStatus(UserState.OFFLINE);
+        userToJoin.setStatus(UserStatus.OFFLINE);
         game.leave(userToJoin);
-        assertEquals(UserState.OFFLINE, userToJoin.getState());
+        assertEquals(UserStatus.OFFLINE, userToJoin.getStatus());
 
         assertEquals(creator, game.getPlayers().get(0).getUser());
         assertEquals(1, game.getNumberOfPlayersInLobby());
@@ -108,10 +108,10 @@ public class GameLobbyTestMultiplayer {
 
         assertThrows(FailedToJoinExceptionBecauseLobbyFull.class, () -> game.join(userToJoin3));
 
-        userToJoin4.setState(UserState.PLAYING);
+        userToJoin4.setStatus(UserStatus.PLAYING);
         assertThrows(FailedToJoinExceptionBecauseOffline.class, () -> game.join(userToJoin4));
 
-        userToJoin4.setState(UserState.OFFLINE);
+        userToJoin4.setStatus(UserStatus.OFFLINE);
         assertThrows(FailedToJoinExceptionBecauseOffline.class, () -> game.join(userToJoin4));
     }
 

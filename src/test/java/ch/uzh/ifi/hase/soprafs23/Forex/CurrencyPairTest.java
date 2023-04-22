@@ -4,7 +4,7 @@ import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-public class CurrencyPairTest {
+class CurrencyPairTest {
 
     private CurrencyPair currencyPair;
 
@@ -28,8 +28,8 @@ public class CurrencyPairTest {
         assertEquals(currencyPair, otherPair);
         assertEquals(currencyPair, currencyPair);
         assertNotEquals(currencyPair, thirdPair);
-        assertNotEquals(currencyPair, null);
-        assertNotEquals(currencyPair, Currency.CHF);
+        assertNotEquals(null, currencyPair);
+        assertNotEquals(Currency.CHF, currencyPair);
         assertEquals(currencyPair.hashCode(), otherPair.hashCode());
         assertNotEquals(currencyPair.hashCode(), thirdPair.hashCode());
         assertEquals(currencyPair, fourthPair);

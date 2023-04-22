@@ -1,5 +1,5 @@
 package ch.uzh.ifi.hase.soprafs23.constant;
 
-public enum UserState {
+public enum UserStatus {
   ONLINE, OFFLINE, PLAYING;
 }

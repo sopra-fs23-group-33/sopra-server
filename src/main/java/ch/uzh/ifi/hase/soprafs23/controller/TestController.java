@@ -69,8 +69,8 @@ public class TestController {
           this.gameRoundRepository.saveAndFlush(gr);
       }
       catch (Exception e){
-          String ErrorMessage = "Failed to store chart";
-          throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+          String errorMessage = "Failed to store chart";
+          throw new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
       }
 
       Chart c = gr.getSecondChart();

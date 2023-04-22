@@ -24,8 +24,9 @@ public enum Currency {
     BRL,
     DKK;
 
+    static Random random = new Random();
+
     public static Currency getRandomCurrency(){
-        Random random = new Random();
         Currency[] currencies = Currency.values();
         return currencies[random.nextInt(currencies.length)];
     }

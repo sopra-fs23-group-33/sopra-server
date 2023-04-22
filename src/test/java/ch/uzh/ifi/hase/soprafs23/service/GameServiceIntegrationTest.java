@@ -10,7 +10,7 @@ import ch.uzh.ifi.hase.soprafs23.Game.Game;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
-import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @WebAppConfiguration
 @SpringBootTest
 @Transactional
-public class GameServiceIntegrationTest {
+class GameServiceIntegrationTest {
     @Qualifier("userRepository")
     @Autowired
     private UserRepository userRepository;
@@ -128,7 +128,8 @@ public class GameServiceIntegrationTest {
         this.userService.createUser(newUser);
         newUser = this.userService.getUserByUsername(newUser.getUsername());
         User finalNewUser = newUser;
-        assertThrows(ResponseStatusException.class, () -> gameService.join(finalNewUser, game.getGameID()));
+        Long id = game.getGameID();
+        assertThrows(ResponseStatusException.class, () -> gameService.join(finalNewUser, id));
     }
 
     @Test
@@ -154,8 +155,9 @@ public class GameServiceIntegrationTest {
         this.userService.createUser(newUser);
         newUser = this.userService.getUserByUsername(newUser.getUsername());
         User finalNewUser = newUser;
+        Long id = game.getGameID();
 
-        assertThrows(ResponseStatusException.class, () -> gameService.leave(finalNewUser, game.getGameID()));
+        assertThrows(ResponseStatusException.class, () -> gameService.leave(finalNewUser, id));
         assertEquals(1, game.getNumberOfPlayersInLobby());
     }
 
@@ -178,7 +180,7 @@ public class GameServiceIntegrationTest {
         this.userService.createUser(newUser);
         newUser = this.userService.getUserByUsername(newUser.getUsername());
 
-        newUser.setStatus(UserState.PLAYING);
+        newUser.setStatus(UserStatus.PLAYING);
         userRepository.saveAndFlush(newUser);
 
         newUser = this.userService.getUserByUsername(newUser.getUsername());
@@ -189,7 +191,8 @@ public class GameServiceIntegrationTest {
 
     @Test
     void failedStart(){
-        assertThrows(ResponseStatusException.class, () -> gameService.start(game.getGameID(), "test123"));
+        Long id = game.getGameID();
+        assertThrows(ResponseStatusException.class, () -> gameService.start(id, "test123"));
     }
 
     @Test
@@ -217,8 +220,8 @@ public class GameServiceIntegrationTest {
         game = gameService.getGameByGameID((game.getGameID()));
         assertEquals(2, game.getGameRounds().size());
 
-        assertDoesNotThrow(()-> gameService.start(game.getGameID(), "test123"));
-        //Thread.sleep(90000);
+        Long id = game.getGameID();
+        assertDoesNotThrow(()-> gameService.start(id, "test123"));
     }
 
     @Test
@@ -233,7 +236,8 @@ public class GameServiceIntegrationTest {
 
     @Test
     void checkInvalidToken(){
-        assertThrows(ResponseStatusException.class, ()-> gameService.tokenMatch("12345", game.getGameID()));
+        Long id = game.getGameID();
+        assertThrows(ResponseStatusException.class, ()-> gameService.tokenMatch("12345", id));
     }
 
 
@@ -258,7 +262,8 @@ public class GameServiceIntegrationTest {
         game = gameService.getGameByGameID((game.getGameID()));
 
         this.gameService.leave(creator, game.getGameID());
-        assertThrows(ResponseStatusException.class, ()-> this.gameService.creator(game.getGameID()));
+        Long id = game.getGameID();
+        assertThrows(ResponseStatusException.class, ()-> this.gameService.creator(id));
     }
 
     @Test
@@ -297,7 +302,8 @@ public class GameServiceIntegrationTest {
 
     @Test
     void invalidChart(){
-        assertThrows(ResponseStatusException.class, ()-> this.gameService.chart(game.getGameID()));
+        Long id = game.getGameID();
+        assertThrows(ResponseStatusException.class, ()-> this.gameService.chart(id));
     }
 
     @Test

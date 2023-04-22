@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 
-public class GameBettingTest {
+class GameBettingTest {
     private Game game;
     private GameData gameData;
     private User creator;
@@ -101,15 +101,15 @@ public class GameBettingTest {
         game.start();
         assertEquals(GameState.BETTING, game.getState());
 
-        assertEquals(UserState.PLAYING, second.getState());
+        assertEquals(UserStatus.PLAYING, second.getStatus());
         game.leave(second);
-        assertEquals(UserState.PLAYING, second.getState());
+        assertEquals(UserStatus.PLAYING, second.getStatus());
 
         assertEquals(1, game.getNumberOfPlayersInLobby());
         assertEquals(2, game.players.size());
 
         game.endRound();
-        assertEquals(UserState.ONLINE, second.getState());
+        assertEquals(UserStatus.ONLINE, second.getStatus());
 
         assertEquals(1, game.getNumberOfPlayersInLobby());
         assertEquals(1, game.players.size());
@@ -121,17 +121,17 @@ public class GameBettingTest {
 
         game.start();
 
-        assertEquals(UserState.PLAYING, second.getState());
-        second.setStatus(UserState.OFFLINE);
+        assertEquals(UserStatus.PLAYING, second.getStatus());
+        second.setStatus(UserStatus.OFFLINE);
         game.leave(second);
-        assertEquals(UserState.OFFLINE, second.getState());
+        assertEquals(UserStatus.OFFLINE, second.getStatus());
 
         assertEquals(1, game.getNumberOfPlayersInLobby());
         assertEquals(2, game.players.size());
 
 
         game.endRound();
-        assertEquals(UserState.OFFLINE, second.getState());
+        assertEquals(UserStatus.OFFLINE, second.getStatus());
 
         assertEquals(1, game.getNumberOfPlayersInLobby());
         assertEquals(1, game.players.size());

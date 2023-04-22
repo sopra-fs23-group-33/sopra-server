@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * This tests if the PlayerController works.
  */
 @WebMvcTest(PlayerController.class)
-public class PlayerControllerTest {
+class PlayerControllerTest {
     @Autowired
     private MockMvc mockMvc;
 

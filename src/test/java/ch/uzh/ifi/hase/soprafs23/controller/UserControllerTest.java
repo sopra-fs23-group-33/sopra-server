@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * This tests if the UserController works.
  */
 @WebMvcTest(UserController.class)
-public class UserControllerTest {
+class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -71,7 +71,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$[0].numberOfBetsWon", is(user.getNumberOfBetsWon())))
                 .andExpect(jsonPath("$[0].numberOfBetsLost", is(user.getNumberOfBetsLost())))
                 .andExpect(jsonPath("$[0].rank", is(user.getRank())))
-                .andExpect(jsonPath("$[0].state", is(user.getState().toString())));
+                .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.numberOfBetsWon", is(user.getNumberOfBetsWon())))
                 .andExpect(jsonPath("$.numberOfBetsLost", is(user.getNumberOfBetsLost())))
                 .andExpect(jsonPath("$.rank", is(user.getRank())))
-                .andExpect(jsonPath("$.state", is(user.getState().toString())));
+                .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
     }
 
     @Test
@@ -152,7 +152,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.numberOfBetsWon", is(user.getNumberOfBetsWon())))
                 .andExpect(jsonPath("$.numberOfBetsLost", is(user.getNumberOfBetsLost())))
                 .andExpect(jsonPath("$.rank", is(user.getRank())))
-                .andExpect(jsonPath("$.state", is(user.getState().toString())));
+                .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
     }
 
     @Test

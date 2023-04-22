@@ -1,27 +1,16 @@
 package ch.uzh.ifi.hase.soprafs23.Runner;
 
-import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Forex.ChartAPI;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.exceptions.ChartException;
-import ch.uzh.ifi.hase.soprafs23.exceptions.NotFoundException;
-import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
-import ch.uzh.ifi.hase.soprafs23.repository.GameRoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 
 @Component
 public class BackgroundChartFetcher {
@@ -87,7 +76,7 @@ public class BackgroundChartFetcher {
                 return false;
             }
 
-            catch (ChartException | NotFoundException e) {
+            catch (ChartException e) {
                 System.out.println("chart failed");
                 return false;
             }

@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
-import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import org.slf4j.Logger;
@@ -62,13 +62,13 @@ public class UserService {
         User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
 
         if (userByUsername != null) {
-            String ErrorMessage = "add User failed because username already exists";
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+            String errorMessage = "add User failed because username already exists";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
         }
 
-        String ErrorMessage = checkIfValidUsername(userToBeCreated.getUsername()) + checkIfValidPassword(userToBeCreated.getPassword());
-        if (!ErrorMessage.equals("")){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ErrorMessage.substring(0, ErrorMessage.length() - 2));
+        String errorMessage = checkIfValidUsername(userToBeCreated.getUsername()) + checkIfValidPassword(userToBeCreated.getPassword());
+        if (!errorMessage.equals("")){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, errorMessage.substring(0, errorMessage.length() - 2));
         }
     }
 
@@ -79,26 +79,26 @@ public class UserService {
         Matcher matcherOneLetter = patternOneLetter.matcher(username);
         Matcher matcherInvalidCharacters = patternInvalidCharacters.matcher(username);
 
-        String ErrorMessage = "";
+        String errorMessage = "";
 
         if (!matcherOneLetter.find()){
-            ErrorMessage = ErrorMessage + "Invalid username: Does not contain alphabetic characters.\n";
+            errorMessage = errorMessage + "Invalid username: Does not contain alphabetic characters.\n";
         } 
         
         if (matcherInvalidCharacters.find()){
-            ErrorMessage = ErrorMessage +  "Invalid username: Contains invalid characters.\n";
+            errorMessage = errorMessage +  "Invalid username: Contains invalid characters.\n";
         } 
         
         if (username.length() > 30){
-            ErrorMessage = ErrorMessage +  "Invalid username: Too long.\n";
+            errorMessage = errorMessage +  "Invalid username: Too long.\n";
         }
 
-        return ErrorMessage;
+        return errorMessage;
     }
 
     private String checkIfValidPassword(String password){
         Pattern patternOneLetter = Pattern.compile("[a-zA-Z]");
-        Pattern patternOneNumber = Pattern.compile("[0-9]");
+        Pattern patternOneNumber = Pattern.compile("\\d");
         Pattern patternOneSpecial = Pattern.compile("[_?!#@&$.]");
         Pattern patternInvalidCharacters = Pattern.compile("[^a-zA-Z0-9_?!#@&$.]");
 
@@ -107,31 +107,31 @@ public class UserService {
         Matcher matcherOneSpecial = patternOneSpecial.matcher(password);
         Matcher matcherInvalidCharacters = patternInvalidCharacters.matcher(password);
 
-        String ErrorMessage = "";
+        String errorMessage = "";
 
         if (!matcherOneLetter.find()){
-            ErrorMessage = ErrorMessage + "Invalid password: Does not contain alphabetic characters.\n";
+            errorMessage = errorMessage + "Invalid password: Does not contain alphabetic characters.\n";
         } 
         
         if (!matcherOneNumber.find()){
-            ErrorMessage = ErrorMessage +  "Invalid password: Does not contain numeric characters.\n";
+            errorMessage = errorMessage +  "Invalid password: Does not contain numeric characters.\n";
         } 
         
         if (!matcherOneSpecial.find()){
-            ErrorMessage = ErrorMessage +  "Invalid password: Does not contain special characters.\n";
+            errorMessage = errorMessage +  "Invalid password: Does not contain special characters.\n";
         } 
         
         if (matcherInvalidCharacters.find()){
-            ErrorMessage = ErrorMessage +  "Invalid password: Contains invalid characters.\n";
+            errorMessage = errorMessage +  "Invalid password: Contains invalid characters.\n";
         } 
         
         if (password.length() < 8){
-            ErrorMessage = ErrorMessage +  "Invalid password: Too short.\n";
+            errorMessage = errorMessage +  "Invalid password: Too short.\n";
         } else if (password.length() > 30){
-            ErrorMessage = ErrorMessage +  "Invalid password: Too long.\n";
+            errorMessage = errorMessage +  "Invalid password: Too long.\n";
         }
 
-        return ErrorMessage;
+        return errorMessage;
     }
 
     public User getUserByUsername(String username) {
@@ -140,8 +140,8 @@ public class UserService {
             return userByUsername;
 
         else {
-            String ErrorMessage = "User with username " + username + " was not found";
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+            String errorMessage = "User with username " + username + " was not found";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
         }
 
     }
@@ -163,8 +163,8 @@ public class UserService {
         if (userByID != null)
             return userByID;
         else {
-            String ErrorMessage = "User with userId " + userID + " was not found";
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+            String errorMessage = "User with userId " + userID + " was not found";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
         }
     }
 
@@ -172,16 +172,16 @@ public class UserService {
         User foundUser = this.getUserByUsername(userToLogin.getUsername());
 
         if (!foundUser.getPassword().equals(userToLogin.getPassword())) {
-            String ErrorMessage = "login failed because password is wrong";
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessage);
+            String errorMessage = "login failed because password is wrong";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
         }
 
-        else if (foundUser.getState().equals(UserState.PLAYING)) {
-            String ErrorMessage = "login failed because user is currently playing a game";
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessage);
+        else if (foundUser.getStatus().equals(UserStatus.PLAYING)) {
+            String errorMessage = "login failed because user is currently playing a game";
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
         }
 
-        foundUser.setState(UserState.ONLINE);
+        foundUser.setStatus(UserStatus.ONLINE);
         foundUser.setToken(UUID.randomUUID().toString());
         foundUser = this.userRepository.saveAndFlush(foundUser);
         log.debug("Created Information for User: {}", foundUser);
@@ -191,13 +191,13 @@ public class UserService {
     public void logoutUser(Long userID) {
         User userByID = getUserByUserID(userID);
 
-        if (userByID.getState().equals(UserState.OFFLINE)) {
-            String ErrorMessage = "logout failed because user was not logged in";
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        if (userByID.getStatus().equals(UserStatus.OFFLINE)) {
+            String errorMessage = "logout failed because user was not logged in";
+            throw new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
         }
 
         else {
-            userByID.setState(UserState.OFFLINE);
+            userByID.setStatus(UserStatus.OFFLINE);
             this.userRepository.saveAndFlush(userByID);
         }
     }

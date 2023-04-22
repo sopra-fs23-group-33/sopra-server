@@ -25,12 +25,12 @@ public abstract class GameStatus {
     @Enumerated(EnumType.STRING)
     GameState gameState;
 
-    public GameStatus(Game game, GameState gameState){
+    protected GameStatus(Game game, GameState gameState){
         this.game = game;
         this.gameState = gameState;
     }
 
-    public GameStatus(){}
+    protected GameStatus(){}
 
     public GameState getGameState() {
         return this.gameState;

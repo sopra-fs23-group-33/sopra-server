@@ -5,7 +5,6 @@ import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
-import ch.uzh.ifi.hase.soprafs23.Game.Game;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import org.mapstruct.*;
@@ -35,7 +34,7 @@ public interface DTOMapper {
   @Mapping(source = "username", target = "username")
   @Mapping(source = "token", target = "token")
   @Mapping(source = "creationDate", target = "creationDate")
-  @Mapping(source = "state", target = "state")
+  @Mapping(source = "status", target = "status")
   @Mapping(source = "totalRoundsPlayed", target = "totalRoundsPlayed")
   @Mapping(source = "numberOfBetsWon", target = "numberOfBetsWon")
   @Mapping(source = "numberOfBetsLost", target = "numberOfBetsLost")

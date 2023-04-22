@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 
-public class UserServiceTest {
+class UserServiceTest {
 
   @Mock
   private UserRepository userRepository;
@@ -60,7 +60,7 @@ public class UserServiceTest {
     assertEquals(testUser.getPassword(), createdUser.getPassword());
     assertEquals(testUser.getUsername(), createdUser.getUsername());
     assertNotNull(createdUser.getToken());
-    //assertEquals(UserState.ONLINE, createdUser.getState());
+    //assertEquals(UserStatus.ONLINE, createdUser.getState());
   }
 
   @Test

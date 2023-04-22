@@ -17,8 +17,6 @@ import org.springframework.stereotype.Component;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 
 @Component
 @Transactional
@@ -52,7 +50,7 @@ public class AsyncTransactionManager {
 
     }
 
-    public void addSingleGameRound(GameRound gameRound) throws NotFoundException {
+    public void addSingleGameRound(GameRound gameRound) {
         this.gameRoundRepository.saveAndFlush(gameRound);
     }
 
@@ -63,7 +61,7 @@ public class AsyncTransactionManager {
             gameRepository.saveAndFlush(game);
         }
         catch (NotFoundException ignored){
-
+            ;
         }
     }
 
@@ -74,6 +72,7 @@ public class AsyncTransactionManager {
             gameRepository.saveAndFlush(game);
         }
         catch (NotFoundException ignored){
+            ;
         }
     }
 
@@ -84,6 +83,7 @@ public class AsyncTransactionManager {
             gameRepository.saveAndFlush(game);
         }
         catch (NotFoundException ignored){
+            ;
         }
     }
 
@@ -94,6 +94,7 @@ public class AsyncTransactionManager {
             gameRepository.saveAndFlush(game);
         }
         catch (NotFoundException ignored){
+            ;
         }
     }
 
@@ -105,18 +106,14 @@ public class AsyncTransactionManager {
             gameRepository.saveAndFlush(game);
         }
         catch (NotFoundException ignored){
-
+            ;
         }
     }
 
     public boolean getAbort(Long gameID){
         try {
             Game game = this.findGame(gameID);
-            if(game.getState().equals(GameState.OVERVIEW) || game.getState().equals(GameState.CORRUPTED) )
-                return true;
-            else{
-                return false;
-            }
+            return (game.getState().equals(GameState.OVERVIEW) || game.getState().equals(GameState.CORRUPTED));
         }
         catch (NotFoundException e1) {
             return true;
@@ -135,10 +132,7 @@ public class AsyncTransactionManager {
     public boolean allBetsPlaced(Long gameID){
         try {
             Game game = this.findGame(gameID);
-            if(game.allBetsPlaced())
-                return true;
-            else
-               return false;
+            return game.allBetsPlaced();
         }
         catch (NotFoundException ignored){
             return false;
@@ -152,6 +146,7 @@ public class AsyncTransactionManager {
             gameRepository.saveAndFlush(game);
         }
         catch (Exception ignored){
+            ;
         }
     }
 

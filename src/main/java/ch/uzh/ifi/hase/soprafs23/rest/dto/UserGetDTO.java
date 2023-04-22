@@ -2,7 +2,7 @@ package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
 import java.time.LocalDate;
 
-import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 
 public class UserGetDTO {
 
@@ -10,7 +10,7 @@ public class UserGetDTO {
   private String username;
   private String token;
   private LocalDate creationDate;
-  private UserState status;
+  private UserStatus status;
   private int totalRoundsPlayed;
   private int numberOfBetsWon;
   private int numberOfBetsLost;
@@ -40,11 +40,11 @@ public class UserGetDTO {
     this.creationDate = creationDate;
   }
 
-  public UserState getState() {
+  public UserStatus getStatus() {
     return status;
   }
 
-  public void setState(UserState status) {
+  public void setStatus(UserStatus status) {
     this.status = status;
   }
 

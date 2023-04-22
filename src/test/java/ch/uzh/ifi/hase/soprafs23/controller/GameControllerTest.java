@@ -7,11 +7,10 @@ import ch.uzh.ifi.hase.soprafs23.Game.Game;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
-import ch.uzh.ifi.hase.soprafs23.constant.UserState;
+import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.GamePostDTO;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.PlayerGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.PlayerService;
@@ -30,7 +29,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -52,7 +50,7 @@ import java.util.List;
  * This tests if the GameController works.
  */
 @WebMvcTest(GameController.class)
-public class GameControllerTest {
+class GameControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -141,10 +139,10 @@ public class GameControllerTest {
     }
 
     @Test
-    void createGameInvalidUserState() throws Exception {
-        user.setState(UserState.OFFLINE);
-        String ErrorMessage = "cannot Create game because user is still in an ongoing game or offline";
-        Throwable response = new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+    void createGameInvalidUserStatus() throws Exception {
+        user.setStatus(UserStatus.OFFLINE);
+        String errorMessage = "cannot Create game because user is still in an ongoing game or offline";
+        Throwable response = new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         given(userService.getUserByUsername(user.getUsername())).willReturn(user);
@@ -167,8 +165,8 @@ public class GameControllerTest {
     @Test
     void createGameInvalidGameData() throws Exception {
         gamePostDTO.setName("????????????????????????????????????????????????????????????????");
-        String ErrorMessage = "Invalid name: Does not contain alphabetic characters.\nInvalid name: Contains invalid characters.\nInvalid name: Too long or empty.\n";
-        Throwable response = new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        String errorMessage = "Invalid name: Does not contain alphabetic characters.\nInvalid name: Contains invalid characters.\nInvalid name: Too long or empty.\n";
+        Throwable response = new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         given(userService.getUserByUsername(user.getUsername())).willReturn(user);
@@ -242,8 +240,8 @@ public class GameControllerTest {
 
     @Test
     void getGameByGameIDInvalidID() throws Exception {
-        String ErrorMessage = "Game with gameId " + game.getGameID() + " was not found";
-        Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+        String errorMessage = "Game with gameId " + game.getGameID() + " was not found";
+        Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         given(gameService.getGameByGameID(game.getGameID())).willThrow(response);
@@ -285,8 +283,8 @@ public class GameControllerTest {
 
     @Test
     void getCreatorInvalidGameID() throws Exception {
-        String ErrorMessage = "Game with gameId " + game.getGameID() + " was not found";
-        Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+        String errorMessage = "Game with gameId " + game.getGameID() + " was not found";
+        Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         given(gameService.creator(game.getGameID())).willThrow(response);
@@ -301,8 +299,8 @@ public class GameControllerTest {
 
     @Test
     void getCreatorInvalidCreator() throws Exception {
-        String ErrorMessage = "Creator was not found";
-        Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+        String errorMessage = "Creator was not found";
+        Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         given(gameService.creator(game.getGameID())).willThrow(response);
@@ -343,8 +341,8 @@ public class GameControllerTest {
 
     @Test
     void getStatusInvalidGameID() throws Exception {
-        String ErrorMessage = "Game with gameId " + game.getGameID() + " was not found";
-        Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+        String errorMessage = "Game with gameId " + game.getGameID() + " was not found";
+        Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         given(gameService.getGameByGameID(game.getGameID())).willThrow(response);
@@ -386,8 +384,8 @@ public class GameControllerTest {
 
     @Test 
     void joinInvalidGameID() throws Exception {
-        String ErrorMessage = "Game with gameId " + game.getGameID() + " was not found";
-        Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+        String errorMessage = "Game with gameId " + game.getGameID() + " was not found";
+        Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         given(gameService.join(Mockito.any(), Mockito.any())).willThrow(response);
@@ -404,11 +402,11 @@ public class GameControllerTest {
     }
 
     @Test 
-    void joinInvalidUserState() throws Exception {
-        user.setState(UserState.OFFLINE);
+    void joinInvalidUserStatus() throws Exception {
+        user.setStatus(UserStatus.OFFLINE);
 
-        String ErrorMessage = "Conflict";
-        Throwable response = new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        String errorMessage = "Conflict";
+        Throwable response = new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         given(gameService.join(Mockito.any(), Mockito.any())).willThrow(response);
@@ -428,8 +426,8 @@ public class GameControllerTest {
     void joinInvalidUserData() throws Exception {
         user.setUsername("somethingDifferent");
 
-        String ErrorMessage = "Not Found";
-        Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+        String errorMessage = "Not Found";
+        Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         given(gameService.join(Mockito.any(), Mockito.any())).willThrow(response);
@@ -481,8 +479,8 @@ public class GameControllerTest {
 
     @Test 
     void leaveInvalidTokenMatch() throws Exception {      
-        String ErrorMessage = "provided token does not match any player in game with gameID: " + game.getGameID();
-        Throwable response = new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessage);
+        String errorMessage = "provided token does not match any player in game with gameID: " + game.getGameID();
+        Throwable response = new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         Mockito.doThrow(response).when(gameService).tokenMatch(user.getToken(), game.getGameID());
@@ -500,8 +498,8 @@ public class GameControllerTest {
 
     @Test 
     void leaveInvalidUserNotInGame() throws Exception {      
-        String ErrorMessage = "Failed to leave game because player is not member of this game";
-        Throwable response = new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        String errorMessage = "Failed to leave game because player is not member of this game";
+        Throwable response = new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         Mockito.doNothing().when(gameService).tokenMatch(user.getToken(), game.getGameID());
@@ -534,8 +532,8 @@ public class GameControllerTest {
 
     @Test
     void startInvalidGameState() throws Exception {
-        String ErrorMessage = "Game with gameId " + game.getGameID() + " cannot be started";
-        Throwable response = new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        String errorMessage = "Game with gameId " + game.getGameID() + " cannot be started";
+        Throwable response = new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         Mockito.doThrow(response).when(gameService).start(1L, user.getToken());
@@ -552,8 +550,8 @@ public class GameControllerTest {
 
     @Test
     void startInvalidTokenMatch() throws Exception {
-        String ErrorMessage = "provided token does not match the creator in game with gameID: " + game.getGameID();
-        Throwable response = new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessage);
+        String errorMessage = "provided token does not match the creator in game with gameID: " + game.getGameID();
+        Throwable response = new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         Mockito.doThrow(response).when(gameService).start(1L, user.getToken());
@@ -625,8 +623,8 @@ public class GameControllerTest {
 
     @Test
     void getAllGamesInvalidFilter() throws Exception {
-        String ErrorMessage = "invalid filter argument provided";
-        Throwable response = new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+        String errorMessage = "invalid filter argument provided";
+        Throwable response = new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         given(gameService.getAllGames()).willThrow(response);
@@ -679,8 +677,8 @@ public class GameControllerTest {
 
     @Test
     void getPlayersInvalidTokenMatch() throws Exception {
-        String ErrorMessage = "provided token does not match the creator in game with gameID: " + game.getGameID();
-        Throwable response = new ResponseStatusException(HttpStatus.UNAUTHORIZED, ErrorMessage);
+        String errorMessage = "provided token does not match the creator in game with gameID: " + game.getGameID();
+        Throwable response = new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
         Mockito.doThrow(response).when(gameService).tokenMatch(user.getToken(), game.getGameID());
