@@ -1,9 +1,12 @@
 package ch.uzh.ifi.hase.soprafs23.Game;
 
+import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 
+import ch.uzh.ifi.hase.soprafs23.Powerups.AbstractPowerUp;
+import ch.uzh.ifi.hase.soprafs23.Powerups.PowerupX2;
 import ch.uzh.ifi.hase.soprafs23.constant.*;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -70,8 +73,6 @@ public class Game {
 
     @Column(name = "bettingTime", nullable = false)
     private int bettingTime;
-
-
 
     public Game() {}
 
@@ -216,6 +217,40 @@ public class Game {
             this.timer -= 1;
         }
     }
+
+    public void collectAndDistributeInstructions(){
+        ArrayList<Instruction> instructions = new ArrayList<>();
+        ArrayList<AbstractPowerUp> playerPowerups = new ArrayList<>();
+
+        for(Player player: this.players){
+           playerPowerups.addAll(player.getActivePowerups());
+        }
+
+        for(AbstractPowerUp powerUp: playerPowerups)
+            instructions.addAll(powerUp.generateInstructions(this));
+
+        for(Instruction instruction: instructions){
+            Long ownerID = instruction.getOwnerID();
+
+            try {
+                Player player = this.findPlayerByID(ownerID);
+                player.addInstruction(instruction);
+            }
+            catch (PlayerNotFoundException ignored){
+
+            }
+        }
+    }
+
+    public Player findPlayerByID(Long ID) throws PlayerNotFoundException {
+        for(Player player: this.players){
+            if(player.getPlayerID().equals(ID)){
+                return player;
+            }
+        }
+        throw new PlayerNotFoundException();
+    }
+
 
     public void incrementRoundsPlayed(){
         this.currentRoundPlayed++;

@@ -20,7 +20,7 @@ class GameBettingTest {
     private User second;
 
     @BeforeEach
-    void setup_for_Overview_State() throws FailedToJoinException, StartException, endRoundException, nextRoundException {
+    void setup_for_Betting_State() throws FailedToJoinException, StartException, endRoundException, nextRoundException {
         creator = new User("creator", "password");
         gameData = new GameData();
         gameData.setNumberOfRoundsToPlay(2);

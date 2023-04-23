@@ -43,6 +43,8 @@ public class GameService {
     private final GameRunnerV2 gameRunnerV2;
     private final ChartFetcher chartFetcher;
 
+    private final PlayerService playerService;
+
     private final BackgroundChartFetcher backgroundChartFetcher;
 
     private final GameRoundRepository gameRoundRepository;
@@ -55,7 +57,8 @@ public class GameService {
                        GameRunnerV2 gameRunner,
                        ChartFetcher chartFetcher,
                         BackgroundChartFetcher backgroundChartFetcher,
-                       GameRoundRepository gameRoundRepository) {
+                       GameRoundRepository gameRoundRepository,
+                       PlayerService playerService) {
 
         this.gameRepository = gameRepository;
         this.userService = userService;
@@ -66,6 +69,7 @@ public class GameService {
         this.backgroundChartFetcher = backgroundChartFetcher;
         this.backgroundChartFetcher.enqueue(32);
         this.gameRoundRepository = gameRoundRepository;
+        this.playerService = playerService;
     }
 
     public Game createGame(User user, GameData gameData){
@@ -91,6 +95,17 @@ public class GameService {
         this.backgroundChartFetcher.enqueue(8);
 
         createdGame = this.gameRepository.saveAndFlush(newGame);
+
+        if(createdGame.isPowerupsActive()){
+            try {
+                Player player = createdGame.creator();
+                this.playerService.addPowerups(createdGame.getNumberOfRoundsToPlay(), player.getPlayerID(), createdGame.getType());
+
+            }
+            catch (PlayerNotFoundException ignored){
+
+            }
+        }
 
         return createdGame;
     }
@@ -178,8 +193,14 @@ public class GameService {
 
         game = this.gameRepository.saveAndFlush(game);
 
+
         try{
-            return game.findPlayerByUser(user);
+            Player player = game.findPlayerByUser(user);
+
+            if(game.isPowerupsActive())
+                this.playerService.addPowerups(game.getNumberOfRoundsToPlay(), player.getPlayerID(), game.getType());
+
+            return player;
         }
         catch (PlayerNotFoundException e){
             String errorMessage = e.getMessage();

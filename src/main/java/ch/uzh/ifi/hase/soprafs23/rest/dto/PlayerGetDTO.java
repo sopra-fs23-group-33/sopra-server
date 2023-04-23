@@ -1,12 +1,12 @@
 package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
 public class PlayerGetDTO {
-    String username;
-    Long playerID;
-    Integer accountBalance;
-    Integer numberOfWonRounds;
-    Integer numberOfLostRounds;
-    String typeOfCurrentBet;
+    private String username;
+    private Long playerID;
+    private Integer accountBalance;
+    private Integer numberOfWonRounds;
+    private Integer numberOfLostRounds;
+    private String typeOfCurrentBet;
 
     public String getUsername() {
         return username;

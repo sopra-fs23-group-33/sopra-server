@@ -2,31 +2,31 @@ package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
 
 public class GameGetDTO {
-    Long gameID;
+    private Long gameID;
 
-    String status;
+    private String status;
 
-    String name;
+    private String name;
 
-    String typeOfGame;
+    private String typeOfGame;
 
-    boolean powerupsActive;
+    private boolean powerupsActive;
 
-    boolean eventsActive;
+    private boolean eventsActive;
 
-    int timer;
+    private int timer;
 
-    int totalLobbySize;
+    private int totalLobbySize;
 
-    int numberOfPlayersInLobby;
+    private int numberOfPlayersInLobby;
 
-    int numberOfRoundsToPlay;
+    private int numberOfRoundsToPlay;
 
-    int currentRoundPlayed;
+    private int currentRoundPlayed;
 
-    String event;
+    private String event;
 
-    String creator;
+    private String creator;
 
     public Long getGameID() {
         return gameID;

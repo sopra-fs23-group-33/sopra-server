@@ -5,6 +5,8 @@ import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.Betting.InstructionManager;
 import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
+import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
+import ch.uzh.ifi.hase.soprafs23.Powerups.AbstractPowerUp;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
@@ -12,6 +14,8 @@ import ch.uzh.ifi.hase.soprafs23.exceptions.*;
 
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "Player")
@@ -45,6 +49,9 @@ public class Player {
     @Embedded
     private Result result;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY )
+    private List<AbstractPowerUp> powerups;
+
     public Player() {}
 
     public Player(User user){
@@ -62,6 +69,7 @@ public class Player {
         InstructionManager newInstructionManager = new InstructionManager();
         newInstructionManager.init(this);
         this.instructionManager = newInstructionManager;
+        this.powerups = new ArrayList<>();
     }
 
     public void placeBet(Bet newBet) throws FailedToPlaceBetException {
@@ -95,6 +103,8 @@ public class Player {
         int profit = newBalance - this.balance;
         this.result = new Result(direction, profit, this.currentBet.getAmount());
         this.balance = newBalance;
+
+        this.resetPowerups();
     }
 
     public void resetBet(){
@@ -116,6 +126,10 @@ public class Player {
 
     public Long getPlayerID() {
         return playerID;
+    }
+
+    public void setPlayerID(Long playerID) {
+        this.playerID = playerID;
     }
 
     public int getBalance() {
@@ -142,6 +156,59 @@ public class Player {
         return this.result;
     }
 
+    public int getNumberOfBetsWon() {
+        return numberOfBetsWon;
+    }
+
+    public int getNumberOfBetsLost() {
+        return numberOfBetsLost;
+    }
+
+    public InstructionManager getInstructionManager() {
+        return instructionManager;
+    }
+
+    public ArrayList<AbstractPowerUp> getActivePowerups() {
+        ArrayList<AbstractPowerUp> activePowerups = new ArrayList<>();
+
+        for(AbstractPowerUp powerUp: this.powerups){
+            if(powerUp.isActive())
+                activePowerups.add(powerUp);
+        }
+        return activePowerups;
+    }
+
+    public List<AbstractPowerUp> getAvailablePowerups(){
+        return this.powerups;
+    }
+
+    public void resetPowerups(){
+        ArrayList<AbstractPowerUp> activatedPowerups = new ArrayList<>();
+
+        for(AbstractPowerUp powerUp: this.powerups){
+            if(powerUp.isActive())
+                activatedPowerups.add(powerUp);
+        }
+
+        for(AbstractPowerUp powerUp: activatedPowerups){
+            this.powerups.remove(powerUp);
+        }
+    }
+
+    public void addPowerup(AbstractPowerUp powerup){
+        if(powerup.getOwnerID().equals(this.playerID))
+            this.powerups.add(powerup);
+    }
+
+    public void activatePowerup(AbstractPowerUp powerup) throws PowerupNotFoundException{
+        if(this.powerups.contains(powerup)){
+            powerup.activate();
+        }
+        else {
+            throw new PowerupNotFoundException();
+        }
+    }
+
     @Override
     public boolean equals(Object other){
         if(other == null) {
@@ -159,4 +226,6 @@ public class Player {
     public int hashCode(){
         return this.user.hashCode();
     }
+
+
 }

@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static java.lang.Math.max;
-import static java.lang.Math.round;
+import static java.lang.Math.*;
 
 
 @Entity(name = "PlayerManager")
@@ -41,7 +40,7 @@ public class InstructionManager {
     }
 
     public void addInstruction(Instruction instruction){
-        if(this.player.getPlayerID() == instruction.getOwnerID())
+        if(this.player.getPlayerID().equals(instruction.getOwnerID()))
             this.instructions.add(instruction);
     }
 
@@ -65,11 +64,19 @@ public class InstructionManager {
 
         this.resetInstructions();
 
-        double newBalance = temp.get(InstructionType.a0) +
-                            temp.get(InstructionType.a1)*this.player.getBalance() +
-                            outcome*(((ratio-1.0)*100+1)*betAmount*temp.get(InstructionType.a2) + temp.get(InstructionType.a3));
-        newBalance = round(newBalance);
+        double betPart = (((ratio-1.0)*100+1)*betAmount*temp.get(InstructionType.a2) + temp.get(InstructionType.a3));
+        double balance = this.player.getBalance();
 
+        double newBalance = temp.get(InstructionType.a0)
+                            + temp.get(InstructionType.a1)*balance
+                            + outcome*betPart
+                            - min(min(1, temp.get(InstructionType.a4))*betPart*outcome, 0)
+                            - temp.get(InstructionType.a5)*temp.get(InstructionType.a6)
+                            + temp.get(InstructionType.a7)*temp.get(InstructionType.a8)
+                            - temp.get(InstructionType.a9)*temp.get(InstructionType.a10)
+                            + temp.get(InstructionType.a11)*temp.get(InstructionType.a12);
+
+        newBalance = round(newBalance);
 
         return max((int) newBalance, 0);
     }

@@ -10,6 +10,8 @@ import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
+import ch.uzh.ifi.hase.soprafs23.Game.Game;
+import ch.uzh.ifi.hase.soprafs23.Powerups.*;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 
 import ch.uzh.ifi.hase.soprafs23.constant.InstructionType;
@@ -18,11 +20,15 @@ import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
 import ch.uzh.ifi.hase.soprafs23.repository.PlayerRepository;
 
+import ch.uzh.ifi.hase.soprafs23.repository.PowerupRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 @DataJpaTest
@@ -30,6 +36,10 @@ class PlayerTest {
 
     @Autowired
     private PlayerRepository playerRepository;
+
+    @Autowired
+    private PowerupRepository powerupRepository;
+
     private User user;
 
     private Player player;
@@ -40,6 +50,12 @@ class PlayerTest {
         player = new Player(user);
         player.init();
         playerRepository.saveAndFlush(player);
+    }
+
+    @AfterEach
+    void teardown(){
+        this.playerRepository.deleteAll();
+        this.powerupRepository.deleteAll();
     }
 
 
@@ -118,11 +134,11 @@ class PlayerTest {
         Player anotherPlayer = new Player(anotherUser);
         anotherPlayer.init();
 
-        assertEquals(otherPlayer, player);
-        assertNotEquals(anotherPlayer, player);
-        assertNotEquals(null, player);
-        assertEquals(player, player);
-        assertNotEquals(new User(), player);
+        assertTrue(otherPlayer.equals(player));
+        assertFalse(anotherPlayer.equals(player));
+        assertFalse(player.equals(null));
+        assertTrue(player.equals(player));
+        assertFalse(player.equals(new User()));
 
         assertEquals(otherPlayer.hashCode(), player.hashCode());
     }
@@ -345,6 +361,175 @@ class PlayerTest {
     }
 
     @Test
+    void instructions_RiskInsurance() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A4 = new Instruction(playerID, InstructionType.a4, 1);
+
+        player.addInstruction(A4);
+        player.addInstruction(A4); //place two to check that they don't stack
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+        player.endRound(Direction.DOWN, 1.01);
+
+        assertEquals(round(1000)   , player.getBalance());
+    }
+
+    @Test
+    void instructions_RiskInsurance_wih_winning_bet() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A4 = new Instruction(playerID, InstructionType.a4, 1);
+
+        player.addInstruction(A4);
+        player.addInstruction(A4); //place two to check that they don't stack
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(1000+2*100)   , player.getBalance());
+    }
+
+    @Test
+    void instructions_RobinHood_steal_without_Guardian() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A7 = new Instruction(playerID, InstructionType.a7, 100);
+
+        player.addInstruction(A7);
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(1000 + 2*100+100)   , player.getBalance());
+    }
+
+    @Test
+    void instructions_RobinHood_steal_with_Guardian() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A7 = new Instruction(playerID, InstructionType.a7, 100);
+        Instruction A8 = new Instruction(playerID, InstructionType.a8, 0);
+
+        player.addInstruction(A7);
+        player.addInstruction(A8);
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(1000 + 2*100)   , player.getBalance());
+    }
+
+    @Test
+    void instructions_RobinHood_stolen_with_Guardian() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A5 = new Instruction(playerID, InstructionType.a5, 100);
+        Instruction A6 = new Instruction(playerID, InstructionType.a6, 0);
+
+        player.addInstruction(A5);
+        player.addInstruction(A6);
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(1000 + 2*100)   , player.getBalance());
+    }
+
+    @Test
+    void instructions_RobinHood_stolen_without_Guardian() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A5 = new Instruction(playerID, InstructionType.a5, 100);
+        player.addInstruction(A5);
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(1000 + 2*100-100)   , player.getBalance());
+    }
+
+    @Test
+    void instructions_Hacker_receiver_without_Cybersecurity() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A9 = new Instruction(playerID, InstructionType.a9, 100);
+        player.addInstruction(A9);
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(1000 + 2*100-100)   , player.getBalance());
+    }
+
+    @Test
+    void instructions_Hacker_receiver_with_Cybersecurity() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A9 = new Instruction(playerID, InstructionType.a9, 100);
+        player.addInstruction(A9);
+
+        Instruction A10 = new Instruction(playerID, InstructionType.a10, 0);
+        player.addInstruction(A10);
+
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(1000 + 2*100)   , player.getBalance());
+    }
+
+    @Test
+    void instructions_Hacker_activator_with_Cybersecurity() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A10 = new Instruction(playerID, InstructionType.a10, 100);
+        player.addInstruction(A10);
+
+        Instruction A11 = new Instruction(playerID, InstructionType.a11, 0);
+        player.addInstruction(A11);
+
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(1000 + 2*100)   , player.getBalance());
+    }
+
+    @Test
+    void instructions_Hacker_activator_without_Cybersecurity() throws FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        Instruction A11 = new Instruction(playerID, InstructionType.a11, 100);
+        player.addInstruction(A11);
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(1000 + 2*100+100)   , player.getBalance());
+    }
+
+    @Test
     void foreign_instruction() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
@@ -357,4 +542,130 @@ class PlayerTest {
 
         assertEquals(round(1000+2*100), player.getBalance());
     }
+
+
+
+    @Test
+    void placeBet_with_powerups_simple() throws FailedToPlaceBetException, PowerupNotFoundException {
+        Long playerID = player.getPlayerID();
+
+        AbstractPowerUp x2 = new PowerupX2(playerID);
+        x2 = this.powerupRepository.saveAndFlush(x2);
+
+        player.addPowerup(x2);
+
+        AbstractPowerUp Plus100 = new PowerupPlus100(playerID);
+        Plus100 = this.powerupRepository.saveAndFlush(Plus100);
+
+        player.addPowerup(Plus100);
+
+        assertEquals(2, player.getAvailablePowerups().size());
+        assertEquals(0, player.getActivePowerups().size());
+
+        AbstractPowerUp finalX2 = x2;
+        AbstractPowerUp finalPlus10 = Plus100;
+
+        assertDoesNotThrow(() -> player.activatePowerup(finalX2));
+        assertEquals(1, player.getActivePowerups().size());
+        assertDoesNotThrow(() -> player.activatePowerup(finalPlus10));
+
+        assertEquals(2, player.getAvailablePowerups().size());
+        assertEquals(2, player.getActivePowerups().size());
+
+        List<AbstractPowerUp> activatedPowerups = player.getActivePowerups();
+
+        Game game = new Game();
+
+        for(AbstractPowerUp powerUp: activatedPowerups){
+            ArrayList<Instruction> instructions = powerUp.generateInstructions(game);
+
+            for(Instruction instruction: instructions){
+                player.addInstruction(instruction);
+            }
+        }
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(100+1000+2*100*2), player.getBalance());
+
+        assertEquals(0, player.getAvailablePowerups().size());
+        assertEquals(0, player.getActivePowerups().size());
+    }
+
+    @Test
+    void foreign_powerup(){
+        Long playerID = player.getPlayerID();
+
+        AbstractPowerUp x2 = new PowerupX2(playerID+1);
+        x2 = this.powerupRepository.saveAndFlush(x2);
+        AbstractPowerUp finalX = x2;
+
+        assertDoesNotThrow(() -> player.addPowerup(finalX));
+        assertThrows(PowerupNotFoundException.class, () -> player.activatePowerup(finalX));
+    }
+
+    @Test
+    void more_complex_powerups() throws PowerupNotFoundException, FailedToPlaceBetException {
+        Long playerID = player.getPlayerID();
+
+        AbstractPowerUp x2 = new PowerupX2(playerID);
+        x2 = this.powerupRepository.saveAndFlush(x2);
+        player.addPowerup(x2);
+
+        AbstractPowerUp Plus100 = new PowerupPlus100(playerID);
+        Plus100 = this.powerupRepository.saveAndFlush(Plus100);
+        player.addPowerup(Plus100);
+
+        AbstractPowerUp x5 = new PowerupX5(playerID);
+        x5 = this.powerupRepository.saveAndFlush(x5);
+        player.addPowerup(x5);
+
+        AbstractPowerUp Plus200 = new PowerupPlus200(playerID);
+        Plus200 = this.powerupRepository.saveAndFlush(Plus200);
+        player.addPowerup(Plus200);
+
+        AbstractPowerUp Plus500 = new PowerupPlus500(playerID);
+        Plus500 = this.powerupRepository.saveAndFlush(Plus500);
+        player.addPowerup(Plus500);
+
+        AbstractPowerUp x10 = new PowerupX10(playerID);
+        x10 = this.powerupRepository.saveAndFlush(x10);
+        player.addPowerup(x10);
+
+        assertEquals(6, player.getAvailablePowerups().size());
+        assertEquals(0, player.getActivePowerups().size());
+
+        player.activatePowerup(x2);
+        player.activatePowerup(x5);
+        player.activatePowerup(Plus100);
+        player.activatePowerup(Plus200);
+
+        assertEquals(6, player.getAvailablePowerups().size());
+        assertEquals(4, player.getActivePowerups().size());
+
+        Game game = new Game();
+        List<AbstractPowerUp> activatedPowerups = player.getActivePowerups();
+
+        for(AbstractPowerUp powerUp: activatedPowerups){
+            ArrayList<Instruction> instructions = powerUp.generateInstructions(game);
+
+            for(Instruction instruction: instructions){
+                player.addInstruction(instruction);
+            }
+        }
+
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(round(100+200+1000+2*100*2*5), player.getBalance());
+
+        assertEquals(2, player.getAvailablePowerups().size());
+        assertEquals(0, player.getActivePowerups().size());
+    }
+
 }

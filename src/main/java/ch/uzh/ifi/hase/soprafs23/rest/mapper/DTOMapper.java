@@ -5,6 +5,8 @@ import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
+import ch.uzh.ifi.hase.soprafs23.Game.Game;
+import ch.uzh.ifi.hase.soprafs23.Powerups.AbstractPowerUp;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import org.mapstruct.*;
@@ -88,4 +90,11 @@ public interface DTOMapper {
     @Mapping(source = "fromCurrency", target = "fromCurrency")
     @Mapping(source = "toCurrency", target = "toCurrency")
     ChartGetDTO convertChartDataToChartGetDTO(ChartData chartData);
+
+    @Mapping(source = "ownerID", target = "ownerID")
+    @Mapping(source = "powerupID", target = "powerupID")
+    @Mapping(source = "description", target = "description")
+    @Mapping(source = "active", target = "active")
+    @Mapping(source = "powerupType", target = "powerupType")
+    PowerupGetDTO convertAbstractPowerupToPowerupGetDTO(AbstractPowerUp abstractPowerUp);
 }

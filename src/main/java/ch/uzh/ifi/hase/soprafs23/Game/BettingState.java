@@ -41,6 +41,9 @@ public class BettingState extends GameStatus{
         GameRound gameRound = this.game.getGameRounds().get(this.game.getCurrentRoundPlayed()-1);
         ArrayList<Player> playersToRemove = new ArrayList<>();
 
+        if(this.game.isPowerupsActive() || this.game.isEventsActive())
+            this.game.collectAndDistributeInstructions();
+
         for(Player player: this.game.getPlayers()){
             player.endRound(gameRound.getOutcome(), gameRound.getRatio());
 

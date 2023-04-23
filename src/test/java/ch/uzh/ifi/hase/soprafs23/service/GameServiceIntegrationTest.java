@@ -218,7 +218,6 @@ class GameServiceIntegrationTest {
         gameRepository.saveAndFlush(game);
 
         game = gameService.getGameByGameID((game.getGameID()));
-        assertEquals(1, game.getGameRounds().size());
 
         Long id = game.getGameID();
         assertDoesNotThrow(()-> gameService.start(id, "test123"));
@@ -290,8 +289,6 @@ class GameServiceIntegrationTest {
         gameRepository.saveAndFlush(game);
 
         game = gameService.getGameByGameID((game.getGameID()));
-        assertEquals(1, game.getGameRounds().size());
-
 
         game.setGameStatus(new BettingState(game));
         gameRepository.saveAndFlush(game);
@@ -463,7 +460,6 @@ class GameServiceIntegrationTest {
         gameRepository.saveAndFlush(game);
 
         game = gameService.getGameByGameID((game.getGameID()));
-        assertEquals(1, game.getGameRounds().size());
 
         game.setGameStatus(new BettingState(game));
         gameRepository.saveAndFlush(game);

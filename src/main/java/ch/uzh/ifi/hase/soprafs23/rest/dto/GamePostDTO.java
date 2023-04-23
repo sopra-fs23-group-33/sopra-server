@@ -2,12 +2,12 @@ package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
 public class GamePostDTO {
 
-    String typeOfGame;
-    int totalLobbySize;
-    boolean powerupsActive;
-    boolean eventsActive;
-    String creator;
-    String name;
+    private String typeOfGame;
+    private int totalLobbySize;
+    private boolean powerupsActive;
+    private boolean eventsActive;
+    private String creator;
+    private String name;
 
     int numberOfRoundsToPlay;
     public String getTypeOfGame() {
