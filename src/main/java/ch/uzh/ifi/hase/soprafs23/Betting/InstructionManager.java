@@ -67,18 +67,23 @@ public class InstructionManager {
         double betPart = (((ratio-1.0)*100+1)*betAmount*temp.get(InstructionType.a2) + temp.get(InstructionType.a3));
         double balance = this.player.getBalance();
 
-        double newBalance = temp.get(InstructionType.a0)
+        double newBalance = temp.get(InstructionType.a18) + max(0,(1-temp.get(InstructionType.a19))) *
+                            (temp.get(InstructionType.a0)
                             + temp.get(InstructionType.a1)*balance
                             + outcome*betPart
                             - min(min(1, temp.get(InstructionType.a4))*betPart*outcome, 0)
                             - temp.get(InstructionType.a5)*temp.get(InstructionType.a6)
                             + temp.get(InstructionType.a7)*temp.get(InstructionType.a8)
                             - temp.get(InstructionType.a9)*temp.get(InstructionType.a10)
-                            + temp.get(InstructionType.a11)*temp.get(InstructionType.a12);
+                            + temp.get(InstructionType.a11)*temp.get(InstructionType.a12)
+                            + min( -min(1,  temp.get(InstructionType.a13))*max(balance,0), 0)
+                            + temp.get(InstructionType.a14)/(1+(temp.get(InstructionType.a15)-1)*abs(signum(temp.get(InstructionType.a15))))
+                            + max(0, outcome)*min(1, temp.get(InstructionType.a16))*betPart
+                            - max(0, -outcome)*min(1, temp.get(InstructionType.a17))*betPart);
 
         newBalance = round(newBalance);
 
-        return max((int) newBalance, 0);
+        return (int) newBalance;
     }
 
     private HashMap<InstructionType, Double> getMap(){

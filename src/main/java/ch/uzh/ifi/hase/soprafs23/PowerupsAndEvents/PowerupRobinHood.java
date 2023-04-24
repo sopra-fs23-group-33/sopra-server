@@ -1,4 +1,4 @@
-package ch.uzh.ifi.hase.soprafs23.Powerups;
+package ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents;
 
 import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
@@ -15,8 +15,8 @@ import static java.lang.Math.round;
 @Entity
 public class PowerupRobinHood extends  AbstractPowerUp{
     public PowerupRobinHood(){}
-    public PowerupRobinHood(Long ownerID){
-        super(ownerID, "this powerup allows you to steal form the best player and distribute among the others", PowerupType.RobinHood);
+    public PowerupRobinHood(Long ownerID, String ownerName){
+        super(ownerID, ownerName, PowerupType.RobinHood.getDescription(), PowerupType.RobinHood.getName(), PowerupType.RobinHood);
     }
 
 

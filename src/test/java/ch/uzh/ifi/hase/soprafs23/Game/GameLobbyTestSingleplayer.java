@@ -52,7 +52,7 @@ class GameLobbyTestSingleplayer {
         assertEquals(1, gameData.getTotalLobbySize());
         assertEquals(1, gameData.getNumberOfPlayersInLobby());
         assertEquals(0, gameData.getCurrentRoundPlayed());
-        assertNull(gameData.getEvent());
+        assertEquals("none", gameData.getEvent());
     }
 
     @Test

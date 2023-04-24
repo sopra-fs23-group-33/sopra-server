@@ -1,4 +1,4 @@
-package ch.uzh.ifi.hase.soprafs23.Powerups;
+package ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents;
 
 import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
@@ -11,10 +11,10 @@ import java.util.Comparator;
 import java.util.List;
 
 @Entity
-public class PowerupCyberSecurity extends AbstractPowerUp{
-    public PowerupCyberSecurity(){}
-    public PowerupCyberSecurity(Long ownerID){
-        super(ownerID, "this powerup protects you from the hacker", PowerupType.CyberSecurity);
+public class PowerupGuardian extends AbstractPowerUp{
+    public PowerupGuardian(){}
+    public PowerupGuardian(Long ownerID, String ownerName){
+        super(ownerID,ownerName,  PowerupType.Guardian.getDescription(), PowerupType.Guardian.getName(), PowerupType.Guardian);
     }
 
 
@@ -39,10 +39,11 @@ public class PowerupCyberSecurity extends AbstractPowerUp{
             Long playerID = player.getPlayerID();
 
             if(playerID.equals(topPlayerID))
-                instructions.add(new Instruction(playerID, InstructionType.a10, 0));
+                instructions.add(new Instruction(playerID, InstructionType.a6, 0));
             else
-                instructions.add(new Instruction(playerID, InstructionType.a12, 0));
+                instructions.add(new Instruction(playerID, InstructionType.a8, 0));
         }
         return instructions;
     }
 }
+

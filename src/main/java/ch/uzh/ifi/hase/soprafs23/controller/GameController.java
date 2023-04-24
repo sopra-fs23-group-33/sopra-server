@@ -1,9 +1,11 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
 import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
+import ch.uzh.ifi.hase.soprafs23.Data.EventData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -180,4 +182,35 @@ public class GameController {
 
         return DTOMapper.INSTANCE.convertChartDataToChartGetDTO(chartData);
     }
+
+    @GetMapping("/games/{gameID}/powerups")
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin
+    public List<PowerupGetDTO> usedPowerups(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token)  {
+        this.userService.checkToken(token);
+        this.gameService.tokenMatch(token, gameID);
+
+        List<AbstractPowerUp> usedPowerups = this.gameService.getUsedPowerups(gameID);
+
+        List<PowerupGetDTO> powerupGetDTOS = new ArrayList<>();
+
+        for(AbstractPowerUp powerup: usedPowerups){
+            powerupGetDTOS.add(DTOMapper.INSTANCE.convertAbstractPowerupToPowerupGetDTO(powerup));
+        }
+
+        return powerupGetDTOS;
+    }
+
+    @GetMapping("/games/{gameID}/event")
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin
+    public EventGetDTO event(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token)  {
+        this.userService.checkToken(token);
+        this.gameService.tokenMatch(token, gameID);
+
+        EventData eventData = this.gameService.getEvent(gameID);
+
+        return DTOMapper.INSTANCE.convertEventDataToEventGetDTO(eventData);
+    }
+
 }

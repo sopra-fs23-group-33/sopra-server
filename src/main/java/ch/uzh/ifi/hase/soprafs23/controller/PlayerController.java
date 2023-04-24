@@ -4,7 +4,7 @@ import ch.uzh.ifi.hase.soprafs23.Betting.Bet;
 import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 
-import ch.uzh.ifi.hase.soprafs23.Powerups.AbstractPowerUp;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 
 import ch.uzh.ifi.hase.soprafs23.rest.dto.BetPutDTO;

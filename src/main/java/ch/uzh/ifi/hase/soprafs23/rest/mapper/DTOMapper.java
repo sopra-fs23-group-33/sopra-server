@@ -3,10 +3,11 @@ package ch.uzh.ifi.hase.soprafs23.rest.mapper;
 import ch.uzh.ifi.hase.soprafs23.Betting.Bet;
 import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
+import ch.uzh.ifi.hase.soprafs23.Data.EventData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
-import ch.uzh.ifi.hase.soprafs23.Game.Game;
-import ch.uzh.ifi.hase.soprafs23.Powerups.AbstractPowerUp;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.Event;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import org.mapstruct.*;
@@ -40,6 +41,7 @@ public interface DTOMapper {
   @Mapping(source = "totalRoundsPlayed", target = "totalRoundsPlayed")
   @Mapping(source = "numberOfBetsWon", target = "numberOfBetsWon")
   @Mapping(source = "numberOfBetsLost", target = "numberOfBetsLost")
+  @Mapping(source = "winRate", target = "winRate")
   UserGetDTO convertEntityToUserGetDTO(User user);
 
     @Mapping(source = "gameID", target = "gameID")
@@ -92,9 +94,15 @@ public interface DTOMapper {
     ChartGetDTO convertChartDataToChartGetDTO(ChartData chartData);
 
     @Mapping(source = "ownerID", target = "ownerID")
+    @Mapping(source = "ownerName", target = "ownerName")
     @Mapping(source = "powerupID", target = "powerupID")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "active", target = "active")
     @Mapping(source = "powerupType", target = "powerupType")
+    @Mapping(source = "name", target = "name")
     PowerupGetDTO convertAbstractPowerupToPowerupGetDTO(AbstractPowerUp abstractPowerUp);
+
+    @Mapping(source = "description", target = "description")
+    @Mapping(source = "name", target = "name")
+    EventGetDTO convertEventDataToEventGetDTO(EventData eventData);
 }

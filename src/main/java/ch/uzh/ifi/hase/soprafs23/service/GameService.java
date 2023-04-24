@@ -1,8 +1,11 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
 import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
+import ch.uzh.ifi.hase.soprafs23.Data.EventData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.Event;
 import ch.uzh.ifi.hase.soprafs23.Runner.BackgroundChartFetcher;
 import ch.uzh.ifi.hase.soprafs23.Runner.ChartFetcher;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunnerV2;
@@ -326,6 +329,16 @@ public class GameService {
 
         String errorMessage = "provided token does not match any player in game with gameID: " + gameID;
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
+    }
+
+    public List<AbstractPowerUp> getUsedPowerups(Long gameID){
+        Game game = this.getGameByGameID(gameID);
+        return game.getUsedPowerups();
+    }
+
+    public EventData getEvent(Long gameID){
+        Game game = this.getGameByGameID(gameID);
+        return game.getEvent().getEventData();
     }
 
 }

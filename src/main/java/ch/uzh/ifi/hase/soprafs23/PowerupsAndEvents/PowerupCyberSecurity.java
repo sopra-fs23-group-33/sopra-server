@@ -1,10 +1,9 @@
-package ch.uzh.ifi.hase.soprafs23.Powerups;
+package ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents;
 
 import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
 import ch.uzh.ifi.hase.soprafs23.constant.InstructionType;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
-import ch.uzh.ifi.hase.soprafs23.entity.User;
 
 import javax.persistence.Entity;
 import java.util.ArrayList;
@@ -12,10 +11,10 @@ import java.util.Comparator;
 import java.util.List;
 
 @Entity
-public class PowerupGuardian extends AbstractPowerUp{
-    public PowerupGuardian(){}
-    public PowerupGuardian(Long ownerID){
-        super(ownerID, "this powerup protects you from Robin Hood", PowerupType.Guardian);
+public class PowerupCyberSecurity extends AbstractPowerUp{
+    public PowerupCyberSecurity(){}
+    public PowerupCyberSecurity(Long ownerID, String ownerName){
+        super(ownerID, ownerName, PowerupType.CyberSecurity.getDescription(), PowerupType.CyberSecurity.getName(), PowerupType.CyberSecurity);
     }
 
 
@@ -40,11 +39,10 @@ public class PowerupGuardian extends AbstractPowerUp{
             Long playerID = player.getPlayerID();
 
             if(playerID.equals(topPlayerID))
-                instructions.add(new Instruction(playerID, InstructionType.a6, 0));
+                instructions.add(new Instruction(playerID, InstructionType.a10, 0));
             else
-                instructions.add(new Instruction(playerID, InstructionType.a8, 0));
+                instructions.add(new Instruction(playerID, InstructionType.a12, 0));
         }
         return instructions;
     }
 }
-

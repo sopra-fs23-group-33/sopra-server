@@ -2,9 +2,8 @@ package ch.uzh.ifi.hase.soprafs23.service;
 
 import ch.uzh.ifi.hase.soprafs23.Betting.Bet;
 import ch.uzh.ifi.hase.soprafs23.Betting.Result;
-import ch.uzh.ifi.hase.soprafs23.Powerups.AbstractPowerUp;
-import ch.uzh.ifi.hase.soprafs23.Powerups.PowerupType;
-import ch.uzh.ifi.hase.soprafs23.Powerups.PowerupX2;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.PowerupType;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
@@ -16,7 +15,6 @@ import ch.uzh.ifi.hase.soprafs23.repository.PowerupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -89,7 +87,7 @@ public class PlayerService {
 
     public void addPowerups(int number, Long playerID, GameType gameType) {
         Player player = this.getPlayerByPlayerID(playerID);
-        ArrayList<AbstractPowerUp> powerUps = PowerupType.generatePowerups(number, player.getPlayerID(), gameType);
+        ArrayList<AbstractPowerUp> powerUps = PowerupType.generatePowerups(number, player.getPlayerID(), player.getUser().getUsername(), gameType);
 
         for (AbstractPowerUp powerUp : powerUps) {
             AbstractPowerUp savedPowerUp = this.powerupRepository.saveAndFlush(powerUp);

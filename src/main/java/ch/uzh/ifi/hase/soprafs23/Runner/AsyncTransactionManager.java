@@ -51,7 +51,11 @@ public class AsyncTransactionManager {
     }
 
     public void addSingleGameRound(GameRound gameRound) {
-        this.gameRoundRepository.saveAndFlush(gameRound);
+        try {
+            this.gameRoundRepository.saveAndFlush(gameRound);
+        }
+        catch (Exception | Error ignored){
+        }
     }
 
     public void startGame(Long gameID) throws  StartException {
@@ -60,8 +64,8 @@ public class AsyncTransactionManager {
             game.start();
             gameRepository.saveAndFlush(game);
         }
-        catch (NotFoundException ignored){
-            ;
+        catch (Exception | Error ignored){
+
         }
     }
 
@@ -72,7 +76,7 @@ public class AsyncTransactionManager {
             gameRepository.saveAndFlush(game);
         }
         catch (NotFoundException ignored){
-            ;
+
         }
     }
 
@@ -83,7 +87,7 @@ public class AsyncTransactionManager {
             gameRepository.saveAndFlush(game);
         }
         catch (NotFoundException ignored){
-            ;
+
         }
     }
 
@@ -94,7 +98,7 @@ public class AsyncTransactionManager {
             gameRepository.saveAndFlush(game);
         }
         catch (NotFoundException ignored){
-            ;
+
         }
     }
 
@@ -106,7 +110,7 @@ public class AsyncTransactionManager {
             gameRepository.saveAndFlush(game);
         }
         catch (NotFoundException ignored){
-            ;
+
         }
     }
 
@@ -145,8 +149,8 @@ public class AsyncTransactionManager {
             game.update();
             gameRepository.saveAndFlush(game);
         }
-        catch (Exception ignored){
-            ;
+        catch (Exception | Error ignored){
+
         }
     }
 

@@ -1,13 +1,10 @@
-package ch.uzh.ifi.hase.soprafs23.Powerups;
+package ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents;
 
 import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
-import ch.uzh.ifi.hase.soprafs23.entity.Player;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -20,8 +17,14 @@ public abstract class AbstractPowerUp {
     @Column(name = "ownerID")
     Long ownerID;
 
+    @Column(name = "ownerName")
+    String ownerName;
+
     @Column(name = "Description")
     String description;
+
+    @Column(name = "name")
+    String name;
 
     @Column(name = "active")
     boolean active;
@@ -32,11 +35,13 @@ public abstract class AbstractPowerUp {
 
     public AbstractPowerUp(){}
 
-    public AbstractPowerUp(Long ownerID, String description, PowerupType type){
+    public AbstractPowerUp(Long ownerID, String ownerName, String description, String name, PowerupType type){
         this.ownerID = ownerID;
         this.description = description;
         this.active = false;
         this.powerupType = type;
+        this.name = name;
+        this.ownerName = ownerName;
     }
 
     public void activate(){
@@ -67,6 +72,14 @@ public abstract class AbstractPowerUp {
 
     public void setPowerupID(Long powerupID) {
         this.powerupID = powerupID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
     }
 
     @Override

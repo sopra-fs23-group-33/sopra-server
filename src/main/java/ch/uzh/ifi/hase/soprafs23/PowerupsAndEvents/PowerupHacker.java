@@ -1,4 +1,4 @@
-package ch.uzh.ifi.hase.soprafs23.Powerups;
+package ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents;
 
 import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
@@ -15,8 +15,8 @@ import static java.lang.Math.round;
 @Entity
 public class PowerupHacker extends AbstractPowerUp{
     public PowerupHacker(){}
-    public PowerupHacker(Long ownerID){
-        super(ownerID, "this powerup allows you to steal from the leading player", PowerupType.Hacker);
+    public PowerupHacker(Long ownerID, String ownerName){
+        super(ownerID,ownerName,  PowerupType.Hacker.getDescription(),  PowerupType.Hacker.getName() , PowerupType.Hacker);
     }
 
 

@@ -1,4 +1,4 @@
-package ch.uzh.ifi.hase.soprafs23.Powerups;
+package ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents;
 
 import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class PowerupPlus1000 extends AbstractPowerUp{
 
     public PowerupPlus1000(){}
-    public PowerupPlus1000(Long ownerID){
-        super(ownerID, "this powerup adds 1000 coins to your balance", PowerupType.Plus1000);
+    public PowerupPlus1000(Long ownerID, String ownerName){
+        super(ownerID, ownerName, PowerupType.Plus1000.getDescription(), PowerupType.Plus1000.getName(), PowerupType.Plus1000);
     }
 
 

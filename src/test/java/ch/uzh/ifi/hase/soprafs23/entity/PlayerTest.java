@@ -11,7 +11,7 @@ import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
-import ch.uzh.ifi.hase.soprafs23.Powerups.*;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.*;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 
 import ch.uzh.ifi.hase.soprafs23.constant.InstructionType;
@@ -212,14 +212,14 @@ class PlayerTest {
 
         assertEquals(1000, result.getBettingAmount());
         assertEquals(Direction.DOWN, result.getOutcome());
-        assertEquals(-1000, result.getProfit());
+        assertEquals(-2000, result.getProfit());
 
-        assertEquals(0, player.getBalance());
+        assertEquals(-1000, player.getBalance());
 
         PlayerData playerData = player.status();
 
         assertEquals(user.getUsername(), playerData.getUsername());
-        assertEquals(0, playerData.getAccountBalance());
+        assertEquals(-1000, playerData.getAccountBalance());
         assertEquals(0, playerData.getNumberOfWonRounds());
         assertEquals(1, playerData.getNumberOfLostRounds());
         assertEquals(Direction.UP, playerData.getTypeOfCurrentBet());
@@ -549,12 +549,12 @@ class PlayerTest {
     void placeBet_with_powerups_simple() throws FailedToPlaceBetException, PowerupNotFoundException {
         Long playerID = player.getPlayerID();
 
-        AbstractPowerUp x2 = new PowerupX2(playerID);
+        AbstractPowerUp x2 = new PowerupX2(playerID, "Test");
         x2 = this.powerupRepository.saveAndFlush(x2);
 
         player.addPowerup(x2);
 
-        AbstractPowerUp Plus100 = new PowerupPlus100(playerID);
+        AbstractPowerUp Plus100 = new PowerupPlus100(playerID, "Test");
         Plus100 = this.powerupRepository.saveAndFlush(Plus100);
 
         player.addPowerup(Plus100);
@@ -591,6 +591,8 @@ class PlayerTest {
 
         assertEquals(round(100+1000+2*100*2), player.getBalance());
 
+        player.resetPowerups();
+
         assertEquals(0, player.getAvailablePowerups().size());
         assertEquals(0, player.getActivePowerups().size());
     }
@@ -599,7 +601,7 @@ class PlayerTest {
     void foreign_powerup(){
         Long playerID = player.getPlayerID();
 
-        AbstractPowerUp x2 = new PowerupX2(playerID+1);
+        AbstractPowerUp x2 = new PowerupX2(playerID+1, "Test");
         x2 = this.powerupRepository.saveAndFlush(x2);
         AbstractPowerUp finalX = x2;
 
@@ -611,27 +613,27 @@ class PlayerTest {
     void more_complex_powerups() throws PowerupNotFoundException, FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        AbstractPowerUp x2 = new PowerupX2(playerID);
+        AbstractPowerUp x2 = new PowerupX2(playerID, "Test");
         x2 = this.powerupRepository.saveAndFlush(x2);
         player.addPowerup(x2);
 
-        AbstractPowerUp Plus100 = new PowerupPlus100(playerID);
+        AbstractPowerUp Plus100 = new PowerupPlus100(playerID, "Test");
         Plus100 = this.powerupRepository.saveAndFlush(Plus100);
         player.addPowerup(Plus100);
 
-        AbstractPowerUp x5 = new PowerupX5(playerID);
+        AbstractPowerUp x5 = new PowerupX5(playerID, "test");
         x5 = this.powerupRepository.saveAndFlush(x5);
         player.addPowerup(x5);
 
-        AbstractPowerUp Plus200 = new PowerupPlus200(playerID);
+        AbstractPowerUp Plus200 = new PowerupPlus200(playerID, "test");
         Plus200 = this.powerupRepository.saveAndFlush(Plus200);
         player.addPowerup(Plus200);
 
-        AbstractPowerUp Plus500 = new PowerupPlus500(playerID);
+        AbstractPowerUp Plus500 = new PowerupPlus500(playerID, "test");
         Plus500 = this.powerupRepository.saveAndFlush(Plus500);
         player.addPowerup(Plus500);
 
-        AbstractPowerUp x10 = new PowerupX10(playerID);
+        AbstractPowerUp x10 = new PowerupX10(playerID, "test");
         x10 = this.powerupRepository.saveAndFlush(x10);
         player.addPowerup(x10);
 
@@ -663,6 +665,8 @@ class PlayerTest {
         player.endRound(Direction.UP, 1.01);
 
         assertEquals(round(100+200+1000+2*100*2*5), player.getBalance());
+
+        player.resetPowerups();
 
         assertEquals(2, player.getAvailablePowerups().size());
         assertEquals(0, player.getActivePowerups().size());

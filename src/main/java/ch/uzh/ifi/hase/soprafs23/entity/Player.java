@@ -5,8 +5,7 @@ import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.Betting.InstructionManager;
 import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
-import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
-import ch.uzh.ifi.hase.soprafs23.Powerups.AbstractPowerUp;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
@@ -103,9 +102,9 @@ public class Player {
         int profit = newBalance - this.balance;
         this.result = new Result(direction, profit, this.currentBet.getAmount());
         this.balance = newBalance;
-
-        this.resetPowerups();
     }
+
+
 
     public void resetBet(){
         this.currentBet = new Bet(Direction.NONE, 0);

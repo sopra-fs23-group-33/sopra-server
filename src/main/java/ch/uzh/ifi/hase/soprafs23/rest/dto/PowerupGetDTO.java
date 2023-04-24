@@ -1,10 +1,13 @@
 package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
-import ch.uzh.ifi.hase.soprafs23.Powerups.PowerupType;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.PowerupType;
 
 public class PowerupGetDTO {
     private Long powerupID;
     private PowerupType powerupType;
+
+    private String ownerName;
+    private String name;
     private String description;
     private Long ownerID;
     private boolean active;
@@ -47,5 +50,21 @@ public class PowerupGetDTO {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
     }
 }

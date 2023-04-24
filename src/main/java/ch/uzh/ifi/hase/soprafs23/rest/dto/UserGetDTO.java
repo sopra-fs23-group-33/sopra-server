@@ -16,6 +16,8 @@ public class UserGetDTO {
   private int numberOfBetsLost;
   private int rank;
 
+  private double winRate;
+
   public Long getUserID() {
     return this.userID;
   }
@@ -87,4 +89,12 @@ public class UserGetDTO {
   public void setRank(int rank){
     this.rank = rank;
   }
+
+    public double getWinRate() {
+        return winRate;
+    }
+
+    public void setWinRate(double winRate) {
+        this.winRate = winRate;
+    }
 }

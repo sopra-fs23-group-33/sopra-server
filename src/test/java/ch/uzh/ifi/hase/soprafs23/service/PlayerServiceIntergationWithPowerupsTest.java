@@ -2,7 +2,7 @@ package ch.uzh.ifi.hase.soprafs23.service;
 
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
-import ch.uzh.ifi.hase.soprafs23.Powerups.AbstractPowerUp;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -126,6 +126,12 @@ public class PlayerServiceIntergationWithPowerupsTest {
         p = newGame.creator();
 
         assertEquals(1, p.getActivePowerups().size());
+
+        newGame = gameService.getGameByGameID(game.getGameID());
+        List<AbstractPowerUp> activatedPowerups = gameService.getUsedPowerups(newGame.getGameID());
+
+        assertEquals(1, activatedPowerups.size());
+
     }
 
     @Test

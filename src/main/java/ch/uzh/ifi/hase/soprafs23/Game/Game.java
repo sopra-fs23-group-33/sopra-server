@@ -5,8 +5,8 @@ import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 
-import ch.uzh.ifi.hase.soprafs23.Powerups.AbstractPowerUp;
-import ch.uzh.ifi.hase.soprafs23.Powerups.PowerupX2;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.Event;
 import ch.uzh.ifi.hase.soprafs23.constant.*;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -74,6 +74,11 @@ public class Game {
     @Column(name = "bettingTime", nullable = false)
     private int bettingTime;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "event", nullable = false)
+    private Event event;
+
+
     public Game() {}
 
     public Game(User creator, GameData gameData){
@@ -89,6 +94,7 @@ public class Game {
         this.players = new ArrayList<>();
         this.bettingTime = 15;
         this.resultTime = 15;
+        this.event = Event.NoEvent;
     }
 
     public void init(){
@@ -97,7 +103,6 @@ public class Game {
             this.join(this.creator);
         }
         catch (FailedToJoinException ignored){
-            ;
         }
     }
 
@@ -142,10 +147,14 @@ public class Game {
 
         if(this.currentRoundPlayed + 1 > this.gameRounds.size())
             return false;
+        else if(!this.type.validNumberOfPlayers(this.getNumberOfPlayersInLobby()))
+            return false;
+        else if(this.type == GameType.SINGLEPLAYER && this.numberOfPlayersBankrupt() == 1)
+            return false;
+        else if(this.type == GameType.MULTIPLAYER && (this.getNumberOfPlayersInLobby() - this.numberOfPlayersBankrupt()) <= 1)
+            return false;
         else
-            return this.type.validNumberOfPlayers(this.getNumberOfPlayersInLobby());
-
-
+            return true;
     }
 
     public boolean canStart(){
@@ -185,7 +194,7 @@ public class Game {
         data.setNumberOfPlayersInLobby(this.getNumberOfPlayersInLobby());
         data.setNumberOfRoundsToPlay(this.numberOfRoundsToPlay);
         data.setCurrentRoundPlayed(this.getCurrentRoundPlayed());
-        data.setEvent(null);
+        data.setEvent(this.event.getName());
         data.setCreator(this.creator.getUsername());
 
         return data;
@@ -222,12 +231,15 @@ public class Game {
         ArrayList<Instruction> instructions = new ArrayList<>();
         ArrayList<AbstractPowerUp> playerPowerups = new ArrayList<>();
 
+
         for(Player player: this.players){
            playerPowerups.addAll(player.getActivePowerups());
         }
 
         for(AbstractPowerUp powerUp: playerPowerups)
             instructions.addAll(powerUp.generateInstructions(this));
+
+        instructions.addAll(this.event.generateInstructions(this));
 
         for(Instruction instruction: instructions){
             Long ownerID = instruction.getOwnerID();
@@ -242,6 +254,19 @@ public class Game {
         }
     }
 
+    public List<AbstractPowerUp> getUsedPowerups(){
+        ArrayList<AbstractPowerUp> playerPowerups = new ArrayList<>();
+
+
+        for(Player player: this.players){
+            playerPowerups.addAll(player.getActivePowerups());
+        }
+        return playerPowerups;
+
+
+    }
+
+
     public Player findPlayerByID(Long ID) throws PlayerNotFoundException {
         for(Player player: this.players){
             if(player.getPlayerID().equals(ID)){
@@ -249,6 +274,26 @@ public class Game {
             }
         }
         throw new PlayerNotFoundException();
+    }
+
+    public int numberOfPlayersBankrupt(){
+        int n = 0;
+
+        for(Player player: this.players){
+            if(player.getBalance() <= 0)
+                n++;
+        }
+        return n;
+    }
+
+    public void generateEvent(){
+        if(this.isEventsActive())
+            this.event = Event.generateRandomEvent(this.type);
+    }
+
+    public void resetEvent(){
+        if(this.isEventsActive())
+            this.event = Event.NoEvent;
     }
 
 
@@ -395,5 +440,11 @@ public class Game {
         this.resultTime = resultTime;
     }
 
+    public Event getEvent() {
+        return event;
+    }
 
+    public void setEvent(Event event) {
+        this.event = event;
+    }
 }

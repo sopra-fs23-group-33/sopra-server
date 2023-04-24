@@ -134,7 +134,7 @@ class GameControllerTest {
                 .andExpect(jsonPath("$.numberOfPlayersInLobby", is(1)))
                 .andExpect(jsonPath("$.numberOfRoundsToPlay", is(gamePostDTO.getNumberOfRoundsToPlay())))
                 .andExpect(jsonPath("$.currentRoundPlayed", is(0)))
-                .andExpect(jsonPath("$.event", org.hamcrest.CoreMatchers.nullValue()))
+                .andExpect(jsonPath("$.event", is("none")))
                 .andExpect(jsonPath("$.creator", is(gamePostDTO.getCreator())));
     }
 
@@ -234,7 +234,7 @@ class GameControllerTest {
                 .andExpect(jsonPath("$.numberOfPlayersInLobby", is(1)))
                 .andExpect(jsonPath("$.numberOfRoundsToPlay", is(gamePostDTO.getNumberOfRoundsToPlay())))
                 .andExpect(jsonPath("$.currentRoundPlayed", is(0)))
-                .andExpect(jsonPath("$.event", org.hamcrest.CoreMatchers.nullValue()))
+                .andExpect(jsonPath("$.event", is("none")))
                 .andExpect(jsonPath("$.creator", is(gamePostDTO.getCreator())));
     }    
 
@@ -335,7 +335,7 @@ class GameControllerTest {
         .andExpect(jsonPath("$.numberOfPlayersInLobby", is(1)))
         .andExpect(jsonPath("$.numberOfRoundsToPlay", is(gamePostDTO.getNumberOfRoundsToPlay())))
         .andExpect(jsonPath("$.currentRoundPlayed", is(0)))
-        .andExpect(jsonPath("$.event", org.hamcrest.CoreMatchers.nullValue()))
+        .andExpect(jsonPath("$.event", is("none")))
         .andExpect(jsonPath("$.creator", is(gamePostDTO.getCreator())));
     }
 
@@ -589,7 +589,7 @@ class GameControllerTest {
                 .andExpect(jsonPath("$[0].numberOfPlayersInLobby", is(1)))
                 .andExpect(jsonPath("$[0].numberOfRoundsToPlay", is(gamePostDTO.getNumberOfRoundsToPlay())))
                 .andExpect(jsonPath("$[0].currentRoundPlayed", is(0)))
-                .andExpect(jsonPath("$[0].event", org.hamcrest.CoreMatchers.nullValue()))
+                .andExpect(jsonPath("$[0].event", is("none")))
                 .andExpect(jsonPath("$[0].creator", is(gamePostDTO.getCreator())));
     }
 
@@ -617,7 +617,7 @@ class GameControllerTest {
                 .andExpect(jsonPath("$[0].numberOfPlayersInLobby", is(1)))
                 .andExpect(jsonPath("$[0].numberOfRoundsToPlay", is(gamePostDTO.getNumberOfRoundsToPlay())))
                 .andExpect(jsonPath("$[0].currentRoundPlayed", is(0)))
-                .andExpect(jsonPath("$[0].event", org.hamcrest.CoreMatchers.nullValue()))
+                .andExpect(jsonPath("$[0].event", is("none")))
                 .andExpect(jsonPath("$[0].creator", is(gamePostDTO.getCreator())));
     }
 

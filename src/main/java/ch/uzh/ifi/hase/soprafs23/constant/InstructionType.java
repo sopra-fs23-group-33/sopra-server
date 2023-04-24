@@ -15,7 +15,17 @@ public enum InstructionType {
     a9(0.0, Symbol.ADD),
     a10(1.0, Symbol.MUL),
     a11(0.0, Symbol.ADD),
-    a12(1.0, Symbol.MUL);;
+    a12(1.0, Symbol.MUL),
+    a13(0.0, Symbol.ADD),
+    a14(0.0, Symbol.ADD),
+    a15(0.0, Symbol.ADD),
+
+    a16(0.0, Symbol.ADD),
+    a17(0.0, Symbol.ADD),
+    a18(0.0, Symbol.ADD),
+    a19(0.0, Symbol.ADD);
+
+
 
     private enum Symbol {
         ADD, MUL;

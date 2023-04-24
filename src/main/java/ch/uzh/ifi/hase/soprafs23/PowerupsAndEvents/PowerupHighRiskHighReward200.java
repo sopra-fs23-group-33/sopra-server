@@ -1,0 +1,27 @@
+package ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents;
+
+import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
+import ch.uzh.ifi.hase.soprafs23.Game.Game;
+import ch.uzh.ifi.hase.soprafs23.constant.InstructionType;
+
+import javax.persistence.Entity;
+import java.util.ArrayList;
+
+@Entity
+public class PowerupHighRiskHighReward200 extends AbstractPowerUp{
+    public PowerupHighRiskHighReward200(){}
+    public PowerupHighRiskHighReward200(Long ownerID, String ownerName){
+        super(ownerID, ownerName, PowerupType.RiskReward200.getDescription(), PowerupType.RiskReward200.getName(), PowerupType.RiskReward200);
+    }
+
+
+    @Override
+    public ArrayList<Instruction> generateInstructions(Game game) {
+        ArrayList<Instruction> instructions = new ArrayList<>();
+
+        Instruction instruction = new Instruction(this.ownerID, InstructionType.a3, 200);
+        instructions.add(instruction);
+        return instructions;
+    }
+}
+

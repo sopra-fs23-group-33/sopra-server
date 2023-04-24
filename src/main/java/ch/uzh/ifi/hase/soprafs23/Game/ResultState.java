@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs23.Game;
 
 import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
+import ch.uzh.ifi.hase.soprafs23.constant.GameType;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.exceptions.nextRoundException;
 
@@ -24,9 +25,13 @@ public class ResultState extends GameStatus{
 
 
     @Override
-    public void nextRound(){
-        for(Player player: game.players)
+    public void nextRound() {
+        for (Player player : game.getPlayers()){
             player.resetBet();
+            player.resetPowerups();
+        }
+
+        game.resetEvent();
 
         if(this.game.currentRoundPlayed >= this.game.numberOfRoundsToPlay || !this.game.checkIntegrity()) {
             this.game.setTimer(0);
