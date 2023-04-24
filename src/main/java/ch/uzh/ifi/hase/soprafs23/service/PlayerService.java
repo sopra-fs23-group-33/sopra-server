@@ -111,8 +111,8 @@ public class PlayerService {
             this.playerRepository.saveAndFlush(player);
         }
         catch (Exception e){
-            String ErrorMessage = "failed to activate powerup with id " + powerupID;
-            throw new ResponseStatusException(HttpStatus.CONFLICT, ErrorMessage);
+            String errorMessage = "failed to activate powerup with id " + powerupID;
+            throw new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
         }
 
     }
@@ -124,8 +124,8 @@ public class PlayerService {
         if (powerupByID != null)
             return powerupByID;
         else {
-            String ErrorMessage = "Powerup with powerupID " + powerupID + " was not found";
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ErrorMessage);
+            String errorMessage = "Powerup with powerupID " + powerupID + " was not found";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage);
         }
 
     }

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class EventTest {
+class EventTest {
 
     @Test
     void generateEventForSinglePlayer(){

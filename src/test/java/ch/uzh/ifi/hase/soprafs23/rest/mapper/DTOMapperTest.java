@@ -176,7 +176,7 @@ class DTOMapperTest {
         gameData.setName("MyGame");
         gameData.setTotalLobbySize(2);
         gameData.setGameID(1L);
-        gameData.setEvent("NoEvent");
+        gameData.setEvent("NO_EVENT");
         gameData.setCreator("Creator");
         gameData.setTimer(10);
         gameData.setCurrentRoundPlayed(2);

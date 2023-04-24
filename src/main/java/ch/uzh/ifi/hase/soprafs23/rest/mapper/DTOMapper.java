@@ -7,7 +7,6 @@ import ch.uzh.ifi.hase.soprafs23.Data.EventData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
-import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.Event;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import org.mapstruct.*;

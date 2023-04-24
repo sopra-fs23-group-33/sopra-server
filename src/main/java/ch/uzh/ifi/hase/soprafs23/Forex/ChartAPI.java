@@ -19,9 +19,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ChartAPI {
 
-    private final String apiKey = "L5DXRR793TYLP95U";
-    private final Interval interval = Interval.FIVE_MIN;
-    private final OutputSize outputSize = OutputSize.FULL;
+    private static final String apiKey = "L5DXRR793TYLP95U";
+    private static final Interval interval = Interval.FIVE_MIN;
+    private static final OutputSize outputSize = OutputSize.FULL;
 
     private final Config cfg = Config.builder()
             .key(apiKey)
@@ -47,8 +47,8 @@ public class ChartAPI {
                 .intraday()
                 .fromSymbol(currencyPair.getFrom().toString())
                 .toSymbol(currencyPair.getTo().toString())
-                .interval(this.interval)
-                .outputSize(this.outputSize)
+                .interval(ChartAPI.interval)
+                .outputSize(ChartAPI.outputSize)
                 .onFailure(e-> failure.set(true))
                 .fetchSync();
 
@@ -59,11 +59,11 @@ public class ChartAPI {
     }
 
     private Chart convertToChart(ForexResponse response){
-        ArrayList<ForexUnit> ForexUnits = new ArrayList<>(response.getForexUnits());
+        ArrayList<ForexUnit> forexUnits = new ArrayList<>(response.getForexUnits());
         ArrayList<String> dates = new ArrayList<>();
         ArrayList<Double> values = new ArrayList<>();
 
-        for(ForexUnit fx: ForexUnits){
+        for(ForexUnit fx: forexUnits){
             dates.add(fx.getDate());
             values.add(fx.getClose());
         }

@@ -14,7 +14,7 @@ import java.util.List;
 public class PowerupCyberSecurity extends AbstractPowerUp{
     public PowerupCyberSecurity(){}
     public PowerupCyberSecurity(Long ownerID, String ownerName){
-        super(ownerID, ownerName, PowerupType.CyberSecurity.getDescription(), PowerupType.CyberSecurity.getName(), PowerupType.CyberSecurity);
+        super(ownerID, ownerName, PowerupType.CYBER_SECURITY.getDescription(), PowerupType.CYBER_SECURITY.getName(), PowerupType.CYBER_SECURITY);
     }
 
 
@@ -39,9 +39,9 @@ public class PowerupCyberSecurity extends AbstractPowerUp{
             Long playerID = player.getPlayerID();
 
             if(playerID.equals(topPlayerID))
-                instructions.add(new Instruction(playerID, InstructionType.a10, 0));
+                instructions.add(new Instruction(playerID, InstructionType.A10, 0));
             else
-                instructions.add(new Instruction(playerID, InstructionType.a12, 0));
+                instructions.add(new Instruction(playerID, InstructionType.A12, 0));
         }
         return instructions;
     }

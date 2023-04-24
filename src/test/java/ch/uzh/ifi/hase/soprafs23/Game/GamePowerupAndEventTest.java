@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @DataJpaTest
-public class GamePowerupAndEventTest {
+class GamePowerupAndEventTest {
 
     @Autowired
     private PlayerRepository playerRepository;
@@ -319,7 +319,7 @@ public class GamePowerupAndEventTest {
         int balanceP3 = player3.getBalance();
 
         AbstractPowerUp RobinHoodP3 = player3.getAvailablePowerups().get(0);
-        assertEquals(PowerupType.RobinHood, RobinHoodP3.getPowerupType());
+        assertEquals(PowerupType.ROBIN_HOOD, RobinHoodP3.getPowerupType());
 
         game.nextRound();
 
@@ -354,13 +354,13 @@ public class GamePowerupAndEventTest {
         int balanceP3 = player3.getBalance();
 
         AbstractPowerUp RobinHoodP3 = player3.getAvailablePowerups().get(0);
-        assertEquals(PowerupType.RobinHood, RobinHoodP3.getPowerupType());
+        assertEquals(PowerupType.ROBIN_HOOD, RobinHoodP3.getPowerupType());
 
         AbstractPowerUp GuardianP2 = player2.getAvailablePowerups().get(1);
-        assertEquals(PowerupType.Guardian, GuardianP2.getPowerupType());
+        assertEquals(PowerupType.GUARDIAN, GuardianP2.getPowerupType());
 
         AbstractPowerUp GuardianP1 = player1.getAvailablePowerups().get(1);
-        assertEquals(PowerupType.Guardian, GuardianP1.getPowerupType());
+        assertEquals(PowerupType.GUARDIAN, GuardianP1.getPowerupType());
 
         game.nextRound();
 
@@ -398,10 +398,10 @@ public class GamePowerupAndEventTest {
         int balanceP3 = player3.getBalance();
 
         AbstractPowerUp RobinHoodP3 = player3.getAvailablePowerups().get(0);
-        assertEquals(PowerupType.RobinHood, RobinHoodP3.getPowerupType());
+        assertEquals(PowerupType.ROBIN_HOOD, RobinHoodP3.getPowerupType());
 
         AbstractPowerUp RobinHoodP2 = player2.getAvailablePowerups().get(0);
-        assertEquals(PowerupType.RobinHood, RobinHoodP2.getPowerupType());
+        assertEquals(PowerupType.ROBIN_HOOD, RobinHoodP2.getPowerupType());
 
         game.nextRound();
 
@@ -436,7 +436,7 @@ public class GamePowerupAndEventTest {
         int balanceP3 = player3.getBalance();
 
         AbstractPowerUp RobinHoodP1 = player1.getAvailablePowerups().get(0);
-        assertEquals(PowerupType.RobinHood, RobinHoodP1.getPowerupType());
+        assertEquals(PowerupType.ROBIN_HOOD, RobinHoodP1.getPowerupType());
 
         game.nextRound();
 
@@ -460,10 +460,10 @@ public class GamePowerupAndEventTest {
         playFirstRound();
 
         AbstractPowerUp RiskInsuranceP1 = player1.getAvailablePowerups().get(0);
-        assertEquals(PowerupType.RiskInsurance, RiskInsuranceP1.getPowerupType());
+        assertEquals(PowerupType.RISK_INSURANCE, RiskInsuranceP1.getPowerupType());
 
         AbstractPowerUp RiskInsuranceP3 = player3.getAvailablePowerups().get(0);
-        assertEquals(PowerupType.RiskInsurance, RiskInsuranceP3.getPowerupType());
+        assertEquals(PowerupType.RISK_INSURANCE, RiskInsuranceP3.getPowerupType());
 
         player1.activatePowerup(RiskInsuranceP1);
         player3.activatePowerup(RiskInsuranceP3);
@@ -495,7 +495,7 @@ public class GamePowerupAndEventTest {
         int balanceP3 = player3.getBalance();
 
         AbstractPowerUp hackerP3 = player3.getAvailablePowerups().get(0);
-        assertEquals(PowerupType.Hacker, hackerP3.getPowerupType());
+        assertEquals(PowerupType.HACKER, hackerP3.getPowerupType());
 
         game.nextRound();
 
@@ -529,13 +529,13 @@ public class GamePowerupAndEventTest {
         int balanceP3 = player3.getBalance();
 
         AbstractPowerUp hackerP3 = player3.getAvailablePowerups().get(0);
-        assertEquals(PowerupType.Hacker, hackerP3.getPowerupType());
+        assertEquals(PowerupType.HACKER, hackerP3.getPowerupType());
 
         AbstractPowerUp cyberP1 = player1.getAvailablePowerups().get(1);
-        assertEquals(PowerupType.CyberSecurity, cyberP1.getPowerupType());
+        assertEquals(PowerupType.CYBER_SECURITY, cyberP1.getPowerupType());
 
         AbstractPowerUp cyberP2 = player2.getAvailablePowerups().get(1);
-        assertEquals(PowerupType.CyberSecurity, cyberP2.getPowerupType());
+        assertEquals(PowerupType.CYBER_SECURITY, cyberP2.getPowerupType());
 
         game.nextRound();
 
@@ -571,11 +571,11 @@ public class GamePowerupAndEventTest {
         int balanceP3 = player3.getBalance();
 
         AbstractPowerUp hackerP3 = player3.getAvailablePowerups().get(0);
-        assertEquals(PowerupType.Hacker, hackerP3.getPowerupType());
+        assertEquals(PowerupType.HACKER, hackerP3.getPowerupType());
 
 
         AbstractPowerUp hackerP2 = player2.getAvailablePowerups().get(0);
-        assertEquals(PowerupType.Hacker, hackerP2.getPowerupType());
+        assertEquals(PowerupType.HACKER, hackerP2.getPowerupType());
 
         game.nextRound();
 
@@ -594,7 +594,7 @@ public class GamePowerupAndEventTest {
 
 
     @Test
-    void powerup_Incendiary() throws StartException, endRoundException, FailedToPlaceBetException, nextRoundException, PowerupNotFoundException {
+    void powerup_INCENDIARY() throws StartException, endRoundException, FailedToPlaceBetException, nextRoundException, PowerupNotFoundException {
         Long p1ID = player1.getPlayerID();
 
         AbstractPowerUp Incend1 = new PowerupIncendiary(p1ID, "test");
@@ -623,7 +623,7 @@ public class GamePowerupAndEventTest {
     }
 
     @Test
-    void powerup_LifeLine() throws StartException, endRoundException, FailedToPlaceBetException, nextRoundException, PowerupNotFoundException {
+    void powerup_LIFE_LINE() throws StartException, endRoundException, FailedToPlaceBetException, nextRoundException, PowerupNotFoundException {
         Long p1ID = player1.getPlayerID();
         Long p2ID = player2.getPlayerID();
 
@@ -671,11 +671,11 @@ public class GamePowerupAndEventTest {
     @Test
     void event_tax() throws StartException, endRoundException {
         game.start();
-        game.setEvent(Event.Tax);
+        game.setEvent(Event.TAX);
         game.endRound();
 
         assertEquals(GameState.RESULT, game.getState());
-        assertEquals(Event.Tax, game.getEvent());
+        assertEquals(Event.TAX, game.getEvent());
 
         assertEquals(1000 * 0.9, player1.getBalance());
         assertEquals(1000 * 0.9, player2.getBalance());
@@ -686,11 +686,11 @@ public class GamePowerupAndEventTest {
     @Test
     void event_inetrest() throws StartException, endRoundException {
         game.start();
-        game.setEvent(Event.Interest);
+        game.setEvent(Event.INTEREST);
         game.endRound();
 
         assertEquals(GameState.RESULT, game.getState());
-        assertEquals(Event.Interest, game.getEvent());
+        assertEquals(Event.INTEREST, game.getEvent());
 
         assertEquals(1000 * 1.1, player1.getBalance());
         assertEquals(1000 * 1.1, player2.getBalance());
@@ -700,11 +700,11 @@ public class GamePowerupAndEventTest {
     @Test
     void event_stimulus() throws StartException, endRoundException {
         game.start();
-        game.setEvent(Event.Stimulus);
+        game.setEvent(Event.STIMULUS);
         game.endRound();
 
         assertEquals(GameState.RESULT, game.getState());
-        assertEquals(Event.Stimulus, game.getEvent());
+        assertEquals(Event.STIMULUS, game.getEvent());
 
         assertEquals(1000 + 200, player1.getBalance());
         assertEquals(1000 + 200, player2.getBalance());
@@ -729,10 +729,10 @@ public class GamePowerupAndEventTest {
 
         game.nextRound();
         playFirstRound();
-        game.setEvent(Event.Tohuwabohu);
+        game.setEvent(Event.TOHUWABOHU);
         game.endRound();
 
-        assertEquals(Event.Tohuwabohu, game.getEvent());
+        assertEquals(Event.TOHUWABOHU, game.getEvent());
 
         assertEquals(balanceP3, player1.getBalance());
         assertEquals(balanceP2, player2.getBalance());
@@ -741,12 +741,12 @@ public class GamePowerupAndEventTest {
     @Test
     void event_Bailout() throws StartException, endRoundException, FailedToPlaceBetException, nextRoundException, PowerupNotFoundException {
         game.start();
-        game.setEvent(Event.BailOut);
+        game.setEvent(Event.BAIL_OUT);
 
         playFirstRound();
         game.endRound();
 
-        assertEquals(Event.BailOut, game.getEvent());
+        assertEquals(Event.BAIL_OUT, game.getEvent());
 
         int ratio = 1;
 
@@ -762,7 +762,7 @@ public class GamePowerupAndEventTest {
         player1.addPowerup(Insurance);
 
         game.start();
-        game.setEvent(Event.BailOut);
+        game.setEvent(Event.BAIL_OUT);
 
         playFirstRound();
         AbstractPowerUp powerup = player1.getAvailablePowerups().get(0);
@@ -770,7 +770,7 @@ public class GamePowerupAndEventTest {
 
         game.endRound();
 
-        assertEquals(Event.BailOut, game.getEvent());
+        assertEquals(Event.BAIL_OUT, game.getEvent());
 
         int ratio = 1;
 
@@ -782,12 +782,12 @@ public class GamePowerupAndEventTest {
     @Test
     void event_WinnersWinMore() throws StartException, endRoundException, FailedToPlaceBetException, nextRoundException {
         game.start();
-        game.setEvent(Event.WinnersWinMore);
+        game.setEvent(Event.WINNERS_WIN_MORE);
         playFirstRound();
 
         game.endRound();
 
-        assertEquals(Event.WinnersWinMore, game.getEvent());
+        assertEquals(Event.WINNERS_WIN_MORE, game.getEvent());
 
         int ratio = 1;
 
@@ -799,12 +799,12 @@ public class GamePowerupAndEventTest {
     @Test
     void event_LosersLooseMore() throws StartException, endRoundException, FailedToPlaceBetException, nextRoundException {
         game.start();
-        game.setEvent(Event.LosersLooseMore);
+        game.setEvent(Event.LOOSERS_LOOSE_MORE);
         playFirstRound();
 
         game.endRound();
 
-        assertEquals(Event.LosersLooseMore, game.getEvent());
+        assertEquals(Event.LOOSERS_LOOSE_MORE, game.getEvent());
 
         int ratio = 1;
 

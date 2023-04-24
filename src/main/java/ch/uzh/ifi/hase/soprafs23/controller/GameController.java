@@ -134,7 +134,7 @@ public class GameController {
 
         this.userService.checkToken(token);
 
-        List<GameData> games = new ArrayList<>();
+        List<GameData> games;
 
         if(filter != null){
             games = this.gameService.getAllGames(filter);

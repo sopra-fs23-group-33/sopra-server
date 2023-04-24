@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class PowerupHighRiskHighReward100 extends AbstractPowerUp{
     public PowerupHighRiskHighReward100(){}
     public PowerupHighRiskHighReward100(Long ownerID, String ownerName){
-        super(ownerID, ownerName, PowerupType.RiskReward100.getDescription(), PowerupType.RiskReward100.getName(), PowerupType.RiskReward100);
+        super(ownerID, ownerName, PowerupType.RISK_REWARD100.getDescription(), PowerupType.RISK_REWARD100.getName(), PowerupType.RISK_REWARD100);
     }
 
 
@@ -19,7 +19,7 @@ public class PowerupHighRiskHighReward100 extends AbstractPowerUp{
     public ArrayList<Instruction> generateInstructions(Game game) {
         ArrayList<Instruction> instructions = new ArrayList<>();
 
-        Instruction instruction = new Instruction(this.ownerID, InstructionType.a3, 100);
+        Instruction instruction = new Instruction(this.ownerID, InstructionType.A3, 100);
         instructions.add(instruction);
         return instructions;
     }

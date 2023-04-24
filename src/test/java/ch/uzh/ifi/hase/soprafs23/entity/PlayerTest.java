@@ -134,11 +134,11 @@ class PlayerTest {
         Player anotherPlayer = new Player(anotherUser);
         anotherPlayer.init();
 
-        assertTrue(otherPlayer.equals(player));
-        assertFalse(anotherPlayer.equals(player));
-        assertFalse(player.equals(null));
-        assertTrue(player.equals(player));
-        assertFalse(player.equals(new User()));
+        assertEquals(otherPlayer, player);
+        assertEquals(anotherPlayer, player);
+        assertNotEquals(null, player);
+        assertEquals(player, player);
+        assertNotEquals(new User(), player);
 
         assertEquals(otherPlayer.hashCode(), player.hashCode());
     }
@@ -261,10 +261,10 @@ class PlayerTest {
     void simple_instructions_bet_won() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A0 = new Instruction(playerID, InstructionType.a0, 100);
-        Instruction A1 = new Instruction(playerID, InstructionType.a1, 2);
-        Instruction A2 = new Instruction(playerID, InstructionType.a2, 3);
-        Instruction A3 = new Instruction(playerID, InstructionType.a3, 200);
+        Instruction A0 = new Instruction(playerID, InstructionType.A0, 100);
+        Instruction A1 = new Instruction(playerID, InstructionType.A1, 2);
+        Instruction A2 = new Instruction(playerID, InstructionType.A2, 3);
+        Instruction A3 = new Instruction(playerID, InstructionType.A3, 200);
 
         player.addInstruction(A0);
         player.addInstruction(A1);
@@ -290,10 +290,10 @@ class PlayerTest {
     void simple_instructions_bet_lost() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A0 = new Instruction(playerID, InstructionType.a0, 100);
-        Instruction A1 = new Instruction(playerID, InstructionType.a1, 2);
-        Instruction A2 = new Instruction(playerID, InstructionType.a2, 3);
-        Instruction A3 = new Instruction(playerID, InstructionType.a3, 200);
+        Instruction A0 = new Instruction(playerID, InstructionType.A0, 100);
+        Instruction A1 = new Instruction(playerID, InstructionType.A1, 2);
+        Instruction A2 = new Instruction(playerID, InstructionType.A2, 3);
+        Instruction A3 = new Instruction(playerID, InstructionType.A3, 200);
 
         player.addInstruction(A0);
         player.addInstruction(A1);
@@ -314,10 +314,10 @@ class PlayerTest {
     void simple_instructions_zero_bet() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A0 = new Instruction(playerID, InstructionType.a0, 100);
-        Instruction A1 = new Instruction(playerID, InstructionType.a1, 2);
-        Instruction A2 = new Instruction(playerID, InstructionType.a2, 3);
-        Instruction A3 = new Instruction(playerID, InstructionType.a3, 200);
+        Instruction A0 = new Instruction(playerID, InstructionType.A0, 100);
+        Instruction A1 = new Instruction(playerID, InstructionType.A1, 2);
+        Instruction A2 = new Instruction(playerID, InstructionType.A2, 3);
+        Instruction A3 = new Instruction(playerID, InstructionType.A3, 200);
 
         player.addInstruction(A0);
         player.addInstruction(A1);
@@ -333,15 +333,15 @@ class PlayerTest {
     void more_complex_instructions() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A0 = new Instruction(playerID, InstructionType.a0, 100);
-        Instruction A1 = new Instruction(playerID, InstructionType.a1, 2);
-        Instruction A2 = new Instruction(playerID, InstructionType.a2, 4);
-        Instruction A3 = new Instruction(playerID, InstructionType.a3, 200);
+        Instruction A0 = new Instruction(playerID, InstructionType.A0, 100);
+        Instruction A1 = new Instruction(playerID, InstructionType.A1, 2);
+        Instruction A2 = new Instruction(playerID, InstructionType.A2, 4);
+        Instruction A3 = new Instruction(playerID, InstructionType.A3, 200);
 
-        Instruction A0R = new Instruction(playerID, InstructionType.a0, -100);
-        Instruction A1R = new Instruction(playerID, InstructionType.a1, 0.5);
-        Instruction A2R = new Instruction(playerID, InstructionType.a2, 0.25);
-        Instruction A3R = new Instruction(playerID, InstructionType.a3, -200);
+        Instruction A0R = new Instruction(playerID, InstructionType.A0, -100);
+        Instruction A1R = new Instruction(playerID, InstructionType.A1, 0.5);
+        Instruction A2R = new Instruction(playerID, InstructionType.A2, 0.25);
+        Instruction A3R = new Instruction(playerID, InstructionType.A3, -200);
 
         player.addInstruction(A1);
         player.addInstruction(A2R);
@@ -364,7 +364,7 @@ class PlayerTest {
     void instructions_RiskInsurance() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A4 = new Instruction(playerID, InstructionType.a4, 1);
+        Instruction A4 = new Instruction(playerID, InstructionType.A4, 1);
 
         player.addInstruction(A4);
         player.addInstruction(A4); //place two to check that they don't stack
@@ -381,7 +381,7 @@ class PlayerTest {
     void instructions_RiskInsurance_wih_winning_bet() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A4 = new Instruction(playerID, InstructionType.a4, 1);
+        Instruction A4 = new Instruction(playerID, InstructionType.A4, 1);
 
         player.addInstruction(A4);
         player.addInstruction(A4); //place two to check that they don't stack
@@ -398,7 +398,7 @@ class PlayerTest {
     void instructions_RobinHood_steal_without_Guardian() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A7 = new Instruction(playerID, InstructionType.a7, 100);
+        Instruction A7 = new Instruction(playerID, InstructionType.A7, 100);
 
         player.addInstruction(A7);
 
@@ -414,8 +414,8 @@ class PlayerTest {
     void instructions_RobinHood_steal_with_Guardian() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A7 = new Instruction(playerID, InstructionType.a7, 100);
-        Instruction A8 = new Instruction(playerID, InstructionType.a8, 0);
+        Instruction A7 = new Instruction(playerID, InstructionType.A7, 100);
+        Instruction A8 = new Instruction(playerID, InstructionType.A8, 0);
 
         player.addInstruction(A7);
         player.addInstruction(A8);
@@ -432,8 +432,8 @@ class PlayerTest {
     void instructions_RobinHood_stolen_with_Guardian() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A5 = new Instruction(playerID, InstructionType.a5, 100);
-        Instruction A6 = new Instruction(playerID, InstructionType.a6, 0);
+        Instruction A5 = new Instruction(playerID, InstructionType.A5, 100);
+        Instruction A6 = new Instruction(playerID, InstructionType.A6, 0);
 
         player.addInstruction(A5);
         player.addInstruction(A6);
@@ -450,7 +450,7 @@ class PlayerTest {
     void instructions_RobinHood_stolen_without_Guardian() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A5 = new Instruction(playerID, InstructionType.a5, 100);
+        Instruction A5 = new Instruction(playerID, InstructionType.A5, 100);
         player.addInstruction(A5);
 
         Bet validBet = new Bet(Direction.UP, 100);
@@ -465,7 +465,7 @@ class PlayerTest {
     void instructions_Hacker_receiver_without_Cybersecurity() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A9 = new Instruction(playerID, InstructionType.a9, 100);
+        Instruction A9 = new Instruction(playerID, InstructionType.A9, 100);
         player.addInstruction(A9);
 
         Bet validBet = new Bet(Direction.UP, 100);
@@ -480,10 +480,10 @@ class PlayerTest {
     void instructions_Hacker_receiver_with_Cybersecurity() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A9 = new Instruction(playerID, InstructionType.a9, 100);
+        Instruction A9 = new Instruction(playerID, InstructionType.A9, 100);
         player.addInstruction(A9);
 
-        Instruction A10 = new Instruction(playerID, InstructionType.a10, 0);
+        Instruction A10 = new Instruction(playerID, InstructionType.A10, 0);
         player.addInstruction(A10);
 
 
@@ -499,10 +499,10 @@ class PlayerTest {
     void instructions_Hacker_activator_with_Cybersecurity() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A10 = new Instruction(playerID, InstructionType.a10, 100);
+        Instruction A10 = new Instruction(playerID, InstructionType.A10, 100);
         player.addInstruction(A10);
 
-        Instruction A11 = new Instruction(playerID, InstructionType.a11, 0);
+        Instruction A11 = new Instruction(playerID, InstructionType.A11, 0);
         player.addInstruction(A11);
 
 
@@ -518,7 +518,7 @@ class PlayerTest {
     void instructions_Hacker_activator_without_Cybersecurity() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A11 = new Instruction(playerID, InstructionType.a11, 100);
+        Instruction A11 = new Instruction(playerID, InstructionType.A11, 100);
         player.addInstruction(A11);
 
         Bet validBet = new Bet(Direction.UP, 100);
@@ -533,7 +533,7 @@ class PlayerTest {
     void foreign_instruction() throws FailedToPlaceBetException {
         Long playerID = player.getPlayerID();
 
-        Instruction A0 = new Instruction(playerID+1, InstructionType.a0, 100);
+        Instruction A0 = new Instruction(playerID+1, InstructionType.A0, 100);
         player.addInstruction(A0);
 
         Bet validBet = new Bet(Direction.UP, 100);

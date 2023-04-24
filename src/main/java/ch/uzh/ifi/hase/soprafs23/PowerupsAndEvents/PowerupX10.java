@@ -19,7 +19,7 @@ public class PowerupX10 extends AbstractPowerUp{
     public ArrayList<Instruction> generateInstructions(Game game) {
         ArrayList<Instruction> instructions = new ArrayList<>();
 
-        Instruction instruction = new Instruction(this.ownerID, InstructionType.a2, 10.0);
+        Instruction instruction = new Instruction(this.ownerID, InstructionType.A2, 10.0);
         instructions.add(instruction);
         return instructions;
     }

@@ -53,7 +53,7 @@ public class PowerupTest {
 
         Instruction createdInstruction = instructions.get(0);
 
-        assertEquals(InstructionType.a2, createdInstruction.getType());
+        assertEquals(InstructionType.A2, createdInstruction.getType());
         assertEquals(2.0, createdInstruction.getNumber());
         assertEquals(1L, createdInstruction.getOwnerID());
     }
@@ -74,7 +74,7 @@ public class PowerupTest {
 
         Instruction createdInstruction = instructions.get(0);
 
-        assertEquals(InstructionType.a2, createdInstruction.getType());
+        assertEquals(InstructionType.A2, createdInstruction.getType());
         assertEquals(5.0, createdInstruction.getNumber());
         assertEquals(1L, createdInstruction.getOwnerID());
     }
@@ -95,7 +95,7 @@ public class PowerupTest {
 
         Instruction createdInstruction = instructions.get(0);
 
-        assertEquals(InstructionType.a2, createdInstruction.getType());
+        assertEquals(InstructionType.A2, createdInstruction.getType());
         assertEquals(10.0, createdInstruction.getNumber());
         assertEquals(1L, createdInstruction.getOwnerID());
     }
@@ -105,7 +105,7 @@ public class PowerupTest {
         AbstractPowerUp powerUp = new PowerupPlus100(1L, "Test");
 
         assertEquals(1L, powerUp.getOwnerID());
-        assertEquals(PowerupType.Plus100, powerUp.getPowerupType());
+        assertEquals(PowerupType.PLUS100, powerUp.getPowerupType());
         assertFalse(powerUp.getDescription().isEmpty());
 
         Game game = new Game();
@@ -116,7 +116,7 @@ public class PowerupTest {
 
         Instruction createdInstruction = instructions.get(0);
 
-        assertEquals(InstructionType.a0, createdInstruction.getType());
+        assertEquals(InstructionType.A0, createdInstruction.getType());
         assertEquals(100.0, createdInstruction.getNumber());
         assertEquals(1L, createdInstruction.getOwnerID());
     }
@@ -126,7 +126,7 @@ public class PowerupTest {
         AbstractPowerUp powerUp = new PowerupPlus200(1L, "Test");
 
         assertEquals(1L, powerUp.getOwnerID());
-        assertEquals(PowerupType.Plus200, powerUp.getPowerupType());
+        assertEquals(PowerupType.PLUS200, powerUp.getPowerupType());
         assertFalse(powerUp.getDescription().isEmpty());
 
         Game game = new Game();
@@ -137,7 +137,7 @@ public class PowerupTest {
 
         Instruction createdInstruction = instructions.get(0);
 
-        assertEquals(InstructionType.a0, createdInstruction.getType());
+        assertEquals(InstructionType.A0, createdInstruction.getType());
         assertEquals(200.0, createdInstruction.getNumber());
         assertEquals(1L, createdInstruction.getOwnerID());
     }
@@ -147,7 +147,7 @@ public class PowerupTest {
         AbstractPowerUp powerUp = new PowerupPlus500(1L, "Test");
 
         assertEquals(1L, powerUp.getOwnerID());
-        assertEquals(PowerupType.Plus500, powerUp.getPowerupType());
+        assertEquals(PowerupType.PLUS500, powerUp.getPowerupType());
         assertFalse(powerUp.getDescription().isEmpty());
 
         Game game = new Game();
@@ -158,7 +158,7 @@ public class PowerupTest {
 
         Instruction createdInstruction = instructions.get(0);
 
-        assertEquals(InstructionType.a0, createdInstruction.getType());
+        assertEquals(InstructionType.A0, createdInstruction.getType());
         assertEquals(500.0, createdInstruction.getNumber());
         assertEquals(1L, createdInstruction.getOwnerID());
     }
@@ -168,7 +168,7 @@ public class PowerupTest {
         AbstractPowerUp powerUp = new PowerupPlus1000(1L, "Test");
 
         assertEquals(1L, powerUp.getOwnerID());
-        assertEquals(PowerupType.Plus1000, powerUp.getPowerupType());
+        assertEquals(PowerupType.PLUS1000, powerUp.getPowerupType());
         assertFalse(powerUp.getDescription().isEmpty());
 
         Game game = new Game();
@@ -179,7 +179,7 @@ public class PowerupTest {
 
         Instruction createdInstruction = instructions.get(0);
 
-        assertEquals(InstructionType.a0, createdInstruction.getType());
+        assertEquals(InstructionType.A0, createdInstruction.getType());
         assertEquals(1000.0, createdInstruction.getNumber());
         assertEquals(1L, createdInstruction.getOwnerID());
     }
@@ -189,7 +189,7 @@ public class PowerupTest {
         AbstractPowerUp powerUp = new PowerupHighRiskHighReward100(1L, "Test");
 
         assertEquals(1L, powerUp.getOwnerID());
-        assertEquals(PowerupType.RiskReward100, powerUp.getPowerupType());
+        assertEquals(PowerupType.RISK_REWARD100, powerUp.getPowerupType());
         assertFalse(powerUp.getDescription().isEmpty());
 
         Game game = new Game();
@@ -200,7 +200,7 @@ public class PowerupTest {
 
         Instruction createdInstruction = instructions.get(0);
 
-        assertEquals(InstructionType.a3, createdInstruction.getType());
+        assertEquals(InstructionType.A3, createdInstruction.getType());
         assertEquals(100.0, createdInstruction.getNumber());
         assertEquals(1L, createdInstruction.getOwnerID());
     }
@@ -209,7 +209,7 @@ public class PowerupTest {
         AbstractPowerUp powerUp = new PowerupHighRiskHighReward200(1L, "Test");
 
         assertEquals(1L, powerUp.getOwnerID());
-        assertEquals(PowerupType.RiskReward200, powerUp.getPowerupType());
+        assertEquals(PowerupType.RISK_REWARD200, powerUp.getPowerupType());
         assertFalse(powerUp.getDescription().isEmpty());
 
         Game game = new Game();
@@ -220,7 +220,7 @@ public class PowerupTest {
 
         Instruction createdInstruction = instructions.get(0);
 
-        assertEquals(InstructionType.a3, createdInstruction.getType());
+        assertEquals(InstructionType.A3, createdInstruction.getType());
         assertEquals(200.0, createdInstruction.getNumber());
         assertEquals(1L, createdInstruction.getOwnerID());
     }
@@ -229,7 +229,7 @@ public class PowerupTest {
         AbstractPowerUp powerUp = new PowerupHighRiskHighReward500(1L, "Test");
 
         assertEquals(1L, powerUp.getOwnerID());
-        assertEquals(PowerupType.RiskReward500, powerUp.getPowerupType());
+        assertEquals(PowerupType.RISK_REWARD500, powerUp.getPowerupType());
         assertFalse(powerUp.getDescription().isEmpty());
 
         Game game = new Game();
@@ -240,7 +240,7 @@ public class PowerupTest {
 
         Instruction createdInstruction = instructions.get(0);
 
-        assertEquals(InstructionType.a3, createdInstruction.getType());
+        assertEquals(InstructionType.A3, createdInstruction.getType());
         assertEquals(500.0, createdInstruction.getNumber());
         assertEquals(1L, createdInstruction.getOwnerID());
     }
@@ -256,11 +256,11 @@ public class PowerupTest {
         PowerupX2 aThirdPowerupX2 = new PowerupX2(1L, "Test");
         aThirdPowerupX2.setPowerupID(3L);
 
-        assertTrue(powerupX2.equals(powerupX2));
-        assertTrue(powerupX2.equals(anotherPowerupX2));
-        assertFalse(powerupX2.equals(null));
-        assertFalse(powerupX2.equals(new User()));
-        assertFalse(powerupX2.equals(aThirdPowerupX2));
+        assertEquals(powerupX2, powerupX2);
+        assertEquals(powerupX2, anotherPowerupX2);
+        assertNotEquals(null, powerupX2);
+        assertNotEquals(powerupX2, new User());
+        assertNotEquals(powerupX2, aThirdPowerupX2);
 
         assertEquals(powerupX2.hashCode(), anotherPowerupX2.hashCode());
     }

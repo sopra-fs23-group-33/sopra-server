@@ -13,21 +13,16 @@ import static java.lang.Math.min;
 @Entity
 public class GameRound  {
 
-    @AttributeOverrides({
-            @AttributeOverride(name="numbers",column=@Column(name="numbers_first")),
-            @AttributeOverride(name="dates",column=@Column(name="dates_first")),
-            @AttributeOverride(name="currencyPair.from",column=@Column(name="currencyPair_from_first")),
-            @AttributeOverride(name="currencyPair.to",column=@Column(name="currencyPair_to_first"))
-    })
+    @AttributeOverride(name="numbers",column=@Column(name="numbers_first"))
+    @AttributeOverride(name="dates",column=@Column(name="dates_first"))
+    @AttributeOverride(name="currencyPair.from",column=@Column(name="currencyPair_from_first"))
+    @AttributeOverride(name="currencyPair.to",column=@Column(name="currencyPair_to_first"))
     private Chart firstChart;
 
-
-    @AttributeOverrides({
-            @AttributeOverride(name="numbers",column=@Column(name="numbers_second")),
-            @AttributeOverride(name="dates",column=@Column(name="dates_second")),
-            @AttributeOverride(name="currencyPair.from",column=@Column(name="currencyPair_from_second")),
-            @AttributeOverride(name="currencyPair.to",column=@Column(name="currencyPair_to_second"))
-    })
+    @AttributeOverride(name="numbers",column=@Column(name="numbers_second"))
+    @AttributeOverride(name="dates",column=@Column(name="dates_second"))
+    @AttributeOverride(name="currencyPair.from",column=@Column(name="currencyPair_from_second"))
+    @AttributeOverride(name="currencyPair.to",column=@Column(name="currencyPair_to_second"))
     private Chart secondChart;
     @Enumerated(EnumType.STRING)
     private Direction outcome;

@@ -16,7 +16,7 @@ import static java.lang.Math.round;
 public class PowerupRobinHood extends  AbstractPowerUp{
     public PowerupRobinHood(){}
     public PowerupRobinHood(Long ownerID, String ownerName){
-        super(ownerID, ownerName, PowerupType.RobinHood.getDescription(), PowerupType.RobinHood.getName(), PowerupType.RobinHood);
+        super(ownerID, ownerName, PowerupType.ROBIN_HOOD.getDescription(), PowerupType.ROBIN_HOOD.getName(), PowerupType.ROBIN_HOOD);
     }
 
 
@@ -44,9 +44,9 @@ public class PowerupRobinHood extends  AbstractPowerUp{
             Long playerID = player.getPlayerID();
 
             if(playerID.equals(topPlayerID))
-                instructions.add(new Instruction(playerID, InstructionType.a5, toDistribute));
+                instructions.add(new Instruction(playerID, InstructionType.A5, toDistribute));
             else
-                instructions.add(new Instruction(playerID, InstructionType.a7, share));
+                instructions.add(new Instruction(playerID, InstructionType.A7, share));
         }
         return instructions;
     }

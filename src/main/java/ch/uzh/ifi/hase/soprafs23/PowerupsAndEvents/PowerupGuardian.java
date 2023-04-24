@@ -14,7 +14,7 @@ import java.util.List;
 public class PowerupGuardian extends AbstractPowerUp{
     public PowerupGuardian(){}
     public PowerupGuardian(Long ownerID, String ownerName){
-        super(ownerID,ownerName,  PowerupType.Guardian.getDescription(), PowerupType.Guardian.getName(), PowerupType.Guardian);
+        super(ownerID,ownerName,  PowerupType.GUARDIAN.getDescription(), PowerupType.GUARDIAN.getName(), PowerupType.GUARDIAN);
     }
 
 
@@ -39,9 +39,9 @@ public class PowerupGuardian extends AbstractPowerUp{
             Long playerID = player.getPlayerID();
 
             if(playerID.equals(topPlayerID))
-                instructions.add(new Instruction(playerID, InstructionType.a6, 0));
+                instructions.add(new Instruction(playerID, InstructionType.A6, 0));
             else
-                instructions.add(new Instruction(playerID, InstructionType.a8, 0));
+                instructions.add(new Instruction(playerID, InstructionType.A8, 0));
         }
         return instructions;
     }

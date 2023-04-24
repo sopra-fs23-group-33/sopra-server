@@ -16,7 +16,7 @@ import static java.lang.Math.round;
 public class PowerupHacker extends AbstractPowerUp{
     public PowerupHacker(){}
     public PowerupHacker(Long ownerID, String ownerName){
-        super(ownerID,ownerName,  PowerupType.Hacker.getDescription(),  PowerupType.Hacker.getName() , PowerupType.Hacker);
+        super(ownerID,ownerName,  PowerupType.HACKER.getDescription(),  PowerupType.HACKER.getName() , PowerupType.HACKER);
     }
 
 
@@ -37,8 +37,8 @@ public class PowerupHacker extends AbstractPowerUp{
         if(this.ownerID.equals(topPlayerID))
             return instructions;
 
-        instructions.add(new Instruction(topPlayerID, InstructionType.a9, 100));
-        instructions.add(new Instruction(this.ownerID, InstructionType.a11, 100));
+        instructions.add(new Instruction(topPlayerID, InstructionType.A9, 100));
+        instructions.add(new Instruction(this.ownerID, InstructionType.A11, 100));
 
         return instructions;
     }

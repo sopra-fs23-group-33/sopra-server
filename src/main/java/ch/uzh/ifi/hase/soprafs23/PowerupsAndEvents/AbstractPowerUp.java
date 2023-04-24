@@ -33,9 +33,9 @@ public abstract class AbstractPowerUp {
     @Enumerated(EnumType.STRING)
     PowerupType powerupType;
 
-    public AbstractPowerUp(){}
+    protected AbstractPowerUp(){}
 
-    public AbstractPowerUp(Long ownerID, String ownerName, String description, String name, PowerupType type){
+    protected AbstractPowerUp(Long ownerID, String ownerName, String description, String name, PowerupType type){
         this.ownerID = ownerID;
         this.description = description;
         this.active = false;

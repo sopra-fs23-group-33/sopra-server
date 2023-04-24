@@ -26,87 +26,87 @@ public enum PowerupType {
             return new PowerupX10(ownerID, ownerName);
         }
     },
-    Plus100(100,"Plus 100", Arrays.asList(GameType.values()), "this powerup adds 100 coins to your balance") {
+    PLUS100(100,"Plus 100", Arrays.asList(GameType.values()), "this powerup adds 100 coins to your balance") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupPlus100(ownerID, ownerName);
         }
     },
-    Plus200(50,"Plus 200", Arrays.asList(GameType.values()), "this powerup adds 200 coins to your balance") {
+    PLUS200(50,"Plus 200", Arrays.asList(GameType.values()), "this powerup adds 200 coins to your balance") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupPlus200(ownerID,ownerName);
         }
     },
-    Plus500(20, "Plus 500", Arrays.asList(GameType.values()), "this powerup adds 500 coins to your balance") {
+    PLUS500(20, "Plus 500", Arrays.asList(GameType.values()), "this powerup adds 500 coins to your balance") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupPlus500(ownerID, ownerName);
         }
     },
-    Plus1000(10,"Plus 1000", Arrays.asList(GameType.values()), "this powerup adds 1000 coins to your balance") {
+    PLUS1000(10,"Plus 1000", Arrays.asList(GameType.values()), "this powerup adds 1000 coins to your balance") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupPlus1000(ownerID, ownerName);
         }
     },
-    RiskInsurance(100,"Risk-insurance", Arrays.asList(GameType.values()),"this powerup protects you from losses in case of a lost bet"){
+    RISK_INSURANCE(100,"Risk-insurance", Arrays.asList(GameType.values()),"this powerup protects you from losses in case of a lost bet"){
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupRiskInsurance(ownerID, ownerName);
         }
     },
-    RobinHood(50,"Robin Hood", List.of(GameType.MULTIPLAYER), "this powerup allows you to steal form the leading player and distribute among the others"){
+    ROBIN_HOOD(50,"Robin Hood", List.of(GameType.MULTIPLAYER), "this powerup allows you to steal form the leading player and distribute among the others"){
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupRobinHood(ownerID, ownerName);
         }
     },
-    Guardian(50, "Guardian", List.of(GameType.MULTIPLAYER), "this powerup protects you from Robin Hood"){
+    GUARDIAN(50, "Guardian", List.of(GameType.MULTIPLAYER), "this powerup protects you from Robin Hood"){
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupGuardian(ownerID, ownerName);
         }
     },
-    Hacker(50, "Hacker", List.of(GameType.MULTIPLAYER), "this powerup allows you to steal from the leading player") {
+    HACKER(50, "Hacker", List.of(GameType.MULTIPLAYER), "this powerup allows you to steal from the leading player") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupHacker(ownerID, ownerName);
         }
     },
-    CyberSecurity(50, "Cyber Security", List.of(GameType.MULTIPLAYER),"this powerup protects you from the hacker") {
+    CYBER_SECURITY(50, "Cyber Security", List.of(GameType.MULTIPLAYER),"this powerup protects you from the hacker") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupCyberSecurity(ownerID, ownerName);
         }
     },
 
-    RiskReward100(100, "High Risk High Reward 100", Arrays.asList(GameType.values()),"this powerup gives you 100 coins if you win and takes 100 coins if you loose") {
+    RISK_REWARD100(100, "High Risk High Reward 100", Arrays.asList(GameType.values()),"this powerup gives you 100 coins if you win and takes 100 coins if you loose") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupHighRiskHighReward100(ownerID,ownerName);
         }
     },
 
-    RiskReward200(50, "High Risk High Reward 200", Arrays.asList(GameType.values()),"this powerup gives you 200 coins if you win and takes 200 coins if you loose") {
+    RISK_REWARD200(50, "High Risk High Reward 200", Arrays.asList(GameType.values()),"this powerup gives you 200 coins if you win and takes 200 coins if you loose") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupHighRiskHighReward200(ownerID,ownerName);
         }
     },
-    RiskReward500(20, "High Risk High Reward 500", Arrays.asList(GameType.values()),"this powerup gives you 500 coins if you win and takes 500 coins if you loose") {
+    RISK_REWARD500(20, "High Risk High Reward 500", Arrays.asList(GameType.values()),"this powerup gives you 500 coins if you win and takes 500 coins if you loose") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupHighRiskHighReward500(ownerID, ownerName);
         }
     },
-    LifeLine(100, "Lifeline", List.of(GameType.MULTIPLAYER), "this powerup restores half of your initial balance if you are bankrupt") {
+    LIFE_LINE(100, "Lifeline", List.of(GameType.MULTIPLAYER), "this powerup restores half of your initial balance if you are bankrupt") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupLifeLine(ownerID, ownerName);
         }
     },
-    Incendiary(100, "Incendiary", List.of(GameType.MULTIPLAYER), "this powerup sets a random players holdings on fire!") {
+    INCENDIARY(100, "Incendiary", List.of(GameType.MULTIPLAYER), "this powerup sets a random players holdings on fire!") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID,String ownerName) {
             return new PowerupIncendiary(ownerID, ownerName);
@@ -148,8 +148,9 @@ public enum PowerupType {
         return powerUps;
     }
 
+    private static Random randomGenerator = new Random();
     private static AbstractPowerUp randomPowerup(int total, Long ownerID,String ownerName,  GameType gameType){
-        int random = new Random().nextInt(total);
+        int random = randomGenerator.nextInt(total);
         int sum = 0;
 
         for(PowerupType type: PowerupType.values()){

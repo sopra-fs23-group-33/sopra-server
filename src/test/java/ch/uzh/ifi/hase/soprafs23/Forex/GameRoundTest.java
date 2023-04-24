@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class GameRoundTest {
+class GameRoundTest {
 
     private ArrayList<Double> numbers = new ArrayList<>();
     private ArrayList<String> dates = new ArrayList<>();

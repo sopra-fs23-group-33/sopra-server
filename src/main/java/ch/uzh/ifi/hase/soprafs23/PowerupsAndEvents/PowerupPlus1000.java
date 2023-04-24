@@ -11,7 +11,7 @@ public class PowerupPlus1000 extends AbstractPowerUp{
 
     public PowerupPlus1000(){}
     public PowerupPlus1000(Long ownerID, String ownerName){
-        super(ownerID, ownerName, PowerupType.Plus1000.getDescription(), PowerupType.Plus1000.getName(), PowerupType.Plus1000);
+        super(ownerID, ownerName, PowerupType.PLUS1000.getDescription(), PowerupType.PLUS1000.getName(), PowerupType.PLUS1000);
     }
 
 
@@ -19,7 +19,7 @@ public class PowerupPlus1000 extends AbstractPowerUp{
     public ArrayList<Instruction> generateInstructions(Game game) {
         ArrayList<Instruction> instructions = new ArrayList<>();
 
-        Instruction instruction = new Instruction(this.ownerID, InstructionType.a0, 1000);
+        Instruction instruction = new Instruction(this.ownerID, InstructionType.A0, 1000);
         instructions.add(instruction);
         return instructions;
     }

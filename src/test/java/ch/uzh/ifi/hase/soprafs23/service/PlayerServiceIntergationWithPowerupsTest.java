@@ -28,7 +28,7 @@ import java.util.List;
 @WebAppConfiguration
 @SpringBootTest
 @Transactional
-public class PlayerServiceIntergationWithPowerupsTest {
+class PlayerServiceIntergationWithPowerupsTest {
     @Qualifier("userRepository")
     @Autowired
     private UserRepository userRepository;
@@ -146,7 +146,9 @@ public class PlayerServiceIntergationWithPowerupsTest {
 
         Player finalP = p;
 
-        assertThrows(ResponseStatusException.class, () -> playerService.activatePowerup(powerup.getPowerupID() + 1000, finalP.getPlayerID()));
+        Long powerUpID = powerup.getPowerupID();
+        Long playerID = finalP.getPlayerID();
+        assertThrows(ResponseStatusException.class, () -> playerService.activatePowerup(powerUpID + 1000, playerID));
 
         newGame = gameService.getGameByGameID(game.getGameID());
         p = newGame.creator();
@@ -167,7 +169,9 @@ public class PlayerServiceIntergationWithPowerupsTest {
         AbstractPowerUp foreignPowerup = powerups.get(0);
 
         Player p = game.creator();
-        assertThrows(ResponseStatusException.class, () -> playerService.activatePowerup(foreignPowerup.getPowerupID(), p.getPlayerID()));
+        Long powerUpID = foreignPowerup.getPowerupID();
+        Long playerID = p.getPlayerID();
+        assertThrows(ResponseStatusException.class, () -> playerService.activatePowerup(powerUpID, playerID));
 
     }
 }

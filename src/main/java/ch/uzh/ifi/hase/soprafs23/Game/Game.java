@@ -94,7 +94,7 @@ public class Game {
         this.players = new ArrayList<>();
         this.bettingTime = 15;
         this.resultTime = 15;
-        this.event = Event.NoEvent;
+        this.event = Event.NO_EVENT;
     }
 
     public void init(){
@@ -103,6 +103,7 @@ public class Game {
             this.join(this.creator);
         }
         catch (FailedToJoinException ignored){
+            ;
         }
     }
 
@@ -151,10 +152,7 @@ public class Game {
             return false;
         else if(this.type == GameType.SINGLEPLAYER && this.numberOfPlayersBankrupt() == 1)
             return false;
-        else if(this.type == GameType.MULTIPLAYER && (this.getNumberOfPlayersInLobby() - this.numberOfPlayersBankrupt()) <= 1)
-            return false;
-        else
-            return true;
+        else return !(this.type == GameType.MULTIPLAYER && (this.getNumberOfPlayersInLobby() - this.numberOfPlayersBankrupt()) <= 1);
     }
 
     public boolean canStart(){
@@ -249,7 +247,7 @@ public class Game {
                 player.addInstruction(instruction);
             }
             catch (PlayerNotFoundException ignored){
-
+                ;
             }
         }
     }
@@ -267,9 +265,9 @@ public class Game {
     }
 
 
-    public Player findPlayerByID(Long ID) throws PlayerNotFoundException {
+    public Player findPlayerByID(Long id) throws PlayerNotFoundException {
         for(Player player: this.players){
-            if(player.getPlayerID().equals(ID)){
+            if(player.getPlayerID().equals(id)){
                 return player;
             }
         }
@@ -293,7 +291,7 @@ public class Game {
 
     public void resetEvent(){
         if(this.isEventsActive())
-            this.event = Event.NoEvent;
+            this.event = Event.NO_EVENT;
     }
 
 

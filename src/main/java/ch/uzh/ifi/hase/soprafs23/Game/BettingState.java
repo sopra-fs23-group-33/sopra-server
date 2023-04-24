@@ -43,7 +43,6 @@ public class BettingState extends GameStatus{
 
         this.game.generateEvent();
 
-        //if(this.game.isPowerupsActive() || this.game.isEventsActive())
         this.game.collectAndDistributeInstructions();
 
         for(Player player: this.game.getPlayers()){

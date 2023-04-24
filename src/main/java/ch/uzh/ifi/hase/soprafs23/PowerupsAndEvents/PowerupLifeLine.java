@@ -14,7 +14,7 @@ public class PowerupLifeLine extends AbstractPowerUp{
 
     public PowerupLifeLine(){}
     public PowerupLifeLine(Long ownerID, String ownerName){
-        super(ownerID, ownerName,  PowerupType.LifeLine.getDescription(),  PowerupType.LifeLine.getName(), PowerupType.LifeLine);
+        super(ownerID, ownerName,  PowerupType.LIFE_LINE.getDescription(),  PowerupType.LIFE_LINE.getName(), PowerupType.LIFE_LINE);
     }
 
 
@@ -28,13 +28,14 @@ public class PowerupLifeLine extends AbstractPowerUp{
             if(player.getBalance() <= 0){
                 int difference = 500 - player.getBalance();
 
-                Instruction instruction1 = new Instruction(this.ownerID, InstructionType.a14, difference);
-                Instruction instruction2 = new Instruction(this.ownerID, InstructionType.a15, 1);
+                Instruction instruction1 = new Instruction(this.ownerID, InstructionType.A14, difference);
+                Instruction instruction2 = new Instruction(this.ownerID, InstructionType.A15, 1);
                 instructions.add(instruction1);
                 instructions.add(instruction2);
             }
         }
         catch (PlayerNotFoundException ignored){
+            ;
         }
 
         return instructions;

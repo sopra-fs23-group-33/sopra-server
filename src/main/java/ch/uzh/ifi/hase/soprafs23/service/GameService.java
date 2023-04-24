@@ -5,7 +5,6 @@ import ch.uzh.ifi.hase.soprafs23.Data.EventData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
-import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.Event;
 import ch.uzh.ifi.hase.soprafs23.Runner.BackgroundChartFetcher;
 import ch.uzh.ifi.hase.soprafs23.Runner.ChartFetcher;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunnerV2;
@@ -106,7 +105,7 @@ public class GameService {
 
             }
             catch (PlayerNotFoundException ignored){
-
+                ;
             }
         }
 

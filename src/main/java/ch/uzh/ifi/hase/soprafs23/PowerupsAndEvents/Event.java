@@ -11,13 +11,13 @@ import java.util.*;
 
 public enum Event {
 
-    NoEvent(400, "none", List.of(GameType.values()), "none"){
+    NO_EVENT(400, "none", List.of(GameType.values()), "none"){
         @Override
         public ArrayList<Instruction> generateInstructions(Game game){
             return  new ArrayList<>();
         }
     },
-    Tax(100, "Wealth tax", List.of(GameType.values()), "Every player gets 10% deducted from his balance"){
+    TAX(100, "Wealth tax", List.of(GameType.values()), "Every player gets 10% deducted from his balance"){
         @Override
         public ArrayList<Instruction> generateInstructions(Game game){
             ArrayList<Instruction> instructions = new ArrayList<>();
@@ -26,13 +26,13 @@ public enum Event {
             players.addAll(game.getPlayers()); //create deep copy
 
             for(Player player: players)
-                instructions.add(new Instruction(player.getPlayerID(), InstructionType.a1, 0.9));
+                instructions.add(new Instruction(player.getPlayerID(), InstructionType.A1, 0.9));
 
             return instructions;
         }
     },
 
-    Interest(100, "Interest", List.of(GameType.values()), "Every player gets 10% interest on his balance"){
+    INTEREST(100, "Interest", List.of(GameType.values()), "Every player gets 10% interest on his balance"){
         @Override
         public ArrayList<Instruction> generateInstructions(Game game){
             ArrayList<Instruction> instructions = new ArrayList<>();
@@ -41,13 +41,13 @@ public enum Event {
             players.addAll(game.getPlayers()); //create deep copy
 
             for(Player player: players)
-                instructions.add(new Instruction(player.getPlayerID(), InstructionType.a1, 1.1));
+                instructions.add(new Instruction(player.getPlayerID(), InstructionType.A1, 1.1));
 
             return instructions;
         }
     },
 
-    Stimulus(100, "Stimulus", List.of(GameType.values()), "Every player receives 200 coins"){
+    STIMULUS(100, "Stimulus", List.of(GameType.values()), "Every player receives 200 coins"){
         @Override
         public ArrayList<Instruction> generateInstructions(Game game){
             ArrayList<Instruction> instructions = new ArrayList<>();
@@ -56,13 +56,13 @@ public enum Event {
             players.addAll(game.getPlayers()); //create deep copy
 
             for(Player player: players)
-                instructions.add(new Instruction(player.getPlayerID(), InstructionType.a0, 200));
+                instructions.add(new Instruction(player.getPlayerID(), InstructionType.A0, 200));
 
             return instructions;
         }
     },
 
-    BailOut(100, "Bailout", List.of(GameType.values()), "players who lost their bet don't take a loss from it"){
+    BAIL_OUT(100, "Bailout", List.of(GameType.values()), "players who lost their bet don't take a loss from it"){
         @Override
         public ArrayList<Instruction> generateInstructions(Game game){
             ArrayList<Instruction> instructions = new ArrayList<>();
@@ -71,13 +71,13 @@ public enum Event {
             players.addAll(game.getPlayers()); //create deep copy
 
             for(Player player: players)
-                instructions.add(new Instruction(player.getPlayerID(), InstructionType.a4, 1.0));
+                instructions.add(new Instruction(player.getPlayerID(), InstructionType.A4, 1.0));
 
             return instructions;
         }
     },
 
-    WinnersWinMore(100, "Winners win more", List.of(GameType.values()), "winning players win twice as much with their bet"){
+    WINNERS_WIN_MORE(100, "Winners win more", List.of(GameType.values()), "winning players win twice as much with their bet"){
         @Override
         public ArrayList<Instruction> generateInstructions(Game game){
             ArrayList<Instruction> instructions = new ArrayList<>();
@@ -86,12 +86,12 @@ public enum Event {
             players.addAll(game.getPlayers()); //create deep copy
 
             for(Player player: players)
-                instructions.add(new Instruction(player.getPlayerID(), InstructionType.a16, 1.0));
+                instructions.add(new Instruction(player.getPlayerID(), InstructionType.A16, 1.0));
 
             return instructions;
         }
     },
-    LosersLooseMore(100, "Losers loose more", List.of(GameType.values()), "loosing players loose twice as much with their bet") {
+    LOOSERS_LOOSE_MORE(100, "Losers loose more", List.of(GameType.values()), "loosing players loose twice as much with their bet") {
         @Override
         public ArrayList<Instruction> generateInstructions(Game game) {
             ArrayList<Instruction> instructions = new ArrayList<>();
@@ -100,13 +100,13 @@ public enum Event {
             players.addAll(game.getPlayers()); //create deep copy
 
             for (Player player : players)
-                instructions.add(new Instruction(player.getPlayerID(), InstructionType.a17, 1.0));
+                instructions.add(new Instruction(player.getPlayerID(), InstructionType.A17, 1.0));
 
             return instructions;
         }
     },
 
-    Tohuwabohu(100, "Tohuwabohu", List.of(GameType.MULTIPLAYER), "the account balances get inverted and all active powerups are ignored") {
+    TOHUWABOHU(100, "Tohuwabohu", List.of(GameType.MULTIPLAYER), "the account balances get inverted and all active powerups are ignored") {
         @Override
         public ArrayList<Instruction> generateInstructions(Game game) {
             ArrayList<Instruction> instructions = new ArrayList<>();
@@ -131,8 +131,8 @@ public enum Event {
 
                 Player revserse = playersReversed.get(i);
 
-                instructions.add(new Instruction(player.getPlayerID(), InstructionType.a18, revserse.getBalance()));
-                instructions.add(new Instruction(player.getPlayerID(), InstructionType.a19,1));
+                instructions.add(new Instruction(player.getPlayerID(), InstructionType.A18, revserse.getBalance()));
+                instructions.add(new Instruction(player.getPlayerID(), InstructionType.A19,1));
 
                 i++;
             }
@@ -155,10 +155,12 @@ public enum Event {
 
     public abstract ArrayList<Instruction> generateInstructions(Game game);
 
+    private static Random randomGenerator = new Random();
+
     public static Event generateRandomEvent(GameType gameType){
         int total = Event.totalProbability(gameType);
         int sum = 0;
-        int random = new Random().nextInt(total);
+        int random = randomGenerator.nextInt(total);
 
         for(Event type: Event.values()){
             if(!type.getGameTypes().contains(gameType))
@@ -170,7 +172,7 @@ public enum Event {
                 return type;
         }
 
-        return Event.Tax;
+        return Event.TAX;
     }
 
     private static int totalProbability(GameType gameType){

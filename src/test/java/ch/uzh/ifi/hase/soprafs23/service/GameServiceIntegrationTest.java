@@ -242,7 +242,8 @@ class GameServiceIntegrationTest {
 
     @Test
     void checkInvalidStartToken(){
-        assertThrows(ResponseStatusException.class, ()-> gameService.start(game.getGameID(),  "12345"));
+        Long id = game.getGameID();
+        assertThrows(ResponseStatusException.class, ()-> gameService.start(id,  "12345"));
     }
 
     @Test
@@ -463,7 +464,9 @@ class GameServiceIntegrationTest {
 
         game.setGameStatus(new BettingState(game));
         gameRepository.saveAndFlush(game);
-        assertThrows(ResponseStatusException.class, () -> this.gameService.start(game.getGameID(), "test123"));
+
+        Long id = game.getGameID();
+        assertThrows(ResponseStatusException.class, () -> this.gameService.start(id, "test123"));
     }
 
 }
