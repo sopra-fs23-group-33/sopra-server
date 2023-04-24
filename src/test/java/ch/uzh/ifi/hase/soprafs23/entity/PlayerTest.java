@@ -87,8 +87,18 @@ class PlayerTest {
         assertEquals(Direction.NONE, playerData.getTypeOfCurrentBet());
     }
 
+
     @Test
-    void place_bet() throws FailedToPlaceBetException {
+    void simple_bet() throws FailedToPlaceBetException {
+        Bet validBet = new Bet(Direction.UP, 100);
+        player.placeBet(validBet);
+        player.endRound(Direction.UP, 1.01);
+
+        assertEquals(1000+2*100, player.getBalance());
+    }
+
+    @Test
+    void place_bet_complex() throws FailedToPlaceBetException {
         Bet negativeBet = new Bet(Direction.DOWN, -10);
         Bet zeroBet = new Bet(Direction.DOWN, 0);
         Bet noneBet = new  Bet(Direction.NONE, 10);
