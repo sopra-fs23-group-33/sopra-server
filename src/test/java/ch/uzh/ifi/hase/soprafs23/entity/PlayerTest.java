@@ -135,7 +135,7 @@ class PlayerTest {
         anotherPlayer.init();
 
         assertEquals(otherPlayer, player);
-        assertEquals(anotherPlayer, player);
+        assertNotEquals(anotherPlayer, player);
         assertNotEquals(null, player);
         assertEquals(player, player);
         assertNotEquals(new User(), player);
