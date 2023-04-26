@@ -25,6 +25,8 @@
 | 3    | Stefan    | ?                | Ported Cloud to App Engine Flex and DB to Cloud SQL (server)  |
 | 2    | Letizia   | #14              | done                                                          |
 | 2    | Letizia   | #47              | done                                                          |
+| 2    | Letizia   | #44              | done                                                          |
+| 2    | Letizia   | #46              | done                                                          |
 | 2    | Christian | #34              | done                                                          |
 | 2    | Christian | #13              | done                                                          |
 | 2    | Christian | #48 (new number) | done                                                          |
