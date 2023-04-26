@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 
 /**
@@ -88,6 +89,14 @@ public class TestController {
         int size = integers.size();
         integers.add(size);
         return integers;
+    }
+
+    @GetMapping("/test/number")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public Long number()  {
+        Long size = gameRoundRepository.countByUsageFalse();
+        return size;
     }
 
     @DeleteMapping("/delete")

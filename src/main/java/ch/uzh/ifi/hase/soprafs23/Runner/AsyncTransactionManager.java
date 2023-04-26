@@ -155,6 +155,16 @@ public class AsyncTransactionManager {
         }
     }
 
+    public void deleteGame(Long gameID){
+        try {
+            Game game = this.findGame(gameID);
+            gameRepository.deleteByGameID(game.getGameID());
+        }
+        catch (Exception | Error ignored){
+
+        }
+    }
+
     public int numberOfRounds(){
         return (int) gameRoundRepository.countByUsageFalse();
     }

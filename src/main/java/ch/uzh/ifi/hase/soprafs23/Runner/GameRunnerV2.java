@@ -43,11 +43,14 @@ public class GameRunnerV2 {
         ScheduledFuture<?> scheduledFuture = scheduler.scheduleWithFixedDelay(gameUpdater, 1000);
 
         GameStopper gameStopper = new GameStopper(scheduledFuture, gameID);
-        Instant now = Instant.now();
-        now = now.plusSeconds(sleepTime);
+        Instant stop = Instant.now();
+        stop = stop.plusSeconds(sleepTime);
 
-        scheduler.schedule(gameStopper, now);
+        scheduler.schedule(gameStopper, stop);
 
+        GameDeleter gameDeleter = new GameDeleter(gameID);
+        Instant delete = stop.plusSeconds(180);
+        scheduler.schedule(gameDeleter, delete);
     }
 
 
@@ -78,6 +81,20 @@ public class GameRunnerV2 {
         public void run() {
             this.scheduledFuture.cancel(true);
             System.out.println("runnable stopped " + this.gameID + ": " + Thread.currentThread().getId());
+        }
+    }
+
+    private class GameDeleter implements Runnable {
+        private final Long gameID;
+
+        public GameDeleter(Long gameID) {
+            this.gameID = gameID;
+        }
+
+        @Override
+        public void run() {
+            asyncTransactionManager.deleteGame(this.gameID);
+            System.out.println("game deleted " + this.gameID + ": " + Thread.currentThread().getId());
         }
     }
 }
