@@ -60,10 +60,7 @@ public class GameRunnerV2 {
 
         @Override
         public void run() {
-            Long t1 = System.currentTimeMillis();
             asyncTransactionManager.updateGame(gameID);
-            Long t2 = System.currentTimeMillis()-t1;
-            System.out.println("time needed: "+t2);
             System.out.println("runnable executed for game " + gameID + ": " + Thread.currentThread().getId());
         }
     }

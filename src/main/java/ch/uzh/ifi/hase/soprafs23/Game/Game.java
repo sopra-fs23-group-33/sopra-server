@@ -118,10 +118,9 @@ public class Game {
 
     void remove(Player player){
         if(this.players.contains(player) && player.getState().equals(PlayerState.INACTIVE)) {
-            User user = player.getUser();
-
-            if(user.getStatus().equals(UserStatus.PLAYING))
-                user.setStatus(UserStatus.ONLINE);
+            //User user = player.getUser();
+            //if(user.getStatus().equals(UserStatus.PLAYING))
+            //    user.setStatus(UserStatus.ONLINE);
             this.players.remove(player);
         }
     }

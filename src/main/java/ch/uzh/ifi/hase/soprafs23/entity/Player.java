@@ -61,7 +61,7 @@ public class Player {
         this.resetBet();
         this.state = PlayerState.ACTIVE;
         this.result = new Result(Direction.NONE, 0, 0);
-        this.user.setStatus(UserStatus.PLAYING);
+        //this.user.setStatus(UserStatus.PLAYING);
     }
 
     public void init(){

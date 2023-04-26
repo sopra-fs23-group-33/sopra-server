@@ -175,12 +175,12 @@ public class UserService {
             String errorMessage = "login failed because password is wrong";
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
         }
-
+        /*
         else if (foundUser.getStatus().equals(UserStatus.PLAYING)) {
             String errorMessage = "login failed because user is currently playing a game";
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
         }
-
+        */
         foundUser.setStatus(UserStatus.ONLINE);
         foundUser.setToken(UUID.randomUUID().toString());
         foundUser = this.userRepository.saveAndFlush(foundUser);

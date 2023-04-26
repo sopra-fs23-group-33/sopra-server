@@ -101,9 +101,9 @@ class GameBettingTest {
         game.start();
         assertEquals(GameState.BETTING, game.getState());
 
-        assertEquals(UserStatus.PLAYING, second.getStatus());
+        assertEquals(UserStatus.ONLINE, second.getStatus());
         game.leave(second);
-        assertEquals(UserStatus.PLAYING, second.getStatus());
+        assertEquals(UserStatus.ONLINE, second.getStatus());
 
         assertEquals(1, game.getNumberOfPlayersInLobby());
         assertEquals(2, game.players.size());
@@ -121,7 +121,7 @@ class GameBettingTest {
 
         game.start();
 
-        assertEquals(UserStatus.PLAYING, second.getStatus());
+        assertEquals(UserStatus.ONLINE, second.getStatus());
         second.setStatus(UserStatus.OFFLINE);
         game.leave(second);
         assertEquals(UserStatus.OFFLINE, second.getStatus());
