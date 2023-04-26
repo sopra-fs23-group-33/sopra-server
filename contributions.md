@@ -45,3 +45,9 @@
 | 3    | Christian | #54              | done                                                          |
 | 3    | Josep     | #88              | Done, may be reopened if needed                               |
 | 3    | Josep     | #60              | Done                                                          |
+| 3    | Cedric    | #75              | done                                                          |
+| 3    | Cedric    | #12              | done                                                          |
+| 3    | Cedric    | #9               | done                                                          |
+| 3    | Cedric    | #45              | done                                                          |
+| 3    | Cedric    | #58              | done                                                          |
+| 3    | Cedric    | #19              | done                                                          |
