@@ -10,8 +10,10 @@ import java.util.List;
 @Embeddable
 public class Chart {
     @ElementCollection(fetch = FetchType.LAZY)
+    @OrderColumn
     private List<Double> numbers;
     @ElementCollection(fetch = FetchType.LAZY)
+    @OrderColumn
     private List<String> dates;
     @Embedded
     private CurrencyPair currencyPair;

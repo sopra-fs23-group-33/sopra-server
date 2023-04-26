@@ -13,16 +13,12 @@ import static java.lang.Math.min;
 @Entity
 public class GameRound  {
 
-    @AttributeOverride(name="numbers",column=@Column(name="numbers_first"))
-    @AttributeOverride(name="dates",column=@Column(name="dates_first"))
-    @AttributeOverride(name="currencyPair.from",column=@Column(name="currencyPair_from_first"))
-    @AttributeOverride(name="currencyPair.to",column=@Column(name="currencyPair_to_first"))
-    private Chart firstChart;
 
     @AttributeOverride(name="numbers",column=@Column(name="numbers_second"))
     @AttributeOverride(name="dates",column=@Column(name="dates_second"))
     @AttributeOverride(name="currencyPair.from",column=@Column(name="currencyPair_from_second"))
     @AttributeOverride(name="currencyPair.to",column=@Column(name="currencyPair_to_second"))
+    @Embedded
     private Chart secondChart;
     @Enumerated(EnumType.STRING)
     private Direction outcome;
@@ -40,9 +36,9 @@ public class GameRound  {
 
     public GameRound(Chart chart) {
         this.secondChart = chart;
-        this.firstChart = this.splitChart(this.secondChart);
+        Chart firstChart = this.splitChart(this.secondChart);
 
-        Double firstClose = this.firstChart.getValues().get(firstChart.getValues().size() -1);
+        Double firstClose = firstChart.getValues().get(firstChart.getValues().size() -1);
         Double secondClose = this.secondChart.getValues().get(secondChart.getValues().size() -1);
 
         this.ratio = this.computeRatio(firstClose, secondClose);
@@ -75,7 +71,7 @@ public class GameRound  {
     }
 
     public Chart getFirstChart() {
-        return firstChart;
+        return this.splitChart(this.secondChart);
     }
 
     public Chart getSecondChart() {

@@ -17,7 +17,6 @@ public enum Currency {
     KRW,
     NOK,
     NZD,
-    INR,
     MXN,
     TWD,
     ZAR,
