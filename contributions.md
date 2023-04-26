@@ -41,3 +41,5 @@
 | 3    | Christian | #55              | done                                                          |
 | 3    | Christian | #46              | done                                                          |
 | 3    | Christian | #54              | done                                                          |
+| 3    | Josep     | #88              | Done, may be reopened if needed                               |
+| 3    | Josep     | #60              | Done                                                          |
