@@ -19,10 +19,10 @@
 | 2    | Josep     | #24              | Implemented and tested                                        |
 | 2    | Josep     | #43              | Implemented and tested (maybe must be adjusted in the future) |
 | 2    | Josep     | #49              | Done                                                          |
-| 0    | Stefan    | ?                | implemented chart fetching and core DB schema                 |
-| 1    | Stefan    | ?                | Alpha build of server                                         |
-| 2    | Stefan    | ?                | improved robustness and implemented Tests (server)            |
-| 3    | Stefan    | ?                | Ported Cloud to App Engine Flex and DB to Cloud SQL (server)  |
+| 1    | Stefan    | #54                | Done                |
+| 1    | Stefan    | #81                |Done                                         |
+| 1    | Stefan    | #74                | Done           |
+| 1    | Stefan    | #70                | Done  except for Powerups|
 | 2    | Letizia   | #14              | done                                                          |
 | 2    | Letizia   | #47              | done                                                          |
 | 2    | Letizia   | #44              | done                                                          |
@@ -50,4 +50,22 @@
 | 3    | Cedric    | #9               | done                                                          |
 | 3    | Cedric    | #45              | done                                                          |
 | 3    | Cedric    | #58              | done                                                          |
-| 3    | Cedric    | #19              | done                                                          |
+| 3    | Cedric    | #19              | done  
+|1 | Stefan | #66 | done |
+| 2 | Stefan | #62 | done  |
+| 2 | Stefan | #44| done |
+| 2 | Stefan | #42| done |
+| 2 | Stefan | #96| done |
+| 2 | Stefan | #97| done |
+| 2 | Stefan | #98| done |
+| 2 | Stefan | #58| done |
+| 3 | Stefan | #56| done |
+| 3 | Stefan | #90| done |
+| 3 | Stefan | #90| done |
+| 3 | Stefan | #93| done |
+| 3 | Stefan | #104| done |
+| 3 | Stefan | #106| done |
+| 3 | Stefan | #89| done |
+| 4 | Stefan | #108| done |
+| 4 | Stefan | #109| done |
+| 4 | Stefan | #110| done |
