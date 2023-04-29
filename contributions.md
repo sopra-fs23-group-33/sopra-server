@@ -69,3 +69,5 @@
 | 4 | Stefan | #108| done |
 | 4 | Stefan | #109| done |
 | 4 | Stefan | #110| done |
+| 4    | Josep     | #78              | Finished                                                      |
+
