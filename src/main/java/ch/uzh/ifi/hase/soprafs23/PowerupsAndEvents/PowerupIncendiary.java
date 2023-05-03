@@ -12,7 +12,6 @@ import java.util.Random;
 
 @Entity
 public class PowerupIncendiary extends AbstractPowerUp{
-    private static Random random = new Random();
     public PowerupIncendiary(){}
     public PowerupIncendiary(Long ownerID, String ownerName){
         super(ownerID, ownerName, PowerupType.INCENDIARY.getDescription(), PowerupType.INCENDIARY.getName(), PowerupType.INCENDIARY);
@@ -29,6 +28,7 @@ public class PowerupIncendiary extends AbstractPowerUp{
         if(players.size() < 2)
             return instructions;
 
+        Random random = new Random();
         int index = random.nextInt(players.size());
 
         if(index > players.size())
@@ -37,6 +37,7 @@ public class PowerupIncendiary extends AbstractPowerUp{
         Player player = players.get(index);
 
         instructions.add(new Instruction(player.getPlayerID(), InstructionType.A13, 1));
+        instructions.add(new Instruction(player.getPlayerID(), InstructionType.A20, 1));
 
         return instructions;
     }

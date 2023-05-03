@@ -105,7 +105,7 @@ class PlayerServiceIntergationWithPowerupsTest {
         Player p = newGame.creator();
 
         List<AbstractPowerUp> powerups = playerService.getPowerups(p.getPlayerID());
-        assertEquals(5, powerups.size());
+        assertEquals(2, powerups.size());
     }
 
     @Test
@@ -114,7 +114,7 @@ class PlayerServiceIntergationWithPowerupsTest {
         Player p = newGame.creator();
 
         List<AbstractPowerUp> powerups = playerService.getPowerups(p.getPlayerID());
-        assertEquals(5, powerups.size());
+        assertEquals(2, powerups.size());
 
         AbstractPowerUp powerup = powerups.get(0);
 
@@ -140,7 +140,7 @@ class PlayerServiceIntergationWithPowerupsTest {
         Player p = newGame.creator();
 
         List<AbstractPowerUp> powerups = playerService.getPowerups(p.getPlayerID());
-        assertEquals(5, powerups.size());
+        assertEquals(2, powerups.size());
 
         AbstractPowerUp powerup = powerups.get(0);
 
@@ -164,7 +164,7 @@ class PlayerServiceIntergationWithPowerupsTest {
         Player p2 = gameService.join(second, game.getGameID());
 
         List<AbstractPowerUp> powerups = playerService.getPowerups(p2.getPlayerID());
-        assertEquals(5, powerups.size());
+        assertEquals(2, powerups.size());
 
         AbstractPowerUp foreignPowerup = powerups.get(0);
 

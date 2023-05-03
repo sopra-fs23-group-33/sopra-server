@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -205,19 +206,23 @@ public class UserService {
     public List<User> leaderboard() {
         this.updateRanks();
         List<User> users = this.getUsers();
+        List<User> sortedUsers = new ArrayList<>();
+        sortedUsers.addAll(users);
 
-        users.sort(Comparator.comparingDouble(User::getWinRate).reversed().thenComparing(User::getUserID));
+        sortedUsers.sort(Comparator.comparingDouble(User::getWinRate).reversed().thenComparing(User::getUserID));
 
-        return users.subList(0, min(users.size(), 9));
+        return sortedUsers.subList(0, min(users.size(), 9));
     }
     private void updateRanks(){
         List<User> users = this.getUsers();
+        List<User> sortedUsers = new ArrayList<>();
+        sortedUsers.addAll(users);
 
-        users.sort(Comparator.comparingDouble(User::getWinRate).reversed().thenComparing(User::getUserID));
+        sortedUsers.sort(Comparator.comparingDouble(User::getWinRate).reversed().thenComparing(User::getUserID));
 
         int rank = 1;
 
-        for(User user: users){
+        for(User user: sortedUsers){
             user.setRank(rank);
             rank++;
             this.userRepository.save(user);

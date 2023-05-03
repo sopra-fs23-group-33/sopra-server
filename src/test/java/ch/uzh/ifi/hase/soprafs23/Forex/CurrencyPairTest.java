@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.Forex;
 
+import ch.uzh.ifi.hase.soprafs23.Betting.Instruction;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,13 +26,13 @@ class CurrencyPairTest {
         CurrencyPair thirdPair = new CurrencyPair(Currency.AUD, Currency.CNY);
         CurrencyPair fourthPair = new CurrencyPair(Currency.EUR, Currency.CHF);
 
-        assertEquals(currencyPair, otherPair);
-        assertEquals(currencyPair, currencyPair);
-        assertNotEquals(currencyPair, thirdPair);
-        assertNotEquals(null, currencyPair);
-        assertNotEquals(Currency.CHF, currencyPair);
+        assertTrue(currencyPair.equals(otherPair));
+        assertTrue(currencyPair.equals(currencyPair));
+        assertFalse(currencyPair.equals(thirdPair));
+        assertFalse(currencyPair.equals(null));
+        assertFalse(currencyPair.equals(new Instruction()));
         assertEquals(currencyPair.hashCode(), otherPair.hashCode());
         assertNotEquals(currencyPair.hashCode(), thirdPair.hashCode());
-        assertEquals(currencyPair, fourthPair);
+        assertTrue(currencyPair.equals(fourthPair));
     }
 }

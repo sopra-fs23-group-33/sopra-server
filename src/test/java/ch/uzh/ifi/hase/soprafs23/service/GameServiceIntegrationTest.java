@@ -1,12 +1,14 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
 import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
+import ch.uzh.ifi.hase.soprafs23.Data.EventData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.Game.BettingState;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.Event;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
@@ -395,6 +397,19 @@ class GameServiceIntegrationTest {
     }
 
     @Test
+    void invalidUserToCreate(){
+
+        User newUser = new User("newUser", "Pw3as?sword");
+        this.userService.createUser(newUser);
+        newUser = this.userService.getUserByUsername(newUser.getUsername());
+        newUser.setStatus(UserStatus.OFFLINE);
+        User finalNewUser = newUser;
+
+        assertThrows(ResponseStatusException.class, ()-> this.gameService.createGame(finalNewUser, gameData));
+    }
+
+
+    @Test
     void invalidPlayerNumberTooLow(){
         gameData.setTotalLobbySize(1);
 
@@ -470,6 +485,14 @@ class GameServiceIntegrationTest {
 
         Long id = game.getGameID();
         assertThrows(ResponseStatusException.class, () -> this.gameService.start(id, "test123"));
+    }
+
+    @Test
+    void getEvent(){
+        Long gameID = game.getGameID();
+        EventData data = gameService.getEvent(gameID);
+        assertNotNull(data.getDescription());
+        assertNotNull(data.getName());
     }
 
 }

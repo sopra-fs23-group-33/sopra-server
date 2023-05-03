@@ -144,11 +144,11 @@ class PlayerTest {
         Player anotherPlayer = new Player(anotherUser);
         anotherPlayer.init();
 
-        assertEquals(otherPlayer, player);
-        assertNotEquals(anotherPlayer, player);
-        assertNotEquals(null, player);
-        assertEquals(player, player);
-        assertNotEquals(new User(), player);
+        assertTrue(otherPlayer.equals(player));
+        assertFalse(anotherPlayer.equals(player));
+        assertFalse(player.equals(null));
+        assertTrue(player.equals(player));
+        assertFalse(player.equals(new User()));
 
         assertEquals(otherPlayer.hashCode(), player.hashCode());
     }
@@ -180,6 +180,7 @@ class PlayerTest {
         assertEquals(1, user.getNumberOfBetsWon());
         assertEquals(0, user.getNumberOfBetsLost());
         assertEquals(1, user.getWinRate());
+        assertEquals(200, user.getProfit());
     }
 
 
@@ -210,6 +211,7 @@ class PlayerTest {
         assertEquals(0, user.getNumberOfBetsWon());
         assertEquals(1, user.getNumberOfBetsLost());
         assertEquals(0, user.getWinRate());
+        assertEquals(-200, user.getProfit());
     }
 
     @Test
@@ -239,6 +241,7 @@ class PlayerTest {
         assertEquals(0, user.getNumberOfBetsWon());
         assertEquals(1, user.getNumberOfBetsLost());
         assertEquals(0, user.getWinRate());
+        assertEquals(-2000, user.getProfit());
     }
 
     @Test

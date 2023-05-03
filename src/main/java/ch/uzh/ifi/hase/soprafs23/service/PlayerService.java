@@ -4,12 +4,10 @@ import ch.uzh.ifi.hase.soprafs23.Betting.Bet;
 import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
 import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.PowerupType;
-import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.exceptions.FailedToPlaceBetException;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
-import ch.uzh.ifi.hase.soprafs23.repository.GameStatusRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.PlayerRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.PowerupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +30,7 @@ public class PlayerService {
 
     @Autowired
     public PlayerService(@Qualifier("gameRepository") GameRepository gameRepository,
-                         UserService userService,
                          PlayerRepository playerRepository,
-                         GameStatusRepository gameStatusRepository,
-                         GameRunner gameRunner,
                          PowerupRepository powerupRepository) {
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
@@ -85,9 +80,9 @@ public class PlayerService {
         }
     }
 
-    public void addPowerups(int number, Long playerID, GameType gameType) {
+    public void addPowerups(int numberOfRounds, Long playerID, GameType gameType) {
         Player player = this.getPlayerByPlayerID(playerID);
-        ArrayList<AbstractPowerUp> powerUps = PowerupType.generatePowerups(number, player.getPlayerID(), player.getUser().getUsername(), gameType);
+        ArrayList<AbstractPowerUp> powerUps = PowerupType.generatePowerups(numberOfRounds/2, player.getPlayerID(), player.getUser().getUsername(), gameType);
 
         for (AbstractPowerUp powerUp : powerUps) {
             AbstractPowerUp savedPowerUp = this.powerupRepository.saveAndFlush(powerUp);

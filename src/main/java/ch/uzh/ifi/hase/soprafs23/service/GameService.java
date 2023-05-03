@@ -6,7 +6,6 @@ import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
 import ch.uzh.ifi.hase.soprafs23.Runner.BackgroundChartFetcher;
-import ch.uzh.ifi.hase.soprafs23.Runner.ChartFetcher;
 import ch.uzh.ifi.hase.soprafs23.Runner.GameRunnerV2;
 import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
@@ -17,8 +16,6 @@ import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.*;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.GameRoundRepository;
-import ch.uzh.ifi.hase.soprafs23.repository.GameStatusRepository;
-import ch.uzh.ifi.hase.soprafs23.repository.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -40,36 +37,24 @@ import java.util.regex.Pattern;
 public class GameService {
     private final GameRepository gameRepository;
     private final UserService userService;
-    private final PlayerRepository playerRepository;
-    private final GameStatusRepository gameStatusRepository;
     private final GameRunnerV2 gameRunnerV2;
-    private final ChartFetcher chartFetcher;
-
     private final PlayerService playerService;
-
     private final BackgroundChartFetcher backgroundChartFetcher;
-
     private final GameRoundRepository gameRoundRepository;
 
     @Autowired
     public GameService(@Qualifier("gameRepository") GameRepository gameRepository,
                        UserService userService,
-                       PlayerRepository playerRepository,
-                       GameStatusRepository gameStatusRepository,
                        GameRunnerV2 gameRunner,
-                       ChartFetcher chartFetcher,
-                        BackgroundChartFetcher backgroundChartFetcher,
+                       BackgroundChartFetcher backgroundChartFetcher,
                        GameRoundRepository gameRoundRepository,
                        PlayerService playerService) {
 
         this.gameRepository = gameRepository;
         this.userService = userService;
-        this.playerRepository = playerRepository;
-        this.gameStatusRepository = gameStatusRepository;
         this.gameRunnerV2 = gameRunner;
-        this.chartFetcher = chartFetcher;
         this.backgroundChartFetcher = backgroundChartFetcher;
-        this.backgroundChartFetcher.enqueue(32);
+        this.backgroundChartFetcher.enqueue(16);
         this.gameRoundRepository = gameRoundRepository;
         this.playerService = playerService;
     }
@@ -275,8 +260,12 @@ public class GameService {
 
     public List<Player> players(Long gameID){
         Game game = this.getGameByGameID(gameID);
+
         List<Player> players =  game.getPlayers();
-        players.sort(Comparator.comparingInt(Player ::getBalance).reversed().thenComparing(Player::getPlayerID));
+        List<Player> sortedPlayers = new ArrayList<>();
+        sortedPlayers.addAll(players);
+
+        sortedPlayers.sort(Comparator.comparingInt(Player ::getBalance).reversed().thenComparing(Player::getPlayerID));
         return players;
     }
 

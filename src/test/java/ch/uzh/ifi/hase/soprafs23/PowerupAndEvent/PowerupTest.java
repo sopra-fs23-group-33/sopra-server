@@ -277,4 +277,10 @@ public class PowerupTest {
         assertTrue(powerupX2.isActive());
     }
 
+    @Test
+    void equals(){
+        AbstractPowerUp powerupX2 = new PowerupX2(1L, "Test");
+        assertFalse(powerupX2.equals(null));
+    }
+
 }

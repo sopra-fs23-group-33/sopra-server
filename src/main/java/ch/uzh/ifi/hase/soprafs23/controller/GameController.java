@@ -6,7 +6,6 @@ import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
 import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
-import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 
@@ -27,12 +26,9 @@ public class GameController {
     private final GameService gameService;
     private final UserService userService;
 
-    private final GameRunner gameRunner;
-
-    GameController(GameService gameService, UserService userService, GameRunner gameRunner) {
+    GameController(GameService gameService, UserService userService) {
         this.gameService = gameService;
         this.userService = userService;
-        this.gameRunner = gameRunner;
     }
 
 

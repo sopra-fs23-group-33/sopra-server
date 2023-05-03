@@ -94,9 +94,5 @@ public class GameRound  {
         this.usage= true;
     }
 
-    public void deactivate(){
-        this.usage= false;
-    }
-
 
 }

@@ -99,8 +99,10 @@ public class Player {
         }
 
         int newBalance = this.instructionManager.computeNewBalance(direction, ratio);
+
         int profit = newBalance - this.balance;
         this.result = new Result(direction, profit, this.currentBet.getAmount());
+        this.user.incrementProfit(profit);
         this.balance = newBalance;
     }
 

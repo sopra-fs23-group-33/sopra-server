@@ -31,11 +31,6 @@ public class AsyncTransactionManager {
         this.gameRepository = gameRepository;
     }
 
-    public int getRounds(Long gameID) throws NotFoundException{
-            Game game = this.findGame(gameID);
-            return game.getNumberOfRoundsToPlay();
-    }
-
     public void addGameRound(GameRound gameRound, Long gameID) throws NotFoundException {
 
         Long t1 = System.currentTimeMillis();
@@ -59,71 +54,6 @@ public class AsyncTransactionManager {
         }
     }
 
-    public void startGame(Long gameID) throws  StartException {
-        try {
-            Game game = this.findGame(gameID);
-            game.start();
-            gameRepository.saveAndFlush(game);
-        }
-        catch (Exception | Error ignored){
-
-        }
-    }
-
-    public void endRoundGame(Long gameID) throws endRoundException{
-        try {
-            Game game = this.findGame(gameID);
-            game.endRound();
-            gameRepository.saveAndFlush(game);
-        }
-        catch (NotFoundException ignored){
-
-        }
-    }
-
-    public void nextRoundGame(Long gameID) throws nextRoundException{
-        try {
-            Game game = this.findGame(gameID);
-            game.nextRound();
-            gameRepository.saveAndFlush(game);
-        }
-        catch (NotFoundException ignored){
-            ;
-        }
-    }
-
-    public void setTimerGame(Long gameID, int timer) {
-        try {
-            Game game = this.findGame(gameID);
-            game.setTimer(timer);
-            gameRepository.saveAndFlush(game);
-        }
-        catch (NotFoundException ignored){
-
-        }
-    }
-
-
-    public void corruptGame(long gameID)  {
-        try {
-            Game game = this.findGame(gameID);
-            game.setGameStatus(new CorruptedState(game));
-            gameRepository.saveAndFlush(game);
-        }
-        catch (NotFoundException ignored){
-            ;
-        }
-    }
-
-    public boolean getAbort(Long gameID){
-        try {
-            Game game = this.findGame(gameID);
-            return (game.getState().equals(GameState.OVERVIEW) || game.getState().equals(GameState.CORRUPTED));
-        }
-        catch (NotFoundException e1) {
-            return true;
-        }
-    }
 
     public Game findGame(Long gameID) throws NotFoundException {
         Game game = this.gameRepository.findByGameID(gameID);
@@ -134,15 +64,6 @@ public class AsyncTransactionManager {
             throw new NotFoundException();
     }
 
-    public boolean allBetsPlaced(Long gameID){
-        try {
-            Game game = this.findGame(gameID);
-            return game.allBetsPlaced();
-        }
-        catch (NotFoundException ignored){
-            return false;
-        }
-    }
 
     public void updateGame(Long gameID){
         try {
@@ -163,10 +84,6 @@ public class AsyncTransactionManager {
         catch (Exception | Error ignored){
 
         }
-    }
-
-    public int numberOfRounds(){
-        return (int) gameRoundRepository.countByUsageFalse();
     }
 
 }

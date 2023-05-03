@@ -602,6 +602,7 @@ class GamePowerupAndEventTest {
         player1.addPowerup(Incend1);
 
         game.start();
+        playFirstRound();
 
         AbstractPowerUp incendiary = player1.getAvailablePowerups().get(0);
         player1.activatePowerup(incendiary);
@@ -811,6 +812,66 @@ class GamePowerupAndEventTest {
         assertEquals(1000 + ratio * player1.getCurrentBet().getAmount(), player1.getBalance());
         assertEquals(1000 + ratio * player2.getCurrentBet().getAmount(), player2.getBalance());
         assertEquals(1000 - 2*ratio * player3.getCurrentBet().getAmount(), player3.getBalance());
+    }
+
+    @Test
+    void event_robber() throws StartException, endRoundException {
+        game.start();
+        game.setEvent(Event.ROBBER);
+        game.endRound();
+
+        assertEquals(GameState.RESULT, game.getState());
+        assertEquals(Event.ROBBER, game.getEvent());
+
+        assertEquals(1000 - 200, player1.getBalance());
+        assertEquals(1000 - 200, player2.getBalance());
+        assertEquals(1000 - 200, player3.getBalance());
+    }
+
+    @Test
+    void event_back_to_roots() throws StartException, endRoundException, FailedToPlaceBetException, nextRoundException {
+        game.start();
+        playFirstRound();
+        game.endRound();
+
+        int ratio = 1;
+
+        assertEquals(1000 + ratio * player1.getCurrentBet().getAmount(), player1.getBalance());
+        assertEquals(1000 + ratio * player2.getCurrentBet().getAmount(), player2.getBalance());
+        assertEquals(1000 - ratio * player3.getCurrentBet().getAmount(), player3.getBalance());
+
+        game.nextRound();
+        playFirstRound();
+        game.setEvent(Event.BACKTOROOTS);
+        game.endRound();
+
+        assertEquals(Event.BACKTOROOTS, game.getEvent());
+
+        assertEquals(1000, player1.getBalance());
+        assertEquals(1000, player2.getBalance());
+        assertEquals(1000, player3.getBalance());
+    }
+
+    @Test
+    void powerupRespawn() throws StartException, endRoundException, nextRoundException {
+        assertEquals(0, player1.getAvailablePowerups().size());
+        game.start();
+        game.endRound();
+        game.nextRound();
+        assertEquals(2, player1.getAvailablePowerups().size());
+
+    }
+
+    @Test
+    void powerupRespawnOff() throws StartException, endRoundException, nextRoundException {
+        game.setPowerupsActive(false);
+
+        assertEquals(0, player1.getAvailablePowerups().size());
+        game.start();
+        game.endRound();
+        game.nextRound();
+        assertEquals(0, player1.getAvailablePowerups().size());
+
     }
 
 

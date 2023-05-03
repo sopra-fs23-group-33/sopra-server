@@ -14,16 +14,14 @@ public enum Currency {
     HKD,
     SGD,
     SEK,
-    KRW,
     NOK,
     NZD,
     MXN,
-    TWD,
     ZAR,
     BRL,
     DKK;
 
-    static Random random = new Random();
+    static final Random random = new Random();
 
     public static Currency getRandomCurrency(){
         Currency[] currencies = Currency.values();

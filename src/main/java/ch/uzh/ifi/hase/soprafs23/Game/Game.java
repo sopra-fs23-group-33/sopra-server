@@ -7,6 +7,7 @@ import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 
 import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
 import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.Event;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.PowerupType;
 import ch.uzh.ifi.hase.soprafs23.constant.*;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -19,7 +20,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 @Entity(name = "Game")
@@ -42,12 +42,12 @@ public class Game {
 
 
     @Column(name = "numberOfRoundsToPlay", nullable = false)
-    int numberOfRoundsToPlay;
+    private int numberOfRoundsToPlay;
 
     @Column(name = "numberOfRoundsPlayed", nullable = false)
-    int currentRoundPlayed;
+    private int currentRoundPlayed;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY )
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<GameRound> gameRounds;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -79,9 +79,10 @@ public class Game {
     private Event event;
 
 
-    public Game() {}
+    public Game() {
+    }
 
-    public Game(User creator, GameData gameData){
+    public Game(User creator, GameData gameData) {
         this.creator = creator;
         this.name = gameData.getName();
         this.eventsActive = gameData.isEventsActive();
@@ -97,12 +98,12 @@ public class Game {
         this.event = Event.NO_EVENT;
     }
 
-    public void init(){
+    public void init() {
         this.gameStatus = new LobbyState(this);
         try {
             this.join(this.creator);
         }
-        catch (FailedToJoinException ignored){
+        catch (FailedToJoinException ignored) {
             ;
         }
     }
@@ -116,8 +117,8 @@ public class Game {
         this.gameStatus.leave(user);
     }
 
-    void remove(Player player){
-        if(this.players.contains(player) && player.getState().equals(PlayerState.INACTIVE)) {
+    void remove(Player player) {
+        if (this.players.contains(player) && player.getState().equals(PlayerState.INACTIVE)) {
             //User user = player.getUser();
             //if(user.getStatus().equals(UserStatus.PLAYING))
             //    user.setStatus(UserStatus.ONLINE);
@@ -126,8 +127,8 @@ public class Game {
     }
 
     public Player findPlayerByUser(User user) throws PlayerNotFoundException {
-        for(Player player: this.players){
-            if(player.getUser().equals(user)){
+        for (Player player : this.players) {
+            if (player.getUser().equals(user)) {
                 return player;
             }
         }
@@ -143,27 +144,28 @@ public class Game {
         this.gameStatus.start();
     }
 
-    public boolean checkIntegrity(){
+    public boolean checkIntegrity() {
 
-        if(this.currentRoundPlayed + 1 > this.gameRounds.size())
+        if (this.currentRoundPlayed + 1 > this.gameRounds.size())
             return false;
-        else if(!this.type.validNumberOfPlayers(this.getNumberOfPlayersInLobby()))
+        else if (!this.type.validNumberOfPlayers(this.getNumberOfPlayersInLobby()))
             return false;
-        else if(this.type == GameType.SINGLEPLAYER && this.numberOfPlayersBankrupt() == 1)
+        else if (this.type == GameType.SINGLEPLAYER && this.numberOfPlayersBankrupt() == 1)
             return false;
-        else return !(this.type == GameType.MULTIPLAYER && (this.getNumberOfPlayersInLobby() - this.numberOfPlayersBankrupt()) <= 1);
+        else
+            return !(this.type == GameType.MULTIPLAYER && (this.getNumberOfPlayersInLobby() - this.numberOfPlayersBankrupt()) <= 1);
     }
 
-    public boolean canStart(){
-        if(!this.checkIntegrity())
+    public boolean canStart() {
+        if (!this.checkIntegrity())
             return false;
-        else if(this.getNumberOfPlayersInLobby() > this.totalLobbySize)
+        else if (this.getNumberOfPlayersInLobby() > this.totalLobbySize)
             return false;
         else return !this.gameRounds.isEmpty();
     }
 
-    public void addGameRound(GameRound gameRound){
-        if(this.gameRounds.size() < this.numberOfRoundsToPlay) {
+    public void addGameRound(GameRound gameRound) {
+        if (this.gameRounds.size() < this.numberOfRoundsToPlay) {
             gameRound.activate();
             this.gameRounds.add(gameRound);
         }
@@ -177,7 +179,7 @@ public class Game {
         this.gameStatus.nextRound();
     }
 
-    public GameData status(){
+    public GameData status() {
         GameData data = new GameData();
 
         data.setGameID(this.getGameID());
@@ -197,9 +199,12 @@ public class Game {
         return data;
     }
 
-    public boolean allBetsPlaced(){
-        for(Player player: this.players){
-            if(player.getState().equals(PlayerState.ACTIVE) && player.getCurrentBet().getDirection().equals(Direction.NONE)){
+    public boolean allBetsPlaced() {
+        if(this.isPowerupsActive())
+            return false;
+
+        for (Player player : this.players) {
+            if (player.getState().equals(PlayerState.ACTIVE) && player.getCurrentBet().getDirection().equals(Direction.NONE)) {
                 return false;
             }
         }
@@ -210,91 +215,102 @@ public class Game {
         return this.gameStatus.chart();
     }
 
-    public void setTimerForBetting(){
+    public void setTimerForBetting() {
         this.setTimer(this.bettingTime);
     }
 
-    public void setTimerForResult(){
+    public void setTimerForResult() {
         this.setTimer(this.resultTime);
     }
 
-    public void decrementTimer(){
-        if(this.timer > 0){
+    public void decrementTimer() {
+        if (this.timer > 0) {
             this.timer -= 1;
         }
     }
 
-    public void collectAndDistributeInstructions(){
+    public void collectAndDistributeInstructions() {
         ArrayList<Instruction> instructions = new ArrayList<>();
         ArrayList<AbstractPowerUp> playerPowerups = new ArrayList<>();
 
 
-        for(Player player: this.players){
-           playerPowerups.addAll(player.getActivePowerups());
+        for (Player player : this.players) {
+            playerPowerups.addAll(player.getActivePowerups());
         }
 
-        for(AbstractPowerUp powerUp: playerPowerups)
+        for (AbstractPowerUp powerUp : playerPowerups)
             instructions.addAll(powerUp.generateInstructions(this));
 
         instructions.addAll(this.event.generateInstructions(this));
 
-        for(Instruction instruction: instructions){
+        for (Instruction instruction : instructions) {
             Long ownerID = instruction.getOwnerID();
 
             try {
                 Player player = this.findPlayerByID(ownerID);
                 player.addInstruction(instruction);
             }
-            catch (PlayerNotFoundException ignored){
+            catch (PlayerNotFoundException ignored) {
                 ;
             }
         }
     }
 
-    public List<AbstractPowerUp> getUsedPowerups(){
+    public List<AbstractPowerUp> getUsedPowerups() {
         ArrayList<AbstractPowerUp> playerPowerups = new ArrayList<>();
 
 
-        for(Player player: this.players){
+        for (Player player : this.players) {
             playerPowerups.addAll(player.getActivePowerups());
         }
         return playerPowerups;
-
-
     }
 
 
     public Player findPlayerByID(Long id) throws PlayerNotFoundException {
-        for(Player player: this.players){
-            if(player.getPlayerID().equals(id)){
+        for (Player player : this.players) {
+            if (player.getPlayerID().equals(id)) {
                 return player;
             }
         }
         throw new PlayerNotFoundException();
     }
 
-    public int numberOfPlayersBankrupt(){
+    public int numberOfPlayersBankrupt() {
         int n = 0;
 
-        for(Player player: this.players){
-            if(player.getBalance() <= 0)
+        for (Player player : this.players) {
+            if (player.getBalance() <= 0)
                 n++;
         }
         return n;
     }
 
-    public void generateEvent(){
-        if(this.isEventsActive())
+    public void generateEvent() {
+        if (this.isEventsActive())
             this.event = Event.generateRandomEvent(this.type);
     }
 
-    public void resetEvent(){
-        if(this.isEventsActive())
+    public void resetEvent() {
+        if (this.isEventsActive())
             this.event = Event.NO_EVENT;
     }
 
+    public void addPowerups(int n) {
+        if (!this.isPowerupsActive())
+            return;
 
-    public void incrementRoundsPlayed(){
+        for (Player player : this.players) {
+            ArrayList<AbstractPowerUp> powerups = PowerupType.generatePowerups(n, player.getPlayerID(), player.getUser().getUsername(), this.getType());
+
+            for (AbstractPowerUp powerUp : powerups) {
+                player.addPowerup(powerUp);
+            }
+        }
+    }
+
+
+    public void incrementRoundsPlayed() {
         this.currentRoundPlayed++;
     }
 
@@ -348,8 +364,8 @@ public class Game {
 
     public int getNumberOfPlayersInLobby() {
         int size = 0;
-        for(Player player: this.players){
-            if(player.getState().equals(PlayerState.ACTIVE))
+        for (Player player : this.players) {
+            if (player.getState().equals(PlayerState.ACTIVE))
                 size++;
         }
         return size;

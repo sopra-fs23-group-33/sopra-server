@@ -50,31 +50,31 @@ public enum PowerupType {
             return new PowerupPlus1000(ownerID, ownerName);
         }
     },
-    RISK_INSURANCE(100,"Risk-insurance", Arrays.asList(GameType.values()),"this powerup protects you from losses in case of a lost bet"){
+    RISK_INSURANCE(300,"Risk-insurance", Arrays.asList(GameType.values()),"this powerup protects you from losses in case of a lost bet"){
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupRiskInsurance(ownerID, ownerName);
         }
     },
-    ROBIN_HOOD(50,"Robin Hood", List.of(GameType.MULTIPLAYER), "this powerup allows you to steal form the leading player and distribute among the others"){
+    ROBIN_HOOD(200,"Robin Hood", List.of(GameType.MULTIPLAYER), "this powerup allows you to steal form the leading player and distribute among the others"){
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupRobinHood(ownerID, ownerName);
         }
     },
-    GUARDIAN(50, "Guardian", List.of(GameType.MULTIPLAYER), "this powerup protects you from Robin Hood"){
+    GUARDIAN(200, "Guardian", List.of(GameType.MULTIPLAYER), "this powerup protects you from Robin Hood"){
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupGuardian(ownerID, ownerName);
         }
     },
-    HACKER(50, "Hacker", List.of(GameType.MULTIPLAYER), "this powerup allows you to steal from the leading player") {
+    HACKER(200, "Hacker", List.of(GameType.MULTIPLAYER), "this powerup allows you to steal from the leading player") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupHacker(ownerID, ownerName);
         }
     },
-    CYBER_SECURITY(50, "Cyber Security", List.of(GameType.MULTIPLAYER),"this powerup protects you from the hacker") {
+    CYBER_SECURITY(200, "Cyber Security", List.of(GameType.MULTIPLAYER),"this powerup protects you from the hacker") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupCyberSecurity(ownerID, ownerName);
@@ -100,7 +100,7 @@ public enum PowerupType {
             return new PowerupHighRiskHighReward500(ownerID, ownerName);
         }
     },
-    LIFE_LINE(100, "Lifeline", List.of(GameType.MULTIPLAYER), "this powerup restores half of your initial balance if you are bankrupt") {
+    LIFE_LINE(200, "Lifeline", List.of(GameType.MULTIPLAYER), "this powerup restores half of your initial balance if you are bankrupt") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupLifeLine(ownerID, ownerName);

@@ -57,12 +57,14 @@ public class User implements Serializable {
     @Column(nullable = false, unique = true)
     private String token;
 
-    @Column
+    @Column(nullable = false)
     private int rank;
 
-
-    @Column
+    @Column(nullable = false)
     private double winRate;
+
+    @Column(nullable = false)
+    private int profit;
 
     public User() {
     }
@@ -195,7 +197,6 @@ public class User implements Serializable {
         else{
             this.winRate = ((double) this.numberOfBetsWon)/((double) this.totalRoundsPlayed);
         }
-
     }
     public void incrementTotalRoundsPlayed() {
         this.totalRoundsPlayed = this.totalRoundsPlayed + 1;
@@ -224,4 +225,15 @@ public class User implements Serializable {
         this.winRate = winRate;
     }
 
+    public int getProfit() {
+        return profit;
+    }
+
+    public void setProfit(int profit) {
+        this.profit = profit;
+    }
+
+    public void incrementProfit(int by){
+        this.profit+=by;
+    }
 }

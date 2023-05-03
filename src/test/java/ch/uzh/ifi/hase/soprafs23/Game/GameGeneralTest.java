@@ -7,6 +7,7 @@ import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 import ch.uzh.ifi.hase.soprafs23.Forex.GameRound;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
+import ch.uzh.ifi.hase.soprafs23.constant.GameState;
 import ch.uzh.ifi.hase.soprafs23.constant.GameType;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -135,5 +136,6 @@ class GameGeneralTest {
         assertTrue(game.getGameRounds().isEmpty());
         assertEquals(GameType.MULTIPLAYER, game.getType());
     }
+
 
 }

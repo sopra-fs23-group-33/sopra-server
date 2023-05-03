@@ -18,7 +18,7 @@ public class ResultState extends GameStatus{
 
     @Override
     public Chart chart() {
-        int round = this.game.currentRoundPlayed;
+        int round = this.game.getCurrentRoundPlayed();
         return this.game.getGameRounds().get(round-1).getSecondChart();
     }
 
@@ -31,8 +31,9 @@ public class ResultState extends GameStatus{
         }
 
         game.resetEvent();
+        game.addPowerups(2);
 
-        if(this.game.currentRoundPlayed >= this.game.numberOfRoundsToPlay || !this.game.checkIntegrity()) {
+        if(this.game.getCurrentRoundPlayed() >= this.game.getNumberOfRoundsToPlay() || !this.game.checkIntegrity()) {
             this.game.setTimer(0);
             this.game.setGameStatus(new OverviewState(this.game));
         }

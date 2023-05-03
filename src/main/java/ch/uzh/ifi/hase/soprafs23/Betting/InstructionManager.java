@@ -20,8 +20,6 @@ public class InstructionManager {
     @GeneratedValue
     private Long instructionManagerID;
 
-
-    //@LazyCollection(LazyCollectionOption.FALSE)
     @ElementCollection
     private List<Instruction> instructions;
 
@@ -30,9 +28,7 @@ public class InstructionManager {
     private Player player;
 
 
-    public InstructionManager(){
-        // TODO
-    }
+    public InstructionManager(){}
 
     public void init(Player player) {
         this.player = player;
@@ -65,7 +61,7 @@ public class InstructionManager {
 
         this.resetInstructions();
 
-        double betPart = (((ratio-1.0)*100+1)*betAmount*temp.get(InstructionType.A2) + temp.get(InstructionType.A3));
+        double betPart = (((ratio-1.0)*100+1)*betAmount*temp.get(InstructionType.A2) + temp.get(InstructionType.A3))*max(0,(1-temp.get(InstructionType.A20)));
         double balance = this.player.getBalance();
 
         double newBalance = temp.get(InstructionType.A18) + max(0,(1-temp.get(InstructionType.A19))) *

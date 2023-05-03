@@ -4,7 +4,6 @@ import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
-import ch.uzh.ifi.hase.soprafs23.Runner.GameRunner;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
@@ -73,9 +72,6 @@ class GameControllerTest {
 
     @MockBean
     private PlayerController playerController;
-
-    @MockBean
-    private GameRunner gameRunner;
 
     
     @BeforeEach

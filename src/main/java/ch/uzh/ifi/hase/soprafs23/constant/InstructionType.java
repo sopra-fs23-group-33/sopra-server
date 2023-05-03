@@ -19,11 +19,11 @@ public enum InstructionType {
     A13(0.0, Symbol.ADD),
     A14(0.0, Symbol.ADD),
     A15(0.0, Symbol.ADD),
-
     A16(0.0, Symbol.ADD),
     A17(0.0, Symbol.ADD),
     A18(0.0, Symbol.ADD),
-    A19(0.0, Symbol.ADD);
+    A19(0.0, Symbol.ADD),
+    A20(0.0, Symbol.ADD);
 
 
 

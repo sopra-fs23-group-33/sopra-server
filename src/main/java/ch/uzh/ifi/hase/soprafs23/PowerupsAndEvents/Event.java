@@ -11,7 +11,7 @@ import java.util.*;
 
 public enum Event {
 
-    NO_EVENT(400, "none", List.of(GameType.values()), "none"){
+    NO_EVENT(500, "none", List.of(GameType.values()), "none"){
         @Override
         public ArrayList<Instruction> generateInstructions(Game game){
             return  new ArrayList<>();
@@ -62,6 +62,21 @@ public enum Event {
         }
     },
 
+    ROBBER(100, "Robber", List.of(GameType.values()), "Every player looses 200 coins"){
+        @Override
+        public ArrayList<Instruction> generateInstructions(Game game){
+            ArrayList<Instruction> instructions = new ArrayList<>();
+
+            List<Player> players = new ArrayList<>();
+            players.addAll(game.getPlayers()); //create deep copy
+
+            for(Player player: players)
+                instructions.add(new Instruction(player.getPlayerID(), InstructionType.A0, -200));
+
+            return instructions;
+        }
+    },
+
     BAIL_OUT(100, "Bailout", List.of(GameType.values()), "players who lost their bet don't take a loss from it"){
         @Override
         public ArrayList<Instruction> generateInstructions(Game game){
@@ -106,7 +121,7 @@ public enum Event {
         }
     },
 
-    TOHUWABOHU(100, "Tohuwabohu", List.of(GameType.MULTIPLAYER), "the account balances get inverted and all active powerups are ignored") {
+    TOHUWABOHU(100, "Tohuwabohu", List.of(GameType.MULTIPLAYER), "the account balances get inverted and all active powerups and bets are ignored") {
         @Override
         public ArrayList<Instruction> generateInstructions(Game game) {
             ArrayList<Instruction> instructions = new ArrayList<>();
@@ -135,6 +150,26 @@ public enum Event {
                 instructions.add(new Instruction(player.getPlayerID(), InstructionType.A19,1));
 
                 i++;
+            }
+
+            return instructions;
+        }
+    },
+
+    BACKTOROOTS(100, "Back to the roots", List.of(GameType.MULTIPLAYER), "all balances get reset to 1000 coins") {
+        @Override
+        public ArrayList<Instruction> generateInstructions(Game game) {
+            ArrayList<Instruction> instructions = new ArrayList<>();
+
+            ArrayList<Player> players = new ArrayList<>();
+            players.addAll(game.getPlayers()); //create deep copy
+
+            if(players.size() < 2)
+                return instructions;
+
+            for (Player player : players){
+                instructions.add(new Instruction(player.getPlayerID(), InstructionType.A18, 1000));
+                instructions.add(new Instruction(player.getPlayerID(), InstructionType.A19,1));
             }
 
             return instructions;

@@ -3,11 +3,14 @@ package ch.uzh.ifi.hase.soprafs23.rest.mapper;
 import ch.uzh.ifi.hase.soprafs23.Betting.Bet;
 import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
+import ch.uzh.ifi.hase.soprafs23.Data.EventData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.Forex.Chart;
 import ch.uzh.ifi.hase.soprafs23.Forex.CurrencyPair;
 
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.PowerupX2;
 import ch.uzh.ifi.hase.soprafs23.constant.*;
 
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -82,17 +85,17 @@ class DTOMapperTest {
     }
 
     @Test
-    void convertChartDataToChartGetDTO(){
+    void convertChartDataToChartGetDTO() {
         ArrayList<String> dates = new ArrayList<>();
         dates.add("Date");
 
         ArrayList<Double> numbers = new ArrayList<>();
         numbers.add(1.0);
 
-        Chart chart = new Chart(numbers,dates, new CurrencyPair(Currency.CHF, Currency.EUR));
+        Chart chart = new Chart(numbers, dates, new CurrencyPair(Currency.CHF, Currency.EUR));
         ChartData chartData = chart.status();
 
-        ChartGetDTO chartGetDTO= DTOMapper.INSTANCE.convertChartDataToChartGetDTO(chartData);
+        ChartGetDTO chartGetDTO = DTOMapper.INSTANCE.convertChartDataToChartGetDTO(chartData);
 
         assertEquals(chartGetDTO.getDates(), chartData.getDates());
         assertEquals(chartGetDTO.getNumbers(), chartData.getNumbers());
@@ -101,10 +104,10 @@ class DTOMapperTest {
     }
 
     @Test
-    void convertResultToResultGetDTO(){
+    void convertResultToResultGetDTO() {
         Result result = new Result(Direction.UP, 200, 1200);
 
-        ResultGetDTO resultGetDTO= DTOMapper.INSTANCE.convertResultToResultGetDTO(result);
+        ResultGetDTO resultGetDTO = DTOMapper.INSTANCE.convertResultToResultGetDTO(result);
 
         assertEquals(resultGetDTO.getBettingAmount(), result.getBettingAmount());
         assertEquals(resultGetDTO.getOutcome(), result.getOutcome());
@@ -112,19 +115,19 @@ class DTOMapperTest {
     }
 
     @Test
-    void convertBetPutDTOToBet(){
-        BetPutDTO betPutDTO= new BetPutDTO();
+    void convertBetPutDTOToBet() {
+        BetPutDTO betPutDTO = new BetPutDTO();
         betPutDTO.setAmount(100);
         betPutDTO.setType(Direction.DOWN);
 
         Bet bet = DTOMapper.INSTANCE.convertBetPutDTOToBet(betPutDTO);
 
         assertEquals(bet.getDirection(), betPutDTO.getType());
-        assertEquals(bet.getAmount(),betPutDTO.getAmount());
+        assertEquals(bet.getAmount(), betPutDTO.getAmount());
     }
 
     @Test
-    void convertPlayerDataToPlayerGetDTO(){
+    void convertPlayerDataToPlayerGetDTO() {
 
         PlayerData playerData = new PlayerData();
         playerData.setUsername("test");
@@ -144,7 +147,7 @@ class DTOMapperTest {
     }
 
     @Test
-    void convertGamePostDTOToGameData(){
+    void convertGamePostDTOToGameData() {
         GamePostDTO gamePostDTO = new GamePostDTO();
         gamePostDTO.setCreator("Test");
         gamePostDTO.setTypeOfGame("MULTIPLAYER");
@@ -167,7 +170,7 @@ class DTOMapperTest {
     }
 
     @Test
-    void convertGameDataToGameGetDTO(){
+    void convertGameDataToGameGetDTO() {
         GameData gameData = new GameData();
         gameData.setNumberOfRoundsToPlay(3);
         gameData.setTypeOfGame(GameType.MULTIPLAYER);
@@ -200,4 +203,32 @@ class DTOMapperTest {
         assertEquals(gameData.getStatus().toString(), gameGetDTO.getStatus());
         assertEquals(gameData.getGameID(), gameGetDTO.getGameID());
     }
+
+    @Test
+    void convertPowerupToPowerupGetDTO() {
+        AbstractPowerUp powerUp = new PowerupX2(1L, "test");
+
+        PowerupGetDTO powerupGetDTO = DTOMapper.INSTANCE.convertAbstractPowerupToPowerupGetDTO(powerUp);
+
+        assertEquals(powerUp.getPowerupID(), powerupGetDTO.getPowerupID());
+        assertEquals(powerUp.getDescription(), powerupGetDTO.getDescription());
+        assertEquals(powerUp.getName(), powerupGetDTO.getName());
+        assertEquals(powerUp.getPowerupType(), powerupGetDTO.getPowerupType());
+        assertEquals(powerUp.getOwnerID(), powerupGetDTO.getOwnerID());
+        assertEquals(powerUp.getOwnerName(), powerupGetDTO.getOwnerName());
+        assertEquals(powerUp.isActive(), powerupGetDTO.isActive());
+    }
+
+    @Test
+    void convertEventDataToEventGetDTO() {
+        EventData eventData = new EventData();
+        eventData.setName("name");
+        eventData.setDescription("desc");
+
+        EventGetDTO eventGetDTO = DTOMapper.INSTANCE.convertEventDataToEventGetDTO(eventData);
+
+        assertEquals(eventData.getName(), eventGetDTO.getName());
+        assertEquals(eventData.getDescription(), eventGetDTO.getDescription());
+    }
+
 }
