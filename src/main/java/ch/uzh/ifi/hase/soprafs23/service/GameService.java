@@ -203,14 +203,21 @@ public class GameService {
             game.leave(user);
             game = this.gameRepository.saveAndFlush(game);
         }
-        catch (PlayerNotFoundException e){
+        catch (Error | PlayerNotFoundException e){
             String errorMessage = "Failed to leave game because player is not member of this game";
             throw new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
         }
 
-        if(game.getNumberOfPlayersInLobby() == 0){
-            this.gameRepository.deleteByGameID(game.getGameID());
-            this.gameRepository.flush();
+        try {
+            game = this.getGameByGameID(gameID);
+
+            if (game.getNumberOfPlayersInLobby() == 0) {
+                this.gameRepository.deleteByGameID(game.getGameID());
+                this.gameRepository.flush();
+            }
+        }
+        catch (Exception | Error ignored){
+            return;
         }
     }
 
@@ -315,8 +322,10 @@ public class GameService {
                 return;
         }
 
-        String errorMessage = "provided token does not match any player in game with gameID: " + gameID;
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
+        if(!gameByID.getPlayers().isEmpty()) {
+            String errorMessage = "provided token does not match any player in game with gameID: " + gameID;
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
+        }
     }
 
     public List<AbstractPowerUp> getUsedPowerups(Long gameID){

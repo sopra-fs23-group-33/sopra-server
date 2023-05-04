@@ -82,7 +82,9 @@ public class PlayerService {
 
     public void addPowerups(int numberOfRounds, Long playerID, GameType gameType) {
         Player player = this.getPlayerByPlayerID(playerID);
-        ArrayList<AbstractPowerUp> powerUps = PowerupType.generatePowerups(numberOfRounds/2, player.getPlayerID(), player.getUser().getUsername(), gameType);
+        int number = Math.max(numberOfRounds/2, 1);
+        ArrayList<AbstractPowerUp> powerUps = PowerupType.generatePowerups(number, player.getPlayerID(), player.getUser().getUsername(), gameType);
+
 
         for (AbstractPowerUp powerUp : powerUps) {
             AbstractPowerUp savedPowerUp = this.powerupRepository.saveAndFlush(powerUp);
