@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -195,6 +196,7 @@ public class GameService {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void leave(User userToLeave, Long gameID){
         Game game = this.getGameByGameID(gameID);
         User user = this.userService.getUserByUsername(userToLeave.getUsername());
@@ -207,7 +209,7 @@ public class GameService {
             String errorMessage = "Failed to leave game because player is not member of this game";
             throw new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
         }
-        /*
+
         try {
             game = this.getGameByGameID(gameID);
 
@@ -219,8 +221,6 @@ public class GameService {
         catch (Exception | Error ignored){
             return;
         }
-
-         */
     }
 
     public void start(Long gameID, String token){
@@ -275,7 +275,7 @@ public class GameService {
         sortedPlayers.addAll(players);
 
         sortedPlayers.sort(Comparator.comparingInt(Player ::getBalance).reversed().thenComparing(Player::getPlayerID));
-        return players;
+        return sortedPlayers;
     }
 
     public List<GameData> getAllGames(String filter){
@@ -324,10 +324,9 @@ public class GameService {
                 return;
         }
 
-        if(!gameByID.getPlayers().isEmpty()) {
-            String errorMessage = "provided token does not match any player in game with gameID: " + gameID;
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
-        }
+        String errorMessage = "provided token does not match any player in game with gameID: " + gameID;
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
+
     }
 
     public List<AbstractPowerUp> getUsedPowerups(Long gameID){

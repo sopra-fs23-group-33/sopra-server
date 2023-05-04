@@ -107,7 +107,7 @@ public class GameController {
     @CrossOrigin
     public void leave(@PathVariable("gameID") Long gameID, @RequestBody UserPostDTO userPostDTO, @RequestHeader("token") String token) {
         this.userService.checkToken(token);
-        this.gameService.tokenMatch(token, gameID);
+        //this.gameService.tokenMatch(token, gameID);
 
         User userToLeave = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
