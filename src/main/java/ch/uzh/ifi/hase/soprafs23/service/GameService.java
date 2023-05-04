@@ -197,18 +197,20 @@ public class GameService {
     }
 
     public void leave(User userToLeave, Long gameID){
+
         Game game = this.getGameByGameID(gameID);
         User user = this.userService.getUserByUsername(userToLeave.getUsername());
 
         try {
             game.leave(user);
         }
-        catch (Error | PlayerNotFoundException e){
+        catch (Error | Exception e){
             return;
         }
 
+        /*
         try {
-            game = this.getGameByGameID(gameID);
+            Game game = this.getGameByGameID(gameID);
 
             if (game.getNumberOfPlayersInLobby() == 0) {
                 this.gameRepository.deleteByGameID(game.getGameID());
@@ -218,6 +220,8 @@ public class GameService {
         catch (Exception | Error ignored){
             return;
         }
+        */
+
     }
 
     public void start(Long gameID, String token){
