@@ -196,14 +196,12 @@ public class GameService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void leave(User userToLeave, Long gameID){
         Game game = this.getGameByGameID(gameID);
         User user = this.userService.getUserByUsername(userToLeave.getUsername());
 
         try {
             game.leave(user);
-            game = this.gameRepository.saveAndFlush(game);
         }
         catch (Error | PlayerNotFoundException e){
             String errorMessage = "Failed to leave game because player is not member of this game";
