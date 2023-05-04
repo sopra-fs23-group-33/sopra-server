@@ -207,7 +207,7 @@ public class GameService {
             String errorMessage = "Failed to leave game because player is not member of this game";
             throw new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
         }
-
+        /*
         try {
             game = this.getGameByGameID(gameID);
 
@@ -219,6 +219,8 @@ public class GameService {
         catch (Exception | Error ignored){
             return;
         }
+
+         */
     }
 
     public void start(Long gameID, String token){
