@@ -159,7 +159,7 @@ class GameServiceIntegrationTest {
         User finalNewUser = newUser;
         Long id = game.getGameID();
 
-        assertThrows(ResponseStatusException.class, () -> gameService.leave(finalNewUser, id));
+        assertDoesNotThrow( () -> gameService.leave(finalNewUser, id));
         assertEquals(1, game.getNumberOfPlayersInLobby());
     }
 

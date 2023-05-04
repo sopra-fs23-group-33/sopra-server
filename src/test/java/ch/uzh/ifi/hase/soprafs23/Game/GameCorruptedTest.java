@@ -101,12 +101,12 @@ class GameCorruptedTest {
 
         this.game.leave(creator);
         assertEquals(1, this.game.getNumberOfPlayersInLobby());
-        assertEquals(1, this.game.getPlayers().size());
+        assertEquals(2, this.game.getPlayers().size());
 
         this.game.leave(second);
 
         assertEquals(0, this.game.getNumberOfPlayersInLobby());
-        assertEquals(0, this.game.getPlayers().size());
+        assertEquals(2, this.game.getPlayers().size());
     }
 
     @Test

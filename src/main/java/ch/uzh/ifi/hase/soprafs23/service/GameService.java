@@ -204,8 +204,7 @@ public class GameService {
             game.leave(user);
         }
         catch (Error | PlayerNotFoundException e){
-            String errorMessage = "Failed to leave game because player is not member of this game";
-            throw new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
+            return;
         }
 
         try {
