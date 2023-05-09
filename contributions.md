@@ -16,13 +16,14 @@
 | 1    | Christian | #5               | done                                                          |
 | 1    | Christian | #6               | done                                                          |
 | 1    | Christian | #7               | done                                                          |
-| 2    | Josep     | #24              | Implemented and tested                                        |
-| 2    | Josep     | #43              | Implemented and tested (maybe must be adjusted in the future) |
-| 2    | Josep     | #49              | Done                                                          |
 | 1    | Stefan    | #54              | Done                                                          |
 | 1    | Stefan    | #81              | Done                                                          |
 | 1    | Stefan    | #74              | Done                                                          |
 | 1    | Stefan    | #70              | Done  except for Powerups                                     |
+| 1    | Stefan    | #66              | done                                                          |
+| 2    | Josep     | #24              | Implemented and tested                                        |
+| 2    | Josep     | #43              | Implemented and tested (maybe must be adjusted in the future) |
+| 2    | Josep     | #49              | Done                                                          |
 | 2    | Letizia   | #14              | done                                                          |
 | 2    | Letizia   | #47              | done                                                          |
 | 2    | Letizia   | #44              | done                                                          |
@@ -32,6 +33,13 @@
 | 2    | Christian | #48 (new number) | done                                                          |
 | 2    | Cedric    | #11              | done                                                          |
 | 2    | Cedric    | #53              | done                                                          |
+| 2    | Stefan    | #62              | done                                                          |
+| 2    | Stefan    | #44              | done                                                          |
+| 2    | Stefan    | #42              | done                                                          |
+| 2    | Stefan    | #96              | done                                                          |
+| 2    | Stefan    | #97              | done                                                          |
+| 2    | Stefan    | #98              | done                                                          |
+| 2    | Stefan    | #58              | done                                                          |
 | 3    | Christian | #10              | done                                                          |
 | 3    | Christian | #20              | done                                                          |
 | 3    | Christian | #13              | done                                                          |
@@ -51,14 +59,6 @@
 | 3    | Cedric    | #45              | done                                                          |
 | 3    | Cedric    | #58              | done                                                          |
 | 3    | Cedric    | #19              | done                                                          |
-| 1    | Stefan    | #66              | done                                                          |
-| 2    | Stefan    | #62              | done                                                          |
-| 2    | Stefan    | #44              | done                                                          |
-| 2    | Stefan    | #42              | done                                                          |
-| 2    | Stefan    | #96              | done                                                          |
-| 2    | Stefan    | #97              | done                                                          |
-| 2    | Stefan    | #98              | done                                                          |
-| 2    | Stefan    | #58              | done                                                          |
 | 3    | Stefan    | #56              | done                                                          |
 | 3    | Stefan    | #90              | done                                                          |
 | 3    | Stefan    | #90              | done                                                          |
@@ -71,13 +71,19 @@
 | 4    | Stefan    | #110             | done                                                          |
 | 4    | Josep     | #80              | Finished                                                      |
 | 4    | Josep     | #81              | Finished                                                      |
+| 4    | Christian | #56              | done                                                          |
+| 4    | Christian | #57              | done                                                          |
+| 4    | Christian | #71              | done                                                          |
+| 4    | Cedric    | #63              | done                                                          |
+| 4    | Cedric    | #64              | done                                                          |
+| 4    | Cedric    | #70              | done                                                          |
+| 5    | Christian | #76              | done                                                          |
+| 5    | Christian | #77              | done                                                          |
+| 5    | Christian | #78              | done                                                          |
 | 5    | Josep     | #82              | Finished                                                      |
 | 5    | Josep     | #32              | Finished                                                      |
 | 5    | Josep     | #33              | Finished                                                      |
 | 5    | Josep     | #35              | Finished                                                      |
-| 4    | Christian | #56              | done                                                          |
-| 4    | Christian | #57              | done                                                          |
-| 4    | Christian | #71              | done                                                          |
-| 5    | Christian | #76              | done                                                          |
-| 5    | Christian | #77              | done                                                          |
-| 5    | Christian | #78              | done                                                          |
+| 5    | Cedric    | #62              | done                                                          |
+| 5    | Cedric    | #73              | done                                                          |
+| 5    | Cedric    | #74              | done                                                          |
