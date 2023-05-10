@@ -87,3 +87,14 @@
 | 5    | Cedric    | #62              | done                                                          |
 | 5    | Cedric    | #73              | done                                                          |
 | 5    | Cedric    | #74              | done                                                          |
+|  5   | Letizia   | #66              | done                                                          |
+|  5   | Letizia   | #79              | done                                                          |
+|  5   |  Stefan   | #117             | done                                                          |
+|  5   | Stefan    | #118             | done                                                          |
+|     |    |            | done                                                          |
+|     |    |            | done                                                          |
+|     |    |            | done                                                          |
+|     |    |            | done                                                          |
+|     |    |            | done                                                          |
+
+
