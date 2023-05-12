@@ -95,6 +95,8 @@ public class GameService {
             }
         }
 
+        gameRunnerV2.deleteGameAfterCreation(createdGame.getGameID());
+
         return createdGame;
     }
 
@@ -203,25 +205,11 @@ public class GameService {
 
         try {
             game.leave(user);
+            gameRunnerV2.deleteGameAfterLeaving(game.getGameID());
         }
         catch (Error | Exception e){
             return;
         }
-
-        /*
-        try {
-            Game game = this.getGameByGameID(gameID);
-
-            if (game.getNumberOfPlayersInLobby() == 0) {
-                this.gameRepository.deleteByGameID(game.getGameID());
-                this.gameRepository.flush();
-            }
-        }
-        catch (Exception | Error ignored){
-            return;
-        }
-        */
-
     }
 
     public void start(Long gameID, String token){

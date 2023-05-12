@@ -106,7 +106,7 @@ class PlayerTest {
         Bet validBet = new Bet(Direction.UP, 100);
 
         assertThrows(FailedToPlaceBetExceptionBecauseNegative.class, () -> player.placeBet(negativeBet));
-        assertThrows(FailedToPlaceBetExceptionBecauseNegative.class, () -> player.placeBet(zeroBet));
+        assertDoesNotThrow( () -> player.placeBet(zeroBet));
         assertThrows(FailedToPlaceBetExceptionBecauseDirection.class, () -> player.placeBet(noneBet));
         assertThrows(FailedToPlaceBetExceptionBecauseBalance.class, () -> player.placeBet(highVolumeBet));
 

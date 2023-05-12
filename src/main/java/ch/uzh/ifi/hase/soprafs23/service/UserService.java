@@ -210,8 +210,7 @@ public class UserService {
         sortedUsers.addAll(users);
 
         sortedUsers.sort(Comparator.comparingDouble(User::getWinRate).reversed().thenComparing(User::getUserID));
-
-        return sortedUsers.subList(0, min(users.size(), 9));
+        return sortedUsers;
     }
     private void updateRanks(){
         List<User> users = this.getUsers();

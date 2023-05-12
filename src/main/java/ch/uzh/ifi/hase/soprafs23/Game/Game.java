@@ -40,7 +40,6 @@ public class Game {
     @Column(name = "totalLobbySize", nullable = false)
     private int totalLobbySize;
 
-
     @Column(name = "numberOfRoundsToPlay", nullable = false)
     private int numberOfRoundsToPlay;
 

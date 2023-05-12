@@ -117,7 +117,7 @@ class PlayerServiceIntegrationTest {
         Bet highVolumeBet =  new Bet(Direction.UP, 100000);
 
         assertThrows(ResponseStatusException.class, () -> this.playerService.placeBet(negativeBet, playerID));
-        assertThrows(ResponseStatusException.class, () -> this.playerService.placeBet(zeroBet, playerID));
+        assertDoesNotThrow( () -> this.playerService.placeBet(zeroBet, playerID));
         assertThrows(ResponseStatusException.class, () -> this.playerService.placeBet(noneBet, playerID));
         assertThrows(ResponseStatusException.class, () -> this.playerService.placeBet(highVolumeBet, playerID));
 

@@ -78,7 +78,7 @@ public class Player {
             throw new FailedToPlaceBetExceptionBecauseBalance();
         else if (newBet.getDirection().equals(Direction.NONE))
             throw new FailedToPlaceBetExceptionBecauseDirection();
-        else if(newBet.getAmount() < 1)
+        else if(newBet.getAmount() < 0)
             throw new FailedToPlaceBetExceptionBecauseNegative();
         else
             this.currentBet = newBet;

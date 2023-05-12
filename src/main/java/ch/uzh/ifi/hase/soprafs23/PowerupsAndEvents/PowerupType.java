@@ -50,7 +50,7 @@ public enum PowerupType {
             return new PowerupPlus1000(ownerID, ownerName);
         }
     },
-    RISK_INSURANCE(300,"Risk-insurance", Arrays.asList(GameType.values()),"this powerup protects you from losses in case of a lost bet"){
+    RISK_INSURANCE(150,"Risk-insurance", Arrays.asList(GameType.values()),"this powerup protects you from losses in case of a lost bet"){
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupRiskInsurance(ownerID, ownerName);

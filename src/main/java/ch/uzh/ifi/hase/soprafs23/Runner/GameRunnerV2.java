@@ -9,6 +9,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.Random;
 import java.util.concurrent.ScheduledFuture;
 
 @Component
@@ -34,7 +35,7 @@ public class GameRunnerV2 {
 
         try {
             Game game = asyncTransactionManager.findGame(gameID);
-            sleepTime = game.getNumberOfRoundsToPlay()*(game.getBettingTime()+game.getResultTime())+20;
+            sleepTime = game.getNumberOfRoundsToPlay()*(game.getBettingTime()+game.getResultTime())+30;
         }
         catch (Exception e) {
             return;
@@ -51,6 +52,56 @@ public class GameRunnerV2 {
         GameDeleter gameDeleter = new GameDeleter(gameID);
         Instant delete = stop.plusSeconds(180);
         scheduler.schedule(gameDeleter, delete);
+    }
+
+    @Async
+    public void deleteGameAfterCreation(Long gameID){
+        Instant del = Instant.now();
+        del = del.plusSeconds(60*10);
+
+        GameDeleterAfterCreation deleterAfterCreation = new GameDeleterAfterCreation(gameID);
+
+        scheduler.schedule(deleterAfterCreation, del);
+    }
+
+    @Async
+    public void deleteGameAfterLeaving(Long gameID){
+        Instant del = Instant.now();
+        Random random = new Random();
+        int time = random.nextInt(30)+1;
+        del = del.plusSeconds(time);
+
+        GameDeleterNoPlayers deleterNoPlayers = new GameDeleterNoPlayers(gameID);
+
+        scheduler.schedule(deleterNoPlayers, del);
+    }
+
+    private class GameDeleterAfterCreation implements Runnable {
+        private final Long gameID;
+
+        public GameDeleterAfterCreation(Long gameID) {
+            this.gameID = gameID;
+        }
+
+        @Override
+        public void run() {
+            asyncTransactionManager.deleteGameInLobby(gameID);
+            System.out.println("deleted game after Lobby with ID " + gameID + ": " + Thread.currentThread().getId());
+        }
+    }
+
+    private class GameDeleterNoPlayers implements Runnable {
+        private final Long gameID;
+
+        public GameDeleterNoPlayers(Long gameID) {
+            this.gameID = gameID;
+        }
+
+        @Override
+        public void run() {
+            asyncTransactionManager.deleteGameNoPlayers(gameID);
+            System.out.println("deleted game because no players left with ID " + gameID + ": " + Thread.currentThread().getId());
+        }
     }
 
 

@@ -86,4 +86,32 @@ public class AsyncTransactionManager {
         }
     }
 
+    public void deleteGameInLobby(Long gameID){
+        try {
+            Game game = this.findGame(gameID);
+
+            if(game.getState().equals(GameState.LOBBY)) {
+                gameRepository.deleteByGameID(game.getGameID());
+                System.out.println("Deleted game with id: " + gameID);
+            }
+        }
+        catch (Exception | Error ignored){
+
+        }
+    }
+
+    public void deleteGameNoPlayers(Long gameID){
+        try {
+            Game game = this.findGame(gameID);
+
+            if((game.getState().equals(GameState.LOBBY) || game.getState().equals(GameState.CORRUPTED)) && game.getNumberOfPlayersInLobby() == 0){
+                gameRepository.deleteByGameID(game.getGameID());
+                System.out.println("Deleted game with id: " + gameID);
+            }
+        }
+        catch (Exception | Error ignored){
+
+        }
+    }
+
 }

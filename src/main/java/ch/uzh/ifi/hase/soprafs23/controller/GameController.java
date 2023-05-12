@@ -110,12 +110,7 @@ public class GameController {
         this.gameService.tokenMatch(token, gameID);
 
         User userToLeave = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
-        try {
-            this.gameService.leave(userToLeave, gameID);
-        }
-        catch (Error ignored){
-
-        }
+        this.gameService.leave(userToLeave, gameID);
     }
 
     @PostMapping("/games/{gameID}/start")
