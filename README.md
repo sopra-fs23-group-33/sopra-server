@@ -1,86 +1,68 @@
-# SoPra RESTful Service Template FS23
+# Bull V$ Bear - The Battle 
 
-## Getting started with Spring Boot
--   Documentation: https://docs.spring.io/spring-boot/docs/current/reference/html/index.html
--   Guides: http://spring.io/guides
-    -   Building a RESTful Web Service: http://spring.io/guides/gs/rest-service/
-    -   Building REST services with Spring: https://spring.io/guides/tutorials/rest/
+## Introduction
+Did you just finish The Wolf of Wall Street and you're feeling cocky? Do you think you can spot a Head and Shoulders trading pattern? 
+And the breaking of the support level? Boy do we have a game for you - put your intuition and knowledge about financial trading to the test with Bull V$ Bear - The Battle, 
+a gamified application that lets you place bets on the evolution of the price of up to 200 currency pairs and see how you measure up.
 
-## Setup this Template with your IDE of choice
-Download your IDE of choice (e.g., [IntelliJ](https://www.jetbrains.com/idea/download/), [Visual Studio Code](https://code.visualstudio.com/), or [Eclipse](http://www.eclipse.org/downloads/)). Make sure Java 17 is installed on your system (for Windows, please make sure your `JAVA_HOME` environment variable is set to the correct version of Java).
 
-### IntelliJ
-1. File -> Open... -> SoPra server template
-2. Accept to import the project as a `gradle project`
-3. To build right click the `build.gradle` file and choose `Run Build`
+## Technologies
+- Spring Boot
+- Spring Data
+  - Postgres
+  - JPA
+  - Google Cloud SQL
+- Mockito
+- JUnit Juniper
+- Gradle
+- Alpha Vantage API
+- REST
 
-### VS Code
-The following extensions can help you get started more easily:
--   `vmware.vscode-spring-boot`
--   `vscjava.vscode-spring-initializr`
--   `vscjava.vscode-spring-boot-dashboard`
--   `vscjava.vscode-java-pack`
+## Components
+Our main component is the [game package](src/main/java/ch/uzh/ifi/hase/soprafs23/Game). It includes the [game](src/main/java/ch/uzh/ifi/hase/soprafs23/Game/Game.java) entity itself that is stored in our database as well as all classes needed for the state pattern. 
+We use the state pattern to control the behaviour of a game object.
 
-**Note:** You'll need to build the project first with Gradle, just click on the `build` command in the _Gradle Tasks_ extension. Then check the _Spring Boot Dashboard_ extension if it already shows `soprafs23` and hit the play button to start the server. If it doesn't show up, restart VS Code and check again.
+The heart and soul of our application is the [InstructionManager](src/main/java/ch/uzh/ifi/hase/soprafs23/Betting/InstructionManager.java) class. It contains the core logic for calculating the result of a betting round. The math for those calculations is based on the concept of [abelian groups](http://en.wikipedia.org/wiki/Abelian_group).
 
-## Building with Gradle
-You can use the local Gradle Wrapper to build the application.
--   macOS: `./gradlew`
--   Linux: `./gradlew`
--   Windows: `./gradlew.bat`
+Another important component is the [ChartAPI](src/main/java/ch/uzh/ifi/hase/soprafs23/Forex/ChartAPI.java) class. This class is responsible for fetching the forex information in real time from the forex markets. It makes use of an external open-source package for fetching and interpreting the response from the API call.
 
-More Information about [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) and [Gradle](https://gradle.org/docs/).
-
-### Build
-
+## Launch and Deployment
+Our application can be built by executing the following command. Prior to running the server locally, the environment must be set to “dev” in the [application.properties](src/main/resources/application.properties)  file:
 ```bash
 ./gradlew build
 ```
-
-### Run
-
+The application can be run by executing the following command:
 ```bash
 ./gradlew bootRun
 ```
 
-You can verify that the server is running by visiting `localhost:8080` in your browser.
+The server will be launched at:  `localhost:8080`
 
-### Test
-
+The test suite can be run from inside an IDE (e.g., IntelliJ) by running the test package. Alternatively, the tests can be run by executing the following command:
 ```bash
 ./gradlew test
 ```
 
-### Development Mode
-You can start the backend in development mode, this will automatically trigger a new build and reload the application
-once the content of a file has been changed.
+The application is hosted on Google Clouds App engine and is deployed automatically with every push to the main branch. The Postgres database is hosted on Google Cloud SQL.
 
-Start two terminal windows and run:
+## Roadmap
+Potentially interesting additions to our project could be:
+- Implementation of Websockets
+- Tracking the effects of powerups (e.g., track who was affected by a powerup and how)  
+- Adding stocks in addition to forex
 
-`./gradlew build --continuous`
 
-and in the other one:
+## Authors and Acknowledgements
+This game was possible thanks to following students, who designed and implemented it for the bachelor course **Software Engineering Lab** at UZH, spring 2023.
 
-`./gradlew bootRun`
+* **Cedric Egon Von Rauscher** - *Frontend*
+* **Christian Berger** - *Frontend*
+* **Maria Letizia Jannibelli** - *Frontend*
+* **Stefan Richard Saxer** - *Backend*
+* **Josep Cunquero Orts** - *Backend*
 
-If you want to avoid running all tests with every change, use the following command instead:
+We are grateful to Jerome Maier for his consistently helpful guidance and insightful comments.
 
-`./gradlew build --continuous -xtest`
+## Licence
+This project is licensed under [Apache-2.0](LICENSE).
 
-## API Endpoint Testing with Postman
-We recommend using [Postman](https://www.getpostman.com) to test your API Endpoints.
-
-## Debugging
-If something is not working and/or you don't know what is going on. We recommend using a debugger and step-through the process step-by-step.
-
-To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you start with `./gradlew bootRun` command), do the following:
-
-1. Open Tab: **Run**/Edit Configurations
-2. Add a new Remote Configuration and name it properly
-3. Start the Server in Debug mode: `./gradlew bootRun --debug-jvm`
-4. Press `Shift + F9` or the use **Run**/Debug "Name of your task"
-5. Set breakpoints in the application where you need it
-6. Step through the process one step at a time
-
-## Testing
-Have a look here: https://www.baeldung.com/spring-boot-testing
