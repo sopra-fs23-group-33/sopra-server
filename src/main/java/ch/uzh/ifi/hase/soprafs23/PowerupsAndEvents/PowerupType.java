@@ -62,7 +62,7 @@ public enum PowerupType {
             return new PowerupRobinHood(ownerID, ownerName);
         }
     },
-    GUARDIAN(200, "Guardian", List.of(GameType.MULTIPLAYER), "this powerup protects you from Robin Hood"){
+    GUARDIAN(150, "Guardian", List.of(GameType.MULTIPLAYER), "this powerup protects you from Robin Hood"){
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupGuardian(ownerID, ownerName);
@@ -74,7 +74,7 @@ public enum PowerupType {
             return new PowerupHacker(ownerID, ownerName);
         }
     },
-    CYBER_SECURITY(200, "Cyber Security", List.of(GameType.MULTIPLAYER),"this powerup protects you from the hacker") {
+    CYBER_SECURITY(150, "Cyber Security", List.of(GameType.MULTIPLAYER),"this powerup protects you from the hacker") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupCyberSecurity(ownerID, ownerName);
@@ -100,7 +100,7 @@ public enum PowerupType {
             return new PowerupHighRiskHighReward500(ownerID, ownerName);
         }
     },
-    LIFE_LINE(200, "Lifeline", List.of(GameType.MULTIPLAYER), "this powerup restores half of your initial balance if you are bankrupt") {
+    LIFE_LINE(100, "Lifeline", List.of(GameType.MULTIPLAYER), "this powerup restores half of your initial balance if you are bankrupt") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupLifeLine(ownerID, ownerName);
