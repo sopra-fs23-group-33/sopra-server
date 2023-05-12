@@ -55,7 +55,7 @@ public class GameService {
         this.userService = userService;
         this.gameRunnerV2 = gameRunner;
         this.backgroundChartFetcher = backgroundChartFetcher;
-        this.backgroundChartFetcher.enqueue(16);
+        this.backgroundChartFetcher.enqueue(32);
         this.gameRoundRepository = gameRoundRepository;
         this.playerService = playerService;
     }

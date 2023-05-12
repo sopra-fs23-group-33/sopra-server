@@ -68,7 +68,7 @@ class GameGeneralTest {
         add_gameRounds(2);
         assertEquals(2, game.getGameRounds().size());
         add_gameRounds(1);
-        assertEquals(2, game.getGameRounds().size());
+        assertEquals(3, game.getGameRounds().size());
     }
 
     @Test

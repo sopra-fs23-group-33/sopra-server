@@ -26,7 +26,7 @@ public class BackgroundChartFetcher {
     public void enqueue(int n)  {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        for(int i = 0; i <= n+2; i++){
+        for(int i = 0; i <= n+4; i++){
                 FetchAndStore fetchAndStore = new FetchAndStore();
                 executorService.submit(fetchAndStore);
             }

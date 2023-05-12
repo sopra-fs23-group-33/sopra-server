@@ -105,8 +105,8 @@ public class TestController {
     public void delete_all()  {
       gameRepository.deleteAll();
       gameRepository.flush();
-      userRepository.deleteAll();
-      userRepository.flush();
+      //userRepository.deleteAll();
+      //userRepository.flush();
       gameRoundRepository.deleteAll();
       gameRoundRepository.flush();
       backgroundChartFetcher.enqueue(32);

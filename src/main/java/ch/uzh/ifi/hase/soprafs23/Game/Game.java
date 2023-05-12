@@ -164,10 +164,10 @@ public class Game {
     }
 
     public void addGameRound(GameRound gameRound) {
-        if (this.gameRounds.size() < this.numberOfRoundsToPlay) {
-            gameRound.activate();
-            this.gameRounds.add(gameRound);
-        }
+        //if (this.gameRounds.size() < this.numberOfRoundsToPlay) {
+        gameRound.activate();
+        this.gameRounds.add(gameRound);
+        //}
     }
 
     public void endRound() throws endRoundException {
