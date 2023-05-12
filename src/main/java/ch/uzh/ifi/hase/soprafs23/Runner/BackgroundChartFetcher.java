@@ -66,7 +66,7 @@ public class BackgroundChartFetcher {
 
         private boolean fetch(CurrencyPair currencyPair) {
             try {
-                Thread.sleep(1200);
+                Thread.sleep(2000);
                 GameRound gameRound = api.getGameRound(currencyPair);
                 asyncTransactionManager.addSingleGameRound(gameRound);
                 return true;

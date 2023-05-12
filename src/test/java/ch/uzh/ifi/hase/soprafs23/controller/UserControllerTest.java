@@ -71,6 +71,8 @@ class UserControllerTest {
                 .andExpect(jsonPath("$[0].numberOfBetsWon", is(user.getNumberOfBetsWon())))
                 .andExpect(jsonPath("$[0].numberOfBetsLost", is(user.getNumberOfBetsLost())))
                 .andExpect(jsonPath("$[0].rank", is(user.getRank())))
+                .andExpect(jsonPath("$[0].winRate", is(user.getWinRate())))
+                .andExpect(jsonPath("$[0].profit", is(user.getProfit())))
                 .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
     }
 
@@ -100,6 +102,8 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.numberOfBetsWon", is(user.getNumberOfBetsWon())))
                 .andExpect(jsonPath("$.numberOfBetsLost", is(user.getNumberOfBetsLost())))
                 .andExpect(jsonPath("$.rank", is(user.getRank())))
+                .andExpect(jsonPath("$.winRate", is(user.getWinRate())))
+                .andExpect(jsonPath("$.profit", is(user.getProfit())))
                 .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
     }
 
@@ -152,6 +156,8 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.numberOfBetsWon", is(user.getNumberOfBetsWon())))
                 .andExpect(jsonPath("$.numberOfBetsLost", is(user.getNumberOfBetsLost())))
                 .andExpect(jsonPath("$.rank", is(user.getRank())))
+                .andExpect(jsonPath("$.winRate", is(user.getWinRate())))
+                .andExpect(jsonPath("$.profit", is(user.getProfit())))
                 .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
     }
 
@@ -257,6 +263,86 @@ class UserControllerTest {
         mockMvc.perform(postRequest)
                 .andExpect(status().isUnauthorized());
     }
+
+    @Test
+    void getLeaderboard() throws Exception {
+        // given
+        User user = new User("username", "password");
+
+        List<User> allUsers = Collections.singletonList(user);
+
+        // this mocks the UserService -> we define above what the userService should
+        // return when getUsers() is called
+        given(userService.leaderboard()).willReturn(allUsers);
+
+        // when
+        MockHttpServletRequestBuilder getRequest = get("/users/leaderboard").contentType(MediaType.APPLICATION_JSON).header("token", user.getToken());
+
+        // then
+        mockMvc.perform(getRequest).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].username", is(user.getUsername())))
+                .andExpect(jsonPath("$[0].token", is(user.getToken())))
+                .andExpect(jsonPath("$[0].creationDate", is(user.getCreationDate().toString())))
+                .andExpect(jsonPath("$[0].totalRoundsPlayed", is(user.getTotalRoundsPlayed())))
+                .andExpect(jsonPath("$[0].numberOfBetsWon", is(user.getNumberOfBetsWon())))
+                .andExpect(jsonPath("$[0].numberOfBetsLost", is(user.getNumberOfBetsLost())))
+                .andExpect(jsonPath("$[0].rank", is(user.getRank())))
+                .andExpect(jsonPath("$[0].winRate", is(user.getWinRate())))
+                .andExpect(jsonPath("$[0].profit", is(user.getProfit())))
+                .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
+    }
+
+    @Test
+    void getUserByIDValid() throws Exception {
+        // given
+        User user = new User("username", "password");
+
+        given(userService.getUserByUserID(Mockito.any())).willReturn(user);
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder getRequest = get("/users/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("token", user.getToken());
+
+
+
+        // then
+        mockMvc.perform(getRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username", is(user.getUsername())))
+                .andExpect(jsonPath("$.token", is(user.getToken())))
+                .andExpect(jsonPath("$.creationDate", is(user.getCreationDate().toString())))
+                .andExpect(jsonPath("$.totalRoundsPlayed", is(user.getTotalRoundsPlayed())))
+                .andExpect(jsonPath("$.numberOfBetsWon", is(user.getNumberOfBetsWon())))
+                .andExpect(jsonPath("$.numberOfBetsLost", is(user.getNumberOfBetsLost())))
+                .andExpect(jsonPath("$.rank", is(user.getRank())))
+                .andExpect(jsonPath("$.winRate", is(user.getWinRate())))
+                .andExpect(jsonPath("$.profit", is(user.getProfit())))
+                .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
+    }
+
+
+    @Test
+    void getUserByIDInvalid() throws Exception {
+        // given
+        String token = "test123";
+
+        Throwable response = new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        Mockito.doNothing().when(userService).checkToken(token);
+        Mockito.doThrow(response).when(userService).getUserByUserID(Mockito.any());
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder getRequest = get("/users/" + "3")
+                .header("token", "test123");
+        ;
+
+        // then
+        mockMvc.perform(getRequest)
+                .andExpect(status().isNotFound());
+    }
+
 
     /**
      * Helper Method to convert userPostDTO into a JSON string such that the input

@@ -31,7 +31,7 @@ public class ResultState extends GameStatus{
         }
 
         game.resetEvent();
-        game.addPowerups(2);
+        game.addPowerups(1);
 
         if(this.game.getCurrentRoundPlayed() >= this.game.getNumberOfRoundsToPlay() || !this.game.checkIntegrity()) {
             this.game.setTimer(0);

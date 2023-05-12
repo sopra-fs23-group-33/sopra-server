@@ -1,9 +1,12 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
 import ch.uzh.ifi.hase.soprafs23.Data.ChartData;
+import ch.uzh.ifi.hase.soprafs23.Data.EventData;
 import ch.uzh.ifi.hase.soprafs23.Data.GameData;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.PowerupX2;
 import ch.uzh.ifi.hase.soprafs23.constant.Currency;
 import ch.uzh.ifi.hase.soprafs23.constant.PlayerState;
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
@@ -727,6 +730,44 @@ class GameControllerTest {
 
         mockMvc.perform(getRequest)
                 .andExpect(status().isConflict());
+    }
+
+    @Test
+    void getEvent() throws Exception {
+        EventData eventData = new EventData();
+        eventData.setDescription("none");
+        eventData.setName("none");
+
+        given(gameService.getEvent(Mockito.any())).willReturn(eventData);
+
+        MockHttpServletRequestBuilder getRequest = get("/games/" + "1" + "/event")
+                .header("token","test123");
+
+        mockMvc.perform(getRequest)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.description", is(eventData.getDescription())))
+                .andExpect(jsonPath("$.name", is(eventData.getName())));
+    }
+
+    @Test
+    void getPowerups() throws Exception {
+        List<AbstractPowerUp> allPowerups = Collections.singletonList(new PowerupX2(1L, "test"));
+
+        Mockito.doNothing().when(userService).checkToken(user.getToken());
+        given(gameService.getUsedPowerups(Mockito.any())).willReturn(allPowerups);
+
+        MockHttpServletRequestBuilder getRequest = get("/games/1/powerups")
+                .header("token", user.getToken());
+
+        // then
+        mockMvc.perform(getRequest).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].powerupType", is("X2")))
+                .andExpect(jsonPath("$[0].ownerName", is("test")))
+                .andExpect(jsonPath("$[0].ownerID", is(1)))
+                .andExpect(jsonPath("$[0].name", is("X2")))
+                .andExpect(jsonPath("$[0].description", is("this powerup doubles your gain or loss")))
+                .andExpect(jsonPath("$[0].active", is(false)));
     }
     
 

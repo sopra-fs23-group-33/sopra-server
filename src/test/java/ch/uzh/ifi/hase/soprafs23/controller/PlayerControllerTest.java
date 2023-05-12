@@ -2,6 +2,8 @@ package ch.uzh.ifi.hase.soprafs23.controller;
 
 import ch.uzh.ifi.hase.soprafs23.Betting.Result;
 import ch.uzh.ifi.hase.soprafs23.Data.PlayerData;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.AbstractPowerUp;
+import ch.uzh.ifi.hase.soprafs23.PowerupsAndEvents.PowerupX2;
 import ch.uzh.ifi.hase.soprafs23.constant.Direction;
 import ch.uzh.ifi.hase.soprafs23.entity.Player;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -26,9 +28,14 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
+import java.util.List;
+
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -119,7 +126,7 @@ class PlayerControllerTest {
         Mockito.doNothing().when(playerService).placeBet(Mockito.any(), Mockito.any());
 
         // when
-        MockHttpServletRequestBuilder putRequest = MockMvcRequestBuilders.put("/players/1/bet")
+        MockHttpServletRequestBuilder putRequest = put("/players/1/bet")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(betToSend))
             .header("token", user.getToken());
@@ -135,7 +142,7 @@ class PlayerControllerTest {
         Mockito.doThrow(response).when(playerService).placeBet(Mockito.any(), Mockito.any());
 
         // when
-        MockHttpServletRequestBuilder putRequest = MockMvcRequestBuilders.put("/players/1/bet")
+        MockHttpServletRequestBuilder putRequest = put("/players/1/bet")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(betToSend))
             .header("token", user.getToken());
@@ -151,7 +158,7 @@ class PlayerControllerTest {
         Mockito.doThrow(response).when(playerService).tokenMatch(Mockito.any(), Mockito.any());
 
         // when
-        MockHttpServletRequestBuilder putRequest = MockMvcRequestBuilders.put("/players/1/bet")
+        MockHttpServletRequestBuilder putRequest = put("/players/1/bet")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(betToSend))
             .header("token", user.getToken());
@@ -195,6 +202,51 @@ class PlayerControllerTest {
         // then
         mockMvc.perform(getRequest)
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getPowerups() throws Exception {
+        List<AbstractPowerUp> allPowerups = Collections.singletonList(new PowerupX2(1L, "test"));
+
+        Mockito.doNothing().when(userService).checkToken(user.getToken());
+        given(playerService.getPowerups(Mockito.any())).willReturn(allPowerups);
+
+        MockHttpServletRequestBuilder getRequest = get("/players/1/powerups")
+                .header("token", user.getToken());
+
+        // then
+        mockMvc.perform(getRequest).andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].powerupType", is("X2")))
+                .andExpect(jsonPath("$[0].ownerName", is("test")))
+                .andExpect(jsonPath("$[0].ownerID", is(1)))
+                .andExpect(jsonPath("$[0].name", is("X2")))
+                .andExpect(jsonPath("$[0].description", is("this powerup doubles your gain or loss")))
+                .andExpect(jsonPath("$[0].active", is(false)));
+    }
+
+    @Test
+    void activatePowerup() throws Exception {
+        Mockito.doNothing().when(userService).checkToken(user.getToken());
+        Mockito.doNothing().when(playerService).activatePowerup(Mockito.any(), Mockito.any());
+
+        MockHttpServletRequestBuilder getRequest = put("/players/1/powerups/2")
+                .header("token", user.getToken());
+
+        // then
+        mockMvc.perform(getRequest).andExpect(status().isNoContent());
+    }
+
+    @Test
+    void activatePowerupInvalid() throws Exception {
+        Mockito.doNothing().when(userService).checkToken(user.getToken());
+        Mockito.doThrow(new ResponseStatusException(HttpStatus.NOT_FOUND)).when(playerService).activatePowerup(Mockito.any(), Mockito.any());
+
+        MockHttpServletRequestBuilder getRequest = put("/players/1/powerups/3")
+                .header("token", user.getToken());
+
+        // then
+        mockMvc.perform(getRequest).andExpect(status().isNotFound());
     }
 
     private String asJsonString(final Object object) {

@@ -858,7 +858,7 @@ class GamePowerupAndEventTest {
         game.start();
         game.endRound();
         game.nextRound();
-        assertEquals(2, player1.getAvailablePowerups().size());
+        assertEquals(1, player1.getAvailablePowerups().size());
 
     }
 
