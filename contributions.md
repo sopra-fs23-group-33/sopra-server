@@ -91,10 +91,5 @@
 |  5   | Letizia   | #79              | done                                                          |
 |  5   |  Stefan   | #117             | done                                                          |
 |  5   | Stefan    | #118             | done                                                          |
-|     |    |            | done                                                          |
-|     |    |            | done                                                          |
-|     |    |            | done                                                          |
-|     |    |            | done                                                          |
-|     |    |            | done                                                          |
-
-
+| 6    | Josep     | #87              | Done                                                          |
+| 6    | Josep     | #94              | Done                                                          |
