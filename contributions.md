@@ -96,4 +96,4 @@
 | 6 | Stefan | #93 | done |
 | 6 | Stefan | #92 | done |
 | 7 | Stefan | #115 | done |
-| 7 Stefan | #102 | done |
+| 7 | Stefan | #102 | done |
