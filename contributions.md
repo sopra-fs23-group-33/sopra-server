@@ -93,3 +93,7 @@
 |  5   | Stefan    | #118             | done                                                          |
 | 6    | Josep     | #87              | Done                                                          |
 | 6    | Josep     | #94              | Done                                                          |
+| 6 | Stefan | #93 | done |
+| 6 | Stefan | #92 | done |
+| 7 | Stefan | #115 | done |
+| 7 Stefan | #102 | done |
