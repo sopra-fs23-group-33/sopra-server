@@ -94,7 +94,7 @@ public class Game {
         this.players = new ArrayList<>();
         this.bettingTime = 15;
 
-        if(gameData.isEventsActive())
+        if(gameData.isPowerupsActive())
             this.bettingTime = 20;
 
         this.resultTime = 15;
