@@ -11,7 +11,7 @@ import java.util.*;
 
 public enum Event {
 
-    NO_EVENT(500, "none", List.of(GameType.values()), "none"){
+    NO_EVENT(400, "none", List.of(GameType.values()), "none"){
         @Override
         public ArrayList<Instruction> generateInstructions(Game game){
             return  new ArrayList<>();
@@ -121,7 +121,7 @@ public enum Event {
         }
     },
 
-    TOHUWABOHU(100, "Tohuwabohu", List.of(GameType.MULTIPLAYER), "the account balances get inverted and all active powerups and bets are ignored") {
+    TOHUWABOHU(200, "Tohuwabohu", List.of(GameType.MULTIPLAYER), "the account balances get inverted and all active powerups and bets are ignored") {
         @Override
         public ArrayList<Instruction> generateInstructions(Game game) {
             ArrayList<Instruction> instructions = new ArrayList<>();
