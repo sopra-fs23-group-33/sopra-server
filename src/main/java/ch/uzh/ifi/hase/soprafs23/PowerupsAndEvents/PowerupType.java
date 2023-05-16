@@ -56,7 +56,7 @@ public enum PowerupType {
             return new PowerupRiskInsurance(ownerID, ownerName);
         }
     },
-    ROBIN_HOOD(80,"Robin Hood", List.of(GameType.MULTIPLAYER), "this powerup allows you to steal form the leading player and distribute among the others"){
+    ROBIN_HOOD(100,"Robin Hood", List.of(GameType.MULTIPLAYER), "this powerup allows you to steal form the leading player and distribute among the others"){
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupRobinHood(ownerID, ownerName);
@@ -68,7 +68,7 @@ public enum PowerupType {
             return new PowerupGuardian(ownerID, ownerName);
         }
     },
-    HACKER(80, "Hacker", List.of(GameType.MULTIPLAYER), "this powerup allows you to steal from the leading player") {
+    HACKER(100, "Hacker", List.of(GameType.MULTIPLAYER), "this powerup allows you to steal from the leading player") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupHacker(ownerID, ownerName);
@@ -100,13 +100,13 @@ public enum PowerupType {
             return new PowerupHighRiskHighReward500(ownerID, ownerName);
         }
     },
-    LIFE_LINE(60, "Lifeline", List.of(GameType.MULTIPLAYER), "this powerup restores half of your initial balance if you are bankrupt") {
+    LIFE_LINE(50, "Lifeline", List.of(GameType.MULTIPLAYER), "this powerup restores half of your initial balance if you are bankrupt") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupLifeLine(ownerID, ownerName);
         }
     },
-    INCENDIARY(60, "Incendiary", List.of(GameType.MULTIPLAYER), "this powerup sets a random players holdings on fire!") {
+    INCENDIARY(40, "Incendiary", List.of(GameType.MULTIPLAYER), "this powerup sets a random players holdings on fire!") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID,String ownerName) {
             return new PowerupIncendiary(ownerID, ownerName);
