@@ -14,13 +14,13 @@ public enum PowerupType {
             return new PowerupX2(ownerID, ownerName);
         }
     },
-    X5(100, "X5", Arrays.asList(GameType.values()), "this powerup multiplies your gain or loss by 5") {
+    X5(120, "X5", Arrays.asList(GameType.values()), "this powerup multiplies your gain or loss by 5") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupX5(ownerID, ownerName);
         }
     },
-    X10(50, "X10",Arrays.asList(GameType.values()), "this powerup multiplies your gain or loss by 10") {
+    X10(60, "X10",Arrays.asList(GameType.values()), "this powerup multiplies your gain or loss by 10") {
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupX10(ownerID, ownerName);
@@ -50,7 +50,7 @@ public enum PowerupType {
             return new PowerupPlus1000(ownerID, ownerName);
         }
     },
-    RISK_INSURANCE(150,"Risk-insurance", Arrays.asList(GameType.values()),"this powerup protects you from losses in case of a lost bet"){
+    RISK_INSURANCE(120,"Risk-insurance", Arrays.asList(GameType.values()),"this powerup protects you from losses in case of a lost bet"){
         @Override
         public AbstractPowerUp generatePowerup(Long ownerID, String ownerName) {
             return new PowerupRiskInsurance(ownerID, ownerName);
