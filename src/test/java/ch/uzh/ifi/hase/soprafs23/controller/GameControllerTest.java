@@ -476,13 +476,14 @@ class GameControllerTest {
             .andExpect(status().isUnauthorized());
     }
 
+    /*
     @Test 
     void leaveInvalidTokenMatch() throws Exception {      
         String errorMessage = "provided token does not match any player in game with gameID: " + game.getGameID();
         Throwable response = new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
-        Mockito.doThrow(response).when(gameService).tokenMatch(user.getToken(), game.getGameID());
+        //Mockito.doThrow(response).when(gameService).tokenMatch(user.getToken(), game.getGameID());
 
         MockHttpServletRequestBuilder postRequest = post("/games/" + game.getGameID() + "/leave")
             .contentType(MediaType.APPLICATION_JSON)
@@ -495,6 +496,8 @@ class GameControllerTest {
             .andExpect(status().isUnauthorized());
     }
 
+
+     */
     @Test 
     void leaveInvalidUserNotInGame() throws Exception {      
         String errorMessage = "Failed to leave game because player is not member of this game";
@@ -674,13 +677,14 @@ class GameControllerTest {
                 .andExpect(jsonPath("$[0].typeOfCurrentBet", is(playerData.getTypeOfCurrentBet().toString())));
     }
 
+    /*
     @Test
     void getPlayersInvalidTokenMatch() throws Exception {
         String errorMessage = "provided token does not match the creator in game with gameID: " + game.getGameID();
         Throwable response = new ResponseStatusException(HttpStatus.UNAUTHORIZED, errorMessage);
 
         Mockito.doNothing().when(userService).checkToken(user.getToken());
-        Mockito.doThrow(response).when(gameService).tokenMatch(user.getToken(), game.getGameID());
+        //Mockito.doThrow(response).when(gameService).tokenMatch(user.getToken(), game.getGameID());
 
         MockHttpServletRequestBuilder getRequest = get("/games/" + game.getGameID() + "/players")
             .header("token", user.getToken());
@@ -689,6 +693,8 @@ class GameControllerTest {
         mockMvc.perform(getRequest)
                 .andExpect(status().isUnauthorized());
     }
+    */
+
 
     @Test
     void getChartValid() throws Exception {

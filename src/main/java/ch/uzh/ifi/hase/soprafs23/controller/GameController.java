@@ -107,7 +107,7 @@ public class GameController {
     @CrossOrigin
     public void leave(@PathVariable("gameID") Long gameID, @RequestBody UserPostDTO userPostDTO, @RequestHeader("token") String token) {
         this.userService.checkToken(token);
-        this.gameService.tokenMatch(token, gameID);
+        //this.gameService.tokenMatch(token, gameID);
 
         User userToLeave = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
         this.gameService.leave(userToLeave, gameID);
@@ -153,7 +153,7 @@ public class GameController {
     @CrossOrigin
     public List<PlayerGetDTO> players(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token)  {
         this.userService.checkToken(token);
-        this.gameService.tokenMatch(token, gameID);
+        //this.gameService.tokenMatch(token, gameID);
 
         List<Player> players = this.gameService.players(gameID);
 
@@ -171,7 +171,7 @@ public class GameController {
     @CrossOrigin
     public ChartGetDTO chart(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token)  {
         this.userService.checkToken(token);
-        this.gameService.tokenMatch(token, gameID);
+        //this.gameService.tokenMatch(token, gameID);
 
         ChartData chartData = this.gameService.chart(gameID);
 
@@ -183,7 +183,7 @@ public class GameController {
     @CrossOrigin
     public List<PowerupGetDTO> usedPowerups(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token)  {
         this.userService.checkToken(token);
-        this.gameService.tokenMatch(token, gameID);
+        //this.gameService.tokenMatch(token, gameID);
 
         List<AbstractPowerUp> usedPowerups = this.gameService.getUsedPowerups(gameID);
 
@@ -201,7 +201,7 @@ public class GameController {
     @CrossOrigin
     public EventGetDTO event(@PathVariable("gameID") Long gameID, @RequestHeader("token") String token)  {
         this.userService.checkToken(token);
-        this.gameService.tokenMatch(token, gameID);
+        //this.gameService.tokenMatch(token, gameID);
 
         EventData eventData = this.gameService.getEvent(gameID);
 

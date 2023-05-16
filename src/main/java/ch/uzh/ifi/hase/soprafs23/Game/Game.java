@@ -93,6 +93,10 @@ public class Game {
         this.gameRounds = new ArrayList<>();
         this.players = new ArrayList<>();
         this.bettingTime = 15;
+
+        if(gameData.isEventsActive())
+            this.bettingTime = 20;
+
         this.resultTime = 15;
         this.event = Event.NO_EVENT;
     }
