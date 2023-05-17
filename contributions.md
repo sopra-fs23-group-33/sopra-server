@@ -100,3 +100,6 @@
 | 6    | Stefan    | #92              | done                                                          |
 | 7    | Stefan    | #115             | done                                                          |
 | 7    | Stefan    | #102             | done                                                          |
+| 6    | Christian | #88              | done                                                          |
+| 6    | Christian | #90              | done                                                          |
+|      |           |                  | done                                                          |
