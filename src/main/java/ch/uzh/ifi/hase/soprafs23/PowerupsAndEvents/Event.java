@@ -156,7 +156,7 @@ public enum Event {
         }
     },
 
-    BACKTOROOTS(100, "Back to the roots", List.of(GameType.MULTIPLAYER), "all balances get reset to 1000 coins") {
+    BACKTOROOTS(40, "Back to the roots", List.of(GameType.MULTIPLAYER), "all balances get reset to 1000 coins") {
         @Override
         public ArrayList<Instruction> generateInstructions(Game game) {
             ArrayList<Instruction> instructions = new ArrayList<>();
