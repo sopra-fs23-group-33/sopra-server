@@ -49,6 +49,7 @@ public class BackgroundChartFetcher {
                 result = this.fetch(currencyPair);
                 count++;
                 System.out.println(count);
+                currencyPair = this.generateCurrencyPair();
             }
             System.out.println("ended");
         }
@@ -71,12 +72,12 @@ public class BackgroundChartFetcher {
                 asyncTransactionManager.addSingleGameRound(gameRound);
                 return true;
             }
-            catch (InterruptedException e) {
+            catch (Exception e) {
                 System.out.println(e.getMessage());
                 return false;
             }
 
-            catch (ChartException e) {
+            catch (Error er) {
                 System.out.println("chart failed");
                 return false;
             }
