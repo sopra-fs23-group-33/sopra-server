@@ -59,60 +59,7 @@ public class TestController {
 
 
 
-  @GetMapping("/test/api")
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public ChartGetDTO test_api()  {
-      ChartAPI api = new ChartAPI();
-      GameRound gr;
-      try {
-          gr = api.getGameRound(new CurrencyPair(Currency.CHF, Currency.EUR));
-          this.gameRoundRepository.saveAndFlush(gr);
-      }
-      catch (Exception e){
-          String errorMessage = "Failed to store chart";
-          throw new ResponseStatusException(HttpStatus.CONFLICT, errorMessage);
-      }
-
-      Chart c = gr.getSecondChart();
-      ChartData cd = c.status();
-      ChartGetDTO cdg = DTOMapper.INSTANCE.convertChartDataToChartGetDTO(cd);
-      return cdg;
-  }
-
-
-
-    @GetMapping("/test/ram")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public ArrayList<Integer> test_ram()  {
-        int size = integers.size();
-        integers.add(size);
-        return integers;
-    }
-
-    @GetMapping("/test/number")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public Long number()  {
-        Long size = gameRoundRepository.countByUsageFalse();
-        return size;
-    }
-
-    @DeleteMapping("/delete")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public void delete_all()  {
-      gameRepository.deleteAll();
-      gameRepository.flush();
-      //userRepository.deleteAll();
-      //userRepository.flush();
-      gameRoundRepository.deleteAll();
-      gameRoundRepository.flush();
-      backgroundChartFetcher.enqueue(32);
-    }
-
-
+  //this class/ controller is used for debugging and testing for developers. Add mappings as you see fit!
 
 
 }
