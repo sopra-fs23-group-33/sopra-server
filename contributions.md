@@ -98,8 +98,10 @@
 | 6    | Cedric    | #97              | Done                                                          |
 | 6    | Stefan    | #93              | done                                                          |
 | 6    | Stefan    | #92              | done                                                          |
-| 7    | Stefan    | #115             | done                                                          |
-| 7    | Stefan    | #102             | done                                                          |
 | 6    | Christian | #88              | done                                                          |
 | 6    | Christian | #90              | done                                                          |
-|      |           |                  | done                                                          |
+| 6    | Letizia   | #89              | done                                                          |
+| 6    | Letizia   | #89              | done                                                          |
+| 6    | Letizia   | #91              | worked on, but closed as not planned as no robust implementation was found |
+| 7    | Stefan    | #115             | done                                                          |
+| 7    | Stefan    | #102             | done                                                          |
