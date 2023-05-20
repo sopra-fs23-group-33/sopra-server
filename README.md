@@ -1,9 +1,7 @@
 # Bull V$ Bear - The Battle 
 
 ## Introduction
-Did you just finish The Wolf of Wall Street and you're feeling cocky? Do you think you can spot a Head and Shoulders trading pattern? 
-And the breaking of the support level? Boy do we have a game for you - put your intuition and knowledge about financial trading to the test with Bull V$ Bear - The Battle, 
-a gamified application that lets you place bets on the evolution of the price of up to 200 currency pairs and see how you measure up.
+Bull V$. Bear - the Battle is a PvP game that aims to provide an interactive and educational experience in the world of forex trading. This game brings together multiple players who compete against each other by placing bets on currency pairs. The motivation behind developing Bull V$. Bear - the Battle was to create a platform that combines the excitement of PvP gameplay with the fundamental understanding of chart analysis, long positions, and short positions in the financial market.
 
 
 ## Technologies
