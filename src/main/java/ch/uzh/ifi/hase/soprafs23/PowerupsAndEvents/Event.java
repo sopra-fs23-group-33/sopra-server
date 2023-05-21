@@ -106,7 +106,7 @@ public enum Event {
             return instructions;
         }
     },
-    LOOSERS_LOOSE_MORE(100, "Losers loose more", List.of(GameType.values()), "loosing players loose twice as much with their bet") {
+    LOOSERS_LOOSE_MORE(100, "Losers lose more", List.of(GameType.values()), "losing players lose twice as much with their bet") {
         @Override
         public ArrayList<Instruction> generateInstructions(Game game) {
             ArrayList<Instruction> instructions = new ArrayList<>();
