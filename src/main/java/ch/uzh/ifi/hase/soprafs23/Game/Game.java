@@ -47,6 +47,7 @@ public class Game {
     private int currentRoundPlayed;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OrderColumn
     private List<GameRound> gameRounds;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
